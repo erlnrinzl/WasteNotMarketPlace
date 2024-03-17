@@ -1,53 +1,69 @@
 <template>
-  <v-app dark>
+  <v-app>
+    <v-navigation-drawer
+      v-model="sideDrawer"
+      app
+      class="hidden-sm-and-up"
+    >
+      <v-list>
+        <v-list-item
+          v-for="(item, i) in navigationMenu"
+          :key="i"
+          :to="item.to"
+          router
+          exact
+        >
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          :to="'/app'"
+        >
+          <v-btn depressed class="custom-secondary white--text">
+            <span class="mr-3">Pergi Ke Aplikasi</span>
+            <v-icon>mdi-send-variant-outline </v-icon>
+          </v-btn>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
     <v-app-bar app>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <!-- hamburger icon -->
+      <span class="hidden-sm-and-up mr-3">
+        <v-app-bar-nav-icon @click.stop="sideDrawer = !sideDrawer" />
+      </span>
+
+      <v-toolbar-title>
+        <router-link
+          to="/"
+          style="cursor: pointer"
+          class="text-decoration-none"
+        >
+          <h1 class="text-h3 font-weight-bold custom-secondary--text">
+            {{ title }}
+          </h1>
+        </router-link>
+      </v-toolbar-title>
+
+      <v-spacer />
+
+      <v-toolbar-items class="hidden-xs-only">
+        <v-btn v-for="(menu, index) in navigationMenu" :key="index" :to="menu.to" text>
+          {{ menu.title }}
+        </v-btn>
+      </v-toolbar-items>
+
+      <v-spacer />
+
+      <v-btn depressed class="custom-secondary white--text hidden-xs-only">
+        <span class="mr-3">Pergi Ke Aplikasi</span>
+        <v-icon>mdi-send-variant-outline </v-icon>
+      </v-btn>
     </v-app-bar>
 
-    <v-carousel
-      cycle
-      height="710"
-      hide-delimiter-background
-      show-arrows-on-hover
-    >
-      <v-carousel-item v-for="(slide, index) in slides" :key="index">
-        <v-sheet
-          :color="colors[0]"
-          height="100%"
-        >
-          <v-row
-            class="fill-height"
-            justify="center"
-            align="center"
-          >
-            <v-col
-              cols="7"
-              class="pl-10"
-            >
-              <v-container class="px-10">
-                <h2 class="text-h4 mb-5 p-5">
-                  Mengubah Sampah untuk Lingkungan yang Lebih Baik
-                </h2>
-                <v-spacer />
-                <p class="text-h5 font-weight-light p-3">
-                  Selamat datang di Waste Not! Kami adalah platform inovatif yang menghubungkan Anda dengan Dinas Lingkungan dan pengrajin lokal untuk menciptakan lingkungan kita yang lebih hijau dan berkelanjutan
-                </p>
-              </v-container>
-            </v-col>
-            <v-col
-              cols="5"
-            >
-              <img :src="imageSrc" alt="Carousel Image" class="d-block w-100">
-            </v-col>
-          </v-row>
-        </v-sheet>
-      </v-carousel-item>
-    </v-carousel>
-
     <v-main>
-      <v-container>
-        <Nuxt />
-      </v-container>
+      <Nuxt />
     </v-main>
 
     <v-footer>
@@ -61,17 +77,21 @@ export default {
   name: 'DefaultLayout',
   data () {
     return {
-      imageSrc: '.assets/images/Landing 1',
       title: 'WasteNot',
-      colors: [
-        'primary'
-      ],
-      slides: [
-        'First',
-        'Second',
-        'Third',
-        'Fourth',
-        'Fifth'
+      sideDrawer: false,
+      navigationMenu: [
+        {
+          title: 'Tentang Kami',
+          to: '/aboutus'
+        },
+        {
+          title: 'Pencapaian',
+          to: '/achievement'
+        },
+        {
+          title: 'Jenis Sampah',
+          to: '/typeofwaste'
+        }
       ]
     }
   }
