@@ -20,7 +20,7 @@
         <v-list-item
           :to="'/app'"
         >
-          <v-btn depressed class="custom-secondary white--text">
+          <v-btn depressed class="custom-secondary white--text" :to="'/app'">
             <span class="mr-3">Pergi Ke Aplikasi</span>
             <v-icon>mdi-send-variant-outline </v-icon>
           </v-btn>
@@ -56,7 +56,7 @@
 
       <v-spacer />
 
-      <v-btn depressed class="custom-secondary white--text hidden-xs-only">
+      <v-btn depressed class="custom-secondary white--text hidden-xs-only" :to="'/app'">
         <span class="mr-3">Pergi Ke Aplikasi</span>
         <v-icon>mdi-send-variant-outline </v-icon>
       </v-btn>
@@ -82,7 +82,7 @@ export default {
       navigationMenu: [
         {
           title: 'Tentang Kami',
-          to: '/aboutus'
+          to: '/about'
         },
         {
           title: 'Pencapaian',
@@ -90,7 +90,7 @@ export default {
         },
         {
           title: 'Jenis Sampah',
-          to: '/typeofwaste'
+          to: '/about-wastes'
         }
       ]
     }
