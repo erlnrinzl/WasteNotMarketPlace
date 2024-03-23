@@ -55,9 +55,10 @@
                 <v-col cols="3" offset-md="9">
                   <div class="px-2 py-2 custom-border">
                     <div class="text-center">
-                      <span class="custom-secondary--text font-weight-bold text-h6 d-block">
-                        200 Point Lagi
+                      <span class="ml-2 custom-secondary--text font-weight-bold text-h6 d-block">
+                        {{ user.targetPoint - user.point }}
                       </span>
+                      <span class="custom-secondary--text font-weight-bold text-h6 d-block">Point Lagi</span>
                       <span>Dapatkan voucher E-Commerce sebesar 5K</span>
                     </div>
                   </div>
@@ -94,7 +95,8 @@ export default {
       user: {
         point: 250,
         weightCollected: 14.5,
-        level: 'Level 1'
+        level: 'Level 1',
+        targetPoint: 500
       }
     }
   }

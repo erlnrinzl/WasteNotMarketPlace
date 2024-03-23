@@ -1,7 +1,7 @@
 <template>
   <v-carousel
     cycle
-    height="710"
+    height="90vh"
     hide-delimiter-background
     show-arrows-on-hover
   >
@@ -37,8 +37,8 @@
             <v-container class="p-10">
               <v-img
                 :src="require(`@/assets/images/${slide.image}`)"
-                max-height="442"
-                max-width="442"
+                max-height="60vh"
+                max-width="60vh"
                 class="rounded-xxl"
               />
             </v-container>
