@@ -2,7 +2,7 @@
   <v-container fluid fill-height class="custom-secondary">
     <v-row>
       <v-col md="10" offset-md="1">
-        <v-card class="px-3" rounded="rounded-xl">
+        <v-card class="px-3 mt-5" rounded="rounded-xl">
           <v-card-title>
             <span class="text-h4 font-weight-bold">
               Kamu sudah mengumpulkan sampah sebanyak:
@@ -52,7 +52,7 @@
 
             <div>
               <v-row>
-                <v-col cols="3" offset-md="9">
+                <v-col md="3" sm="12" offset-md="9">
                   <div class="px-2 py-2 custom-border">
                     <div class="text-center">
                       <span class="ml-2 custom-secondary--text font-weight-bold text-h6 d-block">
@@ -73,11 +73,11 @@
           <p class="white--text text-h5 font-weight-bold">
             Sudah siap menyalurkan sampah lagi?
           </p>
-          <v-btn class="mx-5" color="custom-primary" dark>
+          <v-btn class="mx-5 my-4" color="custom-primary" dark to="/pickup">
             <span class="mx-4">Mulai Pick Up</span>
             <v-icon>mdi-dolly</v-icon>
           </v-btn>
-          <v-btn class="mx-5" color="custom-primary" dark>
+          <v-btn class="mx-5" color="custom-primary" dark to="/deliver">
             <span class="mx-4">Mulai Deliver</span>
             <v-icon>mdi-hand-coin-outline</v-icon>
           </v-btn>

@@ -5,7 +5,7 @@
       app
       class="hidden-sm-and-up"
       disable-resize-watcher
-      height="10vh"
+      height="100vh"
     >
       <v-list>
         <v-list-item
@@ -71,37 +71,41 @@
     <v-footer class="custom-primary">
       <v-row>
         <v-col cols="6">
-          <p class="text-h3 font-weight-medium white--text">
-            WasteNot
-          </p>
-          <v-btn
-            v-for="contact in contactInfo"
-            :key="contact.name"
-            fab
-            small
-            :to="contact.to"
-            class="mx-2"
-          >
-            <v-icon dark>
-              {{ contact.icon }}
-            </v-icon>
-          </v-btn>
+          <div class="ml-4">
+            <p class="text-h4 font-weight-medium white--text">
+              WasteNot
+            </p>
+            <v-btn
+              v-for="contact in contactInfo"
+              :key="contact.name"
+              fab
+              small
+              :to="contact.to"
+              class="mx-2"
+            >
+              <v-icon dark>
+                {{ contact.icon }}
+              </v-icon>
+            </v-btn>
 
-          <p class="white--text mt-5 mb-0">
-            Hubungi kami: <span class="font-weight-bold">contact@wastenot.ac.id</span>
-          </p>
+            <p class="white--text mt-5 mb-0">
+              Hubungi kami: <span class="font-weight-bold">contact@wastenot.ac.id</span>
+            </p>
 
-          <div>
-            <span class="white--text text-subtitle-2">Copyright &copy; {{ new Date().getFullYear() }} WasteNot</span>
+            <div>
+              <span class="white--text text-subtitle-2">Copyright &copy; {{ new Date().getFullYear() }} WasteNot</span>
+            </div>
           </div>
         </v-col>
         <v-col cols="6">
-          <p class="white--text text-h6 font-weight-light">
-            Menu
-          </p>
-          <p v-for="item in menu" :key="item.name">
-            <a class="white--text font-weight-bold text-decoration-none" :href="item.to">{{ item.name }}</a>
-          </p>
+          <div class="ml-4">
+            <p class="white--text text-h6 font-weight-light">
+              Menu
+            </p>
+            <p v-for="item in menu" :key="item.name">
+              <a class="white--text font-weight-bold text-decoration-none" :href="item.to">{{ item.name }}</a>
+            </p>
+          </div>
         </v-col>
       </v-row>
     </v-footer>
