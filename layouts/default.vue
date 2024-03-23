@@ -4,6 +4,7 @@
       v-model="sideDrawer"
       app
       class="hidden-sm-and-up"
+      disable-resize-watcher
     >
       <v-list>
         <v-list-item
