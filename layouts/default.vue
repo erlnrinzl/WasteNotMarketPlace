@@ -102,8 +102,8 @@
             <p class="white--text text-h6 font-weight-light">
               Menu
             </p>
-            <p v-for="item in menu" :key="item.name">
-              <a class="white--text font-weight-bold text-decoration-none" :href="item.to">{{ item.name }}</a>
+            <p v-for="menu in footerMenu" :key="menu.name">
+              <a class="white--text font-weight-bold text-decoration-none" :href="menu.to">{{ menu.name }}</a>
             </p>
           </div>
         </v-col>
@@ -150,7 +150,7 @@ export default {
           to: ''
         }
       ],
-      menu: [
+      footerMenu: [
         {
           name: 'About Us',
           to: ''
