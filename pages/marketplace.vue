@@ -31,7 +31,7 @@
             {{ product.name }}
           </v-card-title>
           <v-card-text class="custom-primary text-subtitle-1 white--text">
-            {{ product.description }}
+            {{ product.preface }}
           </v-card-text>
           <div class="text-center product-wrapper pt-5 pb-5">
             <v-avatar size="25vh" class="mb-5 absolute-div">
@@ -45,7 +45,16 @@
               Oleh:
               <span class="font-weight-bold">{{ product.seller }}</span>
             </div>
-            <v-btn color="custom-secondary" dark>
+            <v-btn
+              color="custom-secondary"
+              dark
+              :to="{
+                name: 'product-detail',
+                params: {
+                  id: product.id
+                }
+              }"
+            >
               Lihat Detail
             </v-btn>
           </v-card-actions>
@@ -69,28 +78,28 @@ export default {
           name: 'Tempat ATK',
           seller: 'Eggan OY',
           thumbnail: 'Tempat ATK.jpg',
-          description: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
+          preface: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
         },
         {
           id: 2,
           name: 'Tempat ATK',
           seller: 'Eggan OY',
           thumbnail: 'Tempat ATK.jpg',
-          description: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
+          preface: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
         },
         {
           id: 3,
           name: 'Tempat ATK',
           seller: 'Eggan OY',
           thumbnail: 'Tempat ATK.jpg',
-          description: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
+          preface: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
         },
         {
           id: 4,
           name: 'Tempat ATK',
           seller: 'Eggan OY',
           thumbnail: 'Tempat ATK.jpg',
-          description: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
+          preface: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
         }
       ]
     }
