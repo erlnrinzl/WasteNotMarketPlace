@@ -1,9 +1,6 @@
 <template>
   <v-container class="my-5 px-3">
     <v-row>
-      <!-- <v-col cols="2">
-        <v-spacer />
-      </v-col> -->
       <v-col cols="8">
         <h4 class="text-h4 custom-primary--text font-weight-bold">
           Produk Daur Ulang
@@ -25,7 +22,14 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col v-for="product in products" :key="product.id" cols="3" class="px-3">
+      <v-col
+        v-for="product in filteredProduct"
+        :key="product.id"
+        sm="6"
+        md="4"
+        lg="3"
+        class="px-3"
+      >
         <v-card>
           <v-card-title class="custom-primary custom-secondary--text text-h5 font-weight-bold">
             {{ product.name }}
@@ -65,44 +69,48 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
   data () {
     return {
       search: null,
       isLoading: false,
       itemsSearch: [],
-      selectedSearch: null,
-      products: [
-        {
-          id: 1,
-          name: 'Tempat ATK',
-          seller: 'Eggan OY',
-          thumbnail: 'Tempat ATK.jpg',
-          preface: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
-        },
-        {
-          id: 2,
-          name: 'Tempat ATK',
-          seller: 'Eggan OY',
-          thumbnail: 'Tempat ATK.jpg',
-          preface: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
-        },
-        {
-          id: 3,
-          name: 'Tempat ATK',
-          seller: 'Eggan OY',
-          thumbnail: 'Tempat ATK.jpg',
-          preface: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
-        },
-        {
-          id: 4,
-          name: 'Tempat ATK',
-          seller: 'Eggan OY',
-          thumbnail: 'Tempat ATK.jpg',
-          preface: 'Memberikan pencahayaan lembut dan suasana nyaman dengan desain ramah lingkungan'
-        }
-      ]
+      selectedSearch: null
     }
+  },
+  computed: {
+    filteredProduct () {
+      if (this.selectedSearch) {
+        return this.products.filter(product =>
+          product.id === this.selectedSearch.id
+        )
+      }
+      return this.products
+    },
+    ...mapState('products', {
+      products: 'products'
+    })
+  },
+  watch: {
+    search (value) {
+      this.isLoading = true
+      setTimeout(() => {
+        this.itemsSearch = this.products.filter((product) => {
+          this.isLoading = false
+          return product.title
+        })
+      }, 800)
+    }
+  },
+  mounted () {
+    // this.fetchProducts()
+  },
+  methods: {
+    ...mapActions({
+      fetchProducts: 'products/fetchProducts'
+    })
   }
 }
 </script>
