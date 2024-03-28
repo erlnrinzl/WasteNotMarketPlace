@@ -47,7 +47,7 @@
                     </div>
                   </v-form>
                 </v-card-text>
-                <v-card-actions class="d-block">
+                <v-card-actions class="d-block px-4">
                   <v-spacer />
                   <v-btn color="custom-secondary" dark block @click="onSubmit">
                     <span v-if="!isDisabled">
@@ -73,6 +73,8 @@
 </template>
 
 <script>
+// import { mapMutations } from 'vuex'
+
 export default {
   name: 'IndexPage',
   data () {
@@ -85,6 +87,46 @@ export default {
         email: '',
         password: ''
       }
+    }
+  },
+  mounted () {
+    if (this.$route.params.message === 'AUTH_REQUIRED') {
+      this.isError = true
+      this.message = this.$route.params.message
+    }
+  },
+  methods: {
+    // ...mapMutations('auth', {
+    //   setFullName: 'setFullName',
+    //   setRefreshToken: 'setRefreshToken',
+    //   setAccessToken: 'setAccessToken'
+    // }),
+    onSubmit () {
+      this.isDisabled = true
+      // this.$axios.$post('url', this.formData).then((response) => {
+      //   this.isDisabled = false
+
+      //   // store passed welcome screen
+      //   if (!localStorage.welcomeScreen) {
+      //     this.storeWelcomeScreen()
+      //     this.$router.push('/register')
+      //   }
+
+      //   // store auth data
+      //   const { fullname, accessToken, refreshToken } = response
+      //   this.setFullName(fullname)
+      //   this.setAccessToken(accessToken)
+      //   this.setRefreshToken(refreshToken)
+
+      //   this.$router.push('/')
+      // }).catch((error) => {
+      //   this.isDisabled = true
+      //   this.isError = true
+      //   this.message = error.response.data.message
+      // })
+    },
+    storeWelcomeScreen () {
+      localStorage.setItem('welcomeScreen', true)
     }
   }
 }

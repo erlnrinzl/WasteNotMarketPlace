@@ -3,18 +3,12 @@
     <v-row>
       <v-col md="4" offset-md="4">
         <v-card class="text-center px-3">
-          <v-card-title class="mb-3 custom-primary--text text-h3 font-weight-medium justify-center">
-            Daftar
-          </v-card-title>
-          <v-card-text class="text-left">
-            <v-alert
-              v-if="isError"
-              class="red lighten-2 white--text"
-            >
-              {{ $t(message) }}
-            </v-alert>
-            <label for="fullname" class="custom-secondary--text font-weight-bold">Nama Lengkap</label>
-            <v-form>
+          <v-form>
+            <v-card-title class="mb-3 custom-primary--text text-h3 font-weight-medium justify-center">
+              Daftar
+            </v-card-title>
+            <v-card-text class="text-left">
+              <label for="fullname" class="custom-secondary--text font-weight-bold">Nama Lengkap</label>
               <v-text-field
                 v-model="formData.email"
                 name="fullname"
@@ -57,6 +51,7 @@
                     type="email"
                     outlined
                     solo
+                    @keyup="checkEmail"
                   />
                   <label for="password" class="custom-secondary--text font-weight-bold">Password</label>
                   <v-text-field
@@ -67,10 +62,10 @@
                     outlined
                     solo
                   />
-                  <label for="repassword" class="custom-secondary--text font-weight-bold">Konfirmasi Password</label>
+                  <label for="retype_Password" class="custom-secondary--text font-weight-bold">Konfirmasi Password</label>
                   <v-text-field
-                    v-model="formData.rePassword"
-                    name="repassword"
+                    v-model="formData.retype_Password"
+                    name="retype_Password"
                     label="password"
                     type="password"
                     outlined
@@ -78,24 +73,24 @@
                   />
                 </v-form>
               </v-form>
-            </v-form>
-          </v-card-text>
-          <v-card-actions class="d-block">
-            <v-spacer />
-            <v-btn color="custom-secondary" dark block @click="onSubmit">
-              <span v-if="!isDisabled">
-                Daftar
-              </span>
-              <v-progress-circular v-else color="custom-secondary" indeterminate />
-            </v-btn>
-            <div class="text-center my-3">
-              <span>Sudah punya akun? <a class="font-weight-black" href="/login">Masuk</a></span>
-            </div>
+            </v-card-text>
+            <v-card-actions class="d-block px-4">
+              <v-spacer />
+              <v-btn color="custom-secondary" dark block @click="onSubmit">
+                <span v-if="!isDisabled">
+                  Daftar
+                </span>
+                <v-progress-circular v-else color="custom-secondary" indeterminate />
+              </v-btn>
+              <div class="text-center my-3">
+                <span>Sudah punya akun? <a class="font-weight-black" href="/login">Masuk</a></span>
+              </div>
 
-          <!-- <v-btn @click="storeWelcomeScreen"> -->
+            <!-- <v-btn @click="storeWelcomeScreen"> -->
             <!-- Store localStorage -->
             <!-- </v-btn> -->
-          </v-card-actions>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-col>
     </v-row>
@@ -107,9 +102,8 @@ export default {
   name: 'IndexPage',
   data () {
     return {
-      heroLoginImg: 'Sign In.jpg',
+      emailExist: false,
       isDisabled: false,
-      isError: false,
       message: '',
       formData: {
         name: '',
@@ -117,8 +111,51 @@ export default {
         phone: '',
         email: '',
         password: '',
-        rePassword: ''
+        retype_Password: ''
+      },
+      rules: {
+        name: [
+          v => !!v || 'Masukan nama lengkap anda!'
+        ],
+        phone: [
+          v => !!v || 'Masukan nomor telepon anda!'
+        ],
+        email: [
+          v => !!v || 'Email is wajib diisi!',
+          v => /.+@.+/.test(v) || 'Email salah!',
+          v => !!this.emailExist || 'Email telah terdaftar'
+        ],
+        password: [
+          v => !!v || 'Password is required!',
+          v => v.length >= 6 || 'Password minimal 6 characters!'
+        ],
+        retype_Password: [
+          v => !!v || 'Re-type your password!',
+          v => v === this.formData.password || 'Re-password harus identik dengan Password!'
+        ]
       }
+    }
+  },
+  methods: {
+    checkEmail () {
+      // this.$axios.$post('url', this.formData.email)
+      //   .then((response) => {
+      //     this.emailExist = false
+      //   }).catch((error) => {
+      //     console.error(error)
+      //     this.emailExist = true
+      //   })
+    },
+    onSubmit () {
+      this.isDisabled = true
+      // this.$axios.$post('url', this.formData).then((response) => {
+      //   console.log(response)
+      //   this.isDisabled = false
+      //   this.$router.push('/login')
+      // }).catch((error) => {
+      //   this.isDisabled = false
+      //   console.error(error)
+      // })
     }
   }
 }
