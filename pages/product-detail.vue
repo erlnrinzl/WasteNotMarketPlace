@@ -12,10 +12,8 @@
         <hr class="my-5">
         <div>
           <v-row>
-            <v-col cols="3">
+            <v-col v-for="(image, index) in product.photos" :key="index" cols="3">
               <v-img
-                v-for="(image, index) in product.photos"
-                :key="index"
                 :src="require(`@/assets/images/${image}`)"
                 @click="selectedImage = index"
               />
@@ -101,7 +99,8 @@ export default {
         thumbnail: 'Tempat ATK.jpg',
         description: 'Lampu tidur dari sendok plastik adalah inovasi kreatif yang terbuat dari daur ulang bahan bekas, memberikan pencahayaan lembut dan suasana nyaman di ruangan. Desainnya yang ramah lingkungan dan unik membuatnya menjadi pilihan hiasan dekoratif yang menarik di rumah.',
         photos: [
-          'Tempat ATK.jpg'
+          'Tempat ATK.jpg',
+          'Lampu Sendok 1.jpg'
         ],
         price: 150000
       }

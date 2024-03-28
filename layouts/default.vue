@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer
+      v-if="renderAppLayout"
       v-model="sideDrawer"
       app
       class="hidden-sm-and-up"
@@ -20,9 +21,9 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          :to="'/app'"
+          :to="'/'"
         >
-          <v-btn depressed class="custom-secondary white--text" :to="'/app'">
+          <v-btn depressed class="custom-secondary white--text" :to="'/'">
             <span class="mr-3">Pergi Ke Aplikasi</span>
             <v-icon>mdi-send-variant-outline </v-icon>
           </v-btn>
@@ -30,7 +31,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app>
+    <v-app-bar v-if="renderAppLayout" app>
       <!-- hamburger icon -->
       <span class="hidden-sm-and-up mr-3">
         <v-app-bar-nav-icon @click.stop="sideDrawer = !sideDrawer" />
@@ -58,7 +59,7 @@
 
       <v-spacer />
 
-      <v-btn depressed class="custom-secondary white--text hidden-xs-only" :to="'/app'">
+      <v-btn depressed class="custom-secondary white--text hidden-xs-only" :to="'/'">
         <span class="mr-3">Pergi Ke Aplikasi</span>
         <v-icon>mdi-send-variant-outline</v-icon>
       </v-btn>
@@ -68,7 +69,7 @@
       <Nuxt />
     </v-main>
 
-    <v-footer class="custom-primary">
+    <v-footer v-if="renderAppLayout" class="custom-primary">
       <v-row>
         <v-col cols="6">
           <div class="ml-4">
@@ -164,6 +165,15 @@ export default {
           to: ''
         }
       ]
+    }
+  },
+  computed: {
+    renderAppLayout () {
+      if (this.$route.path === '/login' || this.$route.path === '/register') {
+        return false
+      }
+
+      return true
     }
   }
 }
