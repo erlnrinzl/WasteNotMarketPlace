@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid fill-height class="custom-secondary">
-    <v-row>
+  <v-container fluid fill-height>
+    <v-row class="py-14 custom-secondary">
       <v-col md="10" offset-md="1">
-        <v-card class="px-3 mt-5" rounded="rounded-xl">
+        <v-card class="px-3 my-5" rounded="rounded-xl">
           <v-card-title>
             <span class="text-h4 font-weight-bold">
               Kamu sudah mengumpulkan sampah sebanyak:
@@ -68,20 +68,81 @@
           </v-card-text>
           <hr>
         </v-card>
-
-        <div class="my-5 text-center">
-          <p class="white--text text-h5 font-weight-bold">
-            Sudah siap menyalurkan sampah lagi?
-          </p>
-          <v-btn class="mx-5 my-4" color="custom-primary" dark to="/pickup">
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="6">
+        <v-row>
+          <v-col cols="10" offset-md="1">
+            <v-img
+              :src="require(`@/assets/images/Sign In.jpg`)"
+            />
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="6">
+        <v-container class="px-10 my-5 text-center">
+          <div class="mt-5 mb-3">
+            <span class="custom-primary--text text-h2 font-weight-bold">Pick Up</span>
+          </div>
+          <div class="my-5">
+            <p class="text-h5 font-weight-light text-right">
+              Layanan pickup adalah sebuah layanan di mana kamu dapat memilih jadwal yang tersedia untuk pengambilan barang-barang yang sudah tidak terpakai atau bekas di rumah anda
+            </p>
+          </div>
+          <v-btn class="mx-5 my-4" color="custom-secondary" dark to="/pickup">
             <span class="mx-4">Mulai Pick Up</span>
             <v-icon>mdi-dolly</v-icon>
           </v-btn>
-          <v-btn class="mx-5" color="custom-primary" dark to="/deliver">
+        </v-container>
+      </v-col>
+    </v-row>
+    <v-row class="custom-primary">
+      <v-col cols="6">
+        <v-container class="px-10 my-16 text-center">
+          <div class="mt-5 mb-3">
+            <span class="white--text text-h2 font-weight-bold">Deliver</span>
+          </div>
+          <div class="my-5">
+            <p class="text-h5 font-weight-light text-left">
+              Layanan deliver adalah sebuah layanan di mana anda dapat mengirim barang anda ke lokasi dinas lingkungan yang diinginkan Anda
+            </p>
+          </div>
+          <v-btn class="mx-5" color="custom-secondary" dark to="/deliver">
             <span class="mx-4">Mulai Deliver</span>
             <v-icon>mdi-hand-coin-outline</v-icon>
           </v-btn>
-        </div>
+        </v-container>
+      </v-col>
+      <v-col cols="6">
+        <v-row>
+          <v-col cols="10" offset-md="1">
+            <v-img
+              :src="require(`@/assets/images/Sign In.jpg`)"
+            />
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+    <v-row class="py-10 custom-secondary">
+      <v-col cols="7">
+        <v-img
+          :src="require(`@/assets/images/mockup.png`)"
+          absolute
+        />
+      </v-col>
+      <v-col cols="5">
+        <v-container class="px-10 my-16 text-center outer-container">
+          <div class="inner-container">
+            <div class="mt-5 mb-3">
+              <span class="white--text text-h4 font-weight-bold">Tertarik menampilkan produk hasil daur ulang anda di website kami?</span>
+            </div>
+            <v-btn class="mx-5 mt-5" color="custom-primary" dark to="/about-us">
+              <span class="mx-4">Hubungi Kami</span>
+              <v-icon>mdi-phone</v-icon>
+            </v-btn>
+          </div>
+        </v-container>
       </v-col>
     </v-row>
   </v-container>
@@ -108,5 +169,14 @@ div.custom-border {
   border: 2px solid #00A699 !important;
   border-radius: 10px; /* Mengatur border menjadi bulat dengan radius 10px */
   padding: 5px;
+}
+
+div.outer-container {
+  position: relative;
+}
+
+div.inner-container {
+  position: absolute;
+  left: -40vh;
 }
 </style>

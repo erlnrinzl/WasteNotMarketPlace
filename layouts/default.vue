@@ -8,9 +8,9 @@
       disable-resize-watcher
       height="100vh"
     >
-      <v-list>
+      <v-list v-if="!authenticated">
         <v-list-item
-          v-for="(item, i) in navigationMenu"
+          v-for="(item, i) in navigationMenuLoggedOff"
           :key="i"
           :to="item.to"
           router
@@ -23,10 +23,23 @@
         <v-list-item
           :to="'/'"
         >
-          <v-btn depressed class="custom-secondary white--text" :to="'/'">
+          <v-btn depressed class="custom-secondary white--text" :to="'/'" active>
             <span class="mr-3">Pergi Ke Aplikasi</span>
             <v-icon>mdi-send-variant-outline </v-icon>
           </v-btn>
+        </v-list-item>
+      </v-list>
+      <v-list v-else>
+        <v-list-item
+          v-for="(item, i) in navigationMenu"
+          :key="i"
+          :to="item.to"
+          router
+          exact
+        >
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -51,15 +64,23 @@
 
       <v-spacer />
 
-      <v-toolbar-items class="hidden-xs-only">
-        <v-btn v-for="(menu, index) in navigationMenu" :key="index" :to="menu.to" text>
+      <v-toolbar-items v-if="!authenticated" class="hidden-xs-only">
+        <v-btn v-for="(menu, index) in navigationMenuLoggedOff" :key="index" :to="menu.to" text>
           {{ menu.title }}
+        </v-btn>
+      </v-toolbar-items>
+
+      <v-toolbar-items v-else class="hidden-xs-only">
+        <v-btn v-for="(menu, index) in navigationMenu" :key="index" :to="menu.to" text>
+          <span :class="$route.path === menu.to ? 'font-weight-black': ''" class="custom-secondary--text">
+            {{ menu.title }}
+          </span>
         </v-btn>
       </v-toolbar-items>
 
       <v-spacer />
 
-      <v-btn depressed class="custom-secondary white--text hidden-xs-only" :to="'/'">
+      <v-btn v-if="!authenticated" depressed class="custom-secondary white--text hidden-xs-only" :to="'/'">
         <span class="mr-3">Pergi Ke Aplikasi</span>
         <v-icon>mdi-send-variant-outline</v-icon>
       </v-btn>
@@ -114,13 +135,15 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'DefaultLayout',
   data () {
     return {
       title: 'WasteNot',
       sideDrawer: false,
-      navigationMenu: [
+      navigationMenuLoggedOff: [
         {
           title: 'Tentang Kami',
           to: '/about'
@@ -132,6 +155,32 @@ export default {
         {
           title: 'Jenis Sampah',
           to: '/about-wastes'
+        }
+      ],
+      navigationMenu: [
+        {
+          title: 'Home',
+          to: '/'
+        },
+        {
+          title: 'Pick-Up',
+          to: '/pickup'
+        },
+        {
+          title: 'Deliver',
+          to: '/deliver'
+        },
+        {
+          title: 'Marketplace',
+          to: '/marketplace'
+        },
+        {
+          title: 'Pesanan',
+          to: '/order'
+        },
+        {
+          title: 'Akun',
+          to: '/account'
         }
       ],
       contactInfo: [
@@ -174,7 +223,10 @@ export default {
       }
 
       return true
-    }
+    },
+    ...mapGetters('auth', {
+      authenticated: 'authenticated'
+    })
   }
 }
 </script>
