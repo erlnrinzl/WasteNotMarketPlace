@@ -12,6 +12,12 @@ export const state = () => ({
   products: []
 })
 
+export const getters = {
+  product: (state, getters, rootState) => {
+    return 'none'
+  }
+}
+
 export const mutations = {
   updateProducts (state, products) {
     state.products = products
