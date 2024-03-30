@@ -13,8 +13,8 @@ export const state = () => ({
 })
 
 export const getters = {
-  product: (state, getters, rootState) => {
-    return 'none'
+  getProductById: state => (id) => {
+    return state.products.find(product => product.id === id)
   }
 }
 
@@ -32,4 +32,11 @@ export const actions = {
   //     commit('updateProducts', response.products)
   //   })
   // },
+
+  // fetchProductById ({ commit }, productId) {
+  //   this.$axios.$get(`url/${productId}`).then((response) => {
+  //     commit('setProduct', response.data)
+  //   })
+  // }
+
 }

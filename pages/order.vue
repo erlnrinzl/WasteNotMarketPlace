@@ -1,0 +1,69 @@
+<template>
+  <v-container>
+    <div class="mb-5">
+      <v-tabs
+        v-model="tabs"
+        color="custom-primary"
+      >
+        <v-tab href="#tab-berlangsung" class="custom-secondary--text font-weight-bold">
+          Berlangsung
+        </v-tab>
+        <v-tab href="#tab-selesai" class="custom-secondary--text font-weight-bold">
+          Selesai
+        </v-tab>
+      </v-tabs>
+    </div>
+    <hr>
+    <v-tabs-items
+      v-model="tabs"
+    >
+      <v-tab-item :value="'tab-berlangsung'">
+        <v-row class="py-5">
+          <!-- <v-col v-for="order in orders" :key="order.id" cols="4"> -->
+          <v-col cols="4">
+            <CardPesanan :order-data="orderData" />
+          </v-col>
+        </v-row>
+      </v-tab-item>
+      <v-tab-item :value="'tab-selesai'">
+        <v-row class="py-5">
+          <v-col v-for="order in finishedOrders" :key="order.id" cols="4">
+            <CardPesanan :order-data="orderData" />
+          </v-col>
+        </v-row>
+      </v-tab-item>
+    </v-tabs-items>
+  </v-container>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+
+export default {
+  data () {
+    return {
+      tabs: null,
+      orderData: {
+        id: '',
+        type: 'deliver',
+        date: '24 Agustus 2024',
+        time: '10.43',
+        image: 'imageUrl',
+        unitPolls: {
+          unitType: 'Dinas Lingkungan',
+          name: 'Dinas Lingkungan Hidup Cilandak'
+        },
+        status: 'Selesai',
+        totalBerat: 1.5,
+        poin: 25
+      }
+    }
+  },
+  computed: {
+    ...mapState('orders', {
+      orders: 'orders',
+      finishedOrders: 'finishedOrders'
+    })
+  }
+}
+</script>
