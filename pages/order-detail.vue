@@ -1,6 +1,6 @@
 <template>
   <v-container class="py-10 px-5">
-    <div class="pb-5 d-flex justify-space-between">
+    <div class="pb-2 d-flex justify-space-between">
       <span class="custom-secondary--text text-h5 font-weight-bold">Detail Pesanan</span>
       <span class="custom-primary--text text-h5 font-weight-bold">{{ orderData.type.charAt(0).toUpperCase() + orderData.type.slice(1) }}</span>
     </div>
