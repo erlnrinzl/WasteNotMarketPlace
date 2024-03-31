@@ -151,6 +151,7 @@
 <script>
 export default {
   name: 'IndexPage',
+  // middleware: ['authenticated'],
   data () {
     return {
       user: {

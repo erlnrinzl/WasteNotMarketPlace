@@ -77,6 +77,7 @@
 
 export default {
   name: 'IndexPage',
+  // middleware: ['unauthenticated'],
   data () {
     return {
       heroLoginImg: 'Sign In.jpg',

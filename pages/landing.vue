@@ -102,6 +102,7 @@ export default {
   components: {
     CarouselBanner
   },
+  // middleware: ['unauthenticated'],
   data () {
     return {
       achievements: [

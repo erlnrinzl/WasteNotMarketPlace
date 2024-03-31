@@ -177,6 +177,7 @@
 
 <script>
 export default {
+  // middleware: ['authenticated'],
   data () {
     return {
       formName: 'Pick Up',

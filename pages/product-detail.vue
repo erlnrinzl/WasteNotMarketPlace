@@ -70,6 +70,7 @@
 <script>
 
 export default {
+  // middleware: ['authenticated'],
   data () {
     return {
       selectedImage: 0,

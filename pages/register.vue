@@ -100,6 +100,7 @@
 <script>
 export default {
   name: 'IndexPage',
+  // middleware: ['unauthenticated'],
   data () {
     return {
       emailExist: false,
