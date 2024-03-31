@@ -44,7 +44,7 @@
             <v-col cols="6">
               <v-btn
                 :to="{
-                  name: 'product-detail',
+                  name: 'account',
                   params: {
                     id: userData.id
                   }
