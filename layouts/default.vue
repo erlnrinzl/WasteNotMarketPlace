@@ -8,7 +8,7 @@
       disable-resize-watcher
       height="100vh"
     >
-      <v-list v-if="!authenticated">
+      <v-list v-if="!renderNavLoggedIn">
         <v-list-item
           v-for="(item, i) in navigationMenuLoggedOff"
           :key="i"
@@ -64,7 +64,7 @@
 
       <v-spacer />
 
-      <v-toolbar-items v-if="!authenticated" class="hidden-xs-only">
+      <v-toolbar-items v-if="!renderNavLoggedIn" class="hidden-xs-only">
         <v-btn v-for="(menu, index) in navigationMenuLoggedOff" :key="index" :to="menu.to" text>
           {{ menu.title }}
         </v-btn>
@@ -80,7 +80,7 @@
 
       <v-spacer />
 
-      <v-btn v-if="!authenticated" depressed class="custom-secondary white--text hidden-xs-only" :to="'/'">
+      <v-btn v-if="!renderNavLoggedIn" depressed class="custom-secondary white--text hidden-xs-only" :to="'/'">
         <span class="mr-3">Pergi Ke Aplikasi</span>
         <v-icon>mdi-send-variant-outline</v-icon>
       </v-btn>
@@ -135,8 +135,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   name: 'DefaultLayout',
   data () {
@@ -224,9 +222,12 @@ export default {
 
       return true
     },
-    ...mapGetters('auth', {
-      authenticated: 'authenticated'
-    })
+    renderNavLoggedIn () {
+      if (this.$route.path === '/landing') {
+        return false
+      }
+      return true
+    }
   }
 }
 </script>
