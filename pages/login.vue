@@ -75,7 +75,6 @@
 <script>
 import { mapMutations } from 'vuex'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '~/plugins/firebase'
 
 export default {
   name: 'IndexPage',
@@ -109,7 +108,7 @@ export default {
 
       try {
         const { email, password } = this.formData
-        const { user } = await signInWithEmailAndPassword(auth, email, password)
+        const { user } = await signInWithEmailAndPassword(this.$auth, email, password)
 
         // store passed welcome screen
         if (!localStorage.welcomeScreen) {
