@@ -73,7 +73,9 @@
 </template>
 
 <script>
-// import { mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '~/plugins/firebase'
 
 export default {
   name: 'IndexPage',
@@ -97,34 +99,36 @@ export default {
     }
   },
   methods: {
-    // ...mapMutations('auth', {
-    //   setFullName: 'setFullName',
-    //   setRefreshToken: 'setRefreshToken',
-    //   setAccessToken: 'setAccessToken'
-    // }),
-    onSubmit () {
+    ...mapMutations('auth', {
+      setFullName: 'setFullName',
+      setRefreshToken: 'setRefreshToken',
+      setAccessToken: 'setAccessToken'
+    }),
+    async onSubmit () {
       this.isDisabled = true
-      // this.$axios.$post('url', this.formData).then((response) => {
-      //   this.isDisabled = false
 
-      //   // store passed welcome screen
-      //   if (!localStorage.welcomeScreen) {
-      //     this.storeWelcomeScreen()
-      //     this.$router.push('/register')
-      //   }
+      try {
+        const { email, password } = this.formData
+        const { user } = await signInWithEmailAndPassword(auth, email, password)
 
-      //   // store auth data
-      //   const { fullname, accessToken, refreshToken } = response
-      //   this.setFullName(fullname)
-      //   this.setAccessToken(accessToken)
-      //   this.setRefreshToken(refreshToken)
+        // store passed welcome screen
+        if (!localStorage.welcomeScreen) {
+          this.storeWelcomeScreen()
+          this.$router.push('/register')
+        }
 
-      //   this.$router.push('/')
-      // }).catch((error) => {
-      //   this.isDisabled = true
-      //   this.isError = true
-      //   this.message = error.response.data.message
-      // })
+        // store auth data
+        this.setFullName(user.displayName)
+        this.setAccessToken(await user.getIdToken())
+        this.setRefreshToken(user.refreshToken)
+
+        this.$router.push('/')
+      } catch (error) {
+        this.isError = true
+        this.message = error.response.data.message
+      } finally {
+        this.isDisabled = false
+      }
     },
     storeWelcomeScreen () {
       localStorage.setItem('welcomeScreen', true)
