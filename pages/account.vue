@@ -1,13 +1,28 @@
 <template>
   <v-container class="py-10 px-5">
-    <div class="pb-2 d-flex justify-space-between">
-      <span class="custom-secondary--text text-h5 font-weight-bold">Informasi Akun</span>
-      <div>
-        <a class="custom-primary--text" href="/edit-account">
-          <span class="text-subtitle-2 font-weight-bold">Perbarui Akun</span>
-        </a>
-      </div>
-    </div>
+    <v-row class="pb-2">
+      <v-col cols="12" md="8" lg="8">
+        <span class="custom-secondary--text text-h5 font-weight-bold">Informasi Akun</span>
+      </v-col>
+      <v-col cols="6" sm="6" md="2" lg="2">
+        <div>
+          <a class="custom-primary--text" href="/edit-account">
+            <span class="text-subtitle-2 font-weight-bold">Perbarui Akun</span>
+          </a>
+        </div>
+      </v-col>
+      <v-col cols="6" sm="6" md="2" lg="2">
+        <v-btn
+          color="custom-primary"
+          block
+          dark
+          small
+          @click="logout"
+        >
+          Log Out
+        </v-btn>
+      </v-col>
+    </v-row>
     <hr>
 
     <v-list>
@@ -71,6 +86,9 @@ export default {
           id: this.orderData.id
         }
       })
+    },
+    logout () {
+      console.log('you are logged out')
     }
   }
 }
