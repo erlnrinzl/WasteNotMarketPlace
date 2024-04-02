@@ -18,9 +18,12 @@ const auth = getAuth(app)
 const firestore = getFirestore(app)
 
 export default function ({ store }, inject) {
-  auth.onAuthStateChanged((user) => {
+  auth.onAuthStateChanged(async (user) => {
     if (user) {
+      const { claims } = await user.getIdTokenResult()
+
       store.commit('auth/setUser', user)
+      store.commit('auth/setRole', claims.role)
     }
   })
 
