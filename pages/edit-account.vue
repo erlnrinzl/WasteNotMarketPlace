@@ -11,7 +11,7 @@
     <hr>
     <v-form>
       <v-row class="py-5">
-        <v-col cols="4">
+        <v-col cols="12" sm="6" md="4" lg="4">
           <label for="fullname" class="custom-secondary--text font-weight-bold">Nama Lengkap</label>
           <v-text-field
             v-model="userData.email"

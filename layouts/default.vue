@@ -144,15 +144,15 @@ export default {
       navigationMenuLoggedOff: [
         {
           title: 'Tentang Kami',
-          to: '/about'
+          to: '#about-us'
         },
         {
           title: 'Pencapaian',
-          to: '/achievement'
+          to: '#achievement'
         },
         {
-          title: 'Jenis Sampah',
-          to: '/about-wastes'
+          title: 'Layanan Unggulan',
+          to: '#our-services'
         }
       ],
       navigationMenu: [

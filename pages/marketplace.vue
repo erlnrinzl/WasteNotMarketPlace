@@ -1,12 +1,12 @@
 <template>
   <v-container class="my-5 px-3">
     <v-row>
-      <v-col cols="8">
+      <v-col cols="12" sm="12" md="8" lg="8">
         <h4 class="text-h4 custom-primary--text font-weight-bold">
           Produk Daur Ulang
         </h4>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="12" sm="12" md="4" lg="4" class="py-0">
         <v-autocomplete
           v-model="selectedSearch"
           label="Cari Produk Daur Ulang"
