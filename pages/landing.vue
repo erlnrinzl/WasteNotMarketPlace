@@ -32,7 +32,7 @@
 
     <!-- Divider -->
     <div id="our-services">
-      <v-responsive height="90vh" class="custom-secondary d-flex align-center">
+      <v-responsive min-height="90vh" class="custom-secondary d-flex align-center">
         <div class="pb-10">
           <div class="my-5 text-center">
             <h3 class="white--text text-h3 font-weight-bold">
@@ -45,7 +45,10 @@
                 v-for="(item, index) in services"
                 :key="index"
                 outlined
-                cols="4"
+                cols="12"
+                sm="12"
+                md="4"
+                lg="4"
               >
                 <v-card height="100%" class="pt-3">
                   <v-img

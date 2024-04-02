@@ -16,25 +16,25 @@
           align="center"
         >
           <v-col
-            xs="12"
-            m="7"
+            cols="12"
+            md="7"
             class="pl-10"
           >
             <v-container class="px-10">
-              <h2 class="text-h4 white--text font-weight-bold mb-5 p-5">
+              <h2 class="text-h4 white--text font-weight-bold mb-5">
                 {{ slide.title }}
               </h2>
               <v-spacer />
-              <p class="text-h5 white--text font-weight-light p-3">
+              <p class="text-h5 white--text font-weight-light hidden-xs-only">
                 {{ slide.description }}
               </p>
             </v-container>
           </v-col>
           <v-col
-            xs="12"
-            m="5"
+            cols="12"
+            md="5"
           >
-            <v-container class="p-10">
+            <v-container class="px-10">
               <v-img
                 :src="require(`@/assets/images/${slide.image}`)"
                 max-height="60vh"
