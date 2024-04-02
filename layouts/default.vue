@@ -92,7 +92,7 @@
 
     <v-footer v-if="renderAppLayout" class="custom-primary">
       <v-row>
-        <v-col cols="6">
+        <v-col cols="12" md="6" lg="6">
           <div class="ml-4">
             <p class="text-h4 font-weight-medium white--text">
               WasteNot
@@ -119,7 +119,7 @@
             </div>
           </div>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="6" class="hidden-xs-only">
           <div class="ml-4">
             <p class="white--text text-h6 font-weight-light">
               Menu
@@ -144,15 +144,15 @@ export default {
       navigationMenuLoggedOff: [
         {
           title: 'Tentang Kami',
-          to: '/about'
+          to: '#about-us'
         },
         {
           title: 'Pencapaian',
-          to: '/achievement'
+          to: '#achievement'
         },
         {
-          title: 'Jenis Sampah',
-          to: '/about-wastes'
+          title: 'Layanan Unggulan',
+          to: '#our-services'
         }
       ],
       navigationMenu: [

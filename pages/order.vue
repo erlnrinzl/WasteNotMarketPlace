@@ -20,7 +20,7 @@
       <v-tab-item :value="'tab-berlangsung'">
         <v-row class="py-5">
           <!-- <v-col v-for="order in orders" :key="order.id" cols="4"> -->
-          <v-col cols="4">
+          <v-col cols="12" sm="6" md="4" lg="4">
             <CardPesanan :order-data="orderData" />
           </v-col>
         </v-row>

@@ -26,12 +26,12 @@
         </div>
         <div class="px-7 mt-10">
           <v-row v-for="(step, index) in guides.steps" :key="index" class="my-10 align-center">
-            <v-col cols="1">
+            <v-col cols="2">
               <span class="rounded-lg py-3 px-5 text-h6 custom-primary white--text">
                 {{ index + 1 }}
               </span>
             </v-col>
-            <v-col cols="11">
+            <v-col cols="10" class="pl-5">
               <span class="text-h6 custom-secondary--text">
                 {{ step }}
               </span>

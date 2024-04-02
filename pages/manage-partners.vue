@@ -1,12 +1,12 @@
 <template>
   <v-container>
     <v-row class="py-5">
-      <v-col cols="3">
+      <v-col cols="12" md="3" lg="3">
         <h2 class="text-h5 font-weight-bold">
           Dinas Lingkungan
         </h2>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="4" md="2" lg="2">
         <v-select
           v-model="sortBy"
           flat
@@ -20,7 +20,7 @@
         />
       </v-col>
 
-      <v-col cols="3" offset-md="2">
+      <v-col cols="8" md="3" lg="3" offset-md="2">
         <v-autocomplete
           v-model="selectedSearch"
           label="Cari Produk Daur Ulang"
@@ -61,10 +61,10 @@
         >
           <v-card>
             <v-card-title>
-              <v-icon class="mr-2" large>
+              <v-icon class="mr-2 custom-primary--text" large>
                 mdi-plus
               </v-icon>
-              <span class="text-h5 font-weight-bold">{{ formTitle }}</span>
+              <span class="text-h5 custom-primary--text font-weight-bold">{{ formTitle }}</span>
             </v-card-title>
             <v-card-text>
               <v-container>
@@ -218,15 +218,15 @@
               <v-card-actions>
                 <v-spacer />
                 <v-btn
-                  color="blue darken-1"
-                  text
+                  color="red darken-1"
+                  dark
                   @click="close"
                 >
                   Cancel
                 </v-btn>
                 <v-btn
-                  color="blue darken-1"
-                  text
+                  color="custom-primary"
+                  dark
                   @click="save"
                 >
                   Save
@@ -336,7 +336,7 @@ export default {
         }
       ],
       partners: [],
-      dialog: true,
+      dialog: false,
       dialogDelete: false,
       sortBy: 'name',
       keys: [

@@ -1,37 +1,41 @@
 <template>
   <v-card>
     <v-row class="align-center">
-      <v-col cols="2">
-        <div class="ml-3">
+      <v-col cols="12" sm="2" md="2" lg="2">
+        <div class="px-3">
           <v-img
             :src="require(`@/assets/images/${product.photos[0]}`)"
           />
         </div>
       </v-col>
-      <v-col cols="5">
+      <v-col cols="12" sm="5" md="5" lg="5" class="px-3">
         <p class="mb-0 custom-secondary--text text-h4 font-weight-bold">
           {{ product.name }}
         </p>
         <span class="custom-primary--text text-h4 font-weight-bold">
           {{ 'Rp. ' + currency(product.price) }}
         </span>
-        <p class="mt-1 text-caption">
+        <p class="mt-1 text-caption hidden-xs-only">
           {{ product.description }}
         </p>
       </v-col>
       <v-col
         v-for="market in product.seller.marketPlace"
         :key="market.id"
-        cols="1"
+        cols="12"
+        sm="1"
+        md="1"
+        lg="1"
+        class="px-3"
       >
         <a
           :href="market.to"
           :class="market.name.toLowerCase() + '-icon'"
         >
-          Link Shopee
+          {{ 'Link ' + market.name }}
         </a>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="12" sm="2" md="2" lg="2">
         <v-btn
           class="mr-3 custom-primary--text"
           small

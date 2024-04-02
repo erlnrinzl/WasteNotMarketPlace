@@ -17,7 +17,12 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap', crossorigin: true }
+    ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -54,6 +59,7 @@ export default {
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
     theme: {
       dark: false,
       light: true,
@@ -72,6 +78,12 @@ export default {
           'custom-secondary': '#003E39'
         }
       }
+    },
+    defaultAssets: {
+      font: false // Menonaktifkan font bawaan Vuetify
+    },
+    fonts: {
+      family: 'Montserrat'
     }
   },
 

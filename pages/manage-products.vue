@@ -50,21 +50,29 @@
       <v-col cols="7">
         Detail Product
       </v-col>
-      <v-col cols="1" class="font-weight-bold">
+      <v-col cols="1" class="font-weight-bold hidden-xs-only">
         Shopee
       </v-col>
-      <v-col cols="1" class="font-weight-bold">
+      <v-col cols="1" class="font-weight-bold hidden-xs-only">
         Tokopedia
       </v-col>
-      <v-col cols="1" class="font-weight-bold">
+      <v-col cols="1" class="font-weight-bold hidden-xs-only">
         Lazada
       </v-col>
-      <v-col cols="2" class="text-center font-weight-bold">
+      <v-col cols="2" class="text-center font-weight-bold hidden-xs-only">
         Aksi
       </v-col>
     </v-row>
     <v-row class="my-0">
-      <v-col v-for="product in products" :key="product.id" cols="12" class="mb-5">
+      <v-col
+        v-for="product in products"
+        :key="product.id"
+        cols="6"
+        sm="12"
+        md="12"
+        lg="12"
+        class="mb-5"
+      >
         <CardProduct :product="product" @open-dialog="deleteDialog" />
       </v-col>
     </v-row>
