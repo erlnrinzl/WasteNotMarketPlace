@@ -17,7 +17,13 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 const firestore = getFirestore(app)
 
-export default function (_, inject) {
+export default function ({ store }, inject) {
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      store.commit('auth/setUser', user)
+    }
+  })
+
   inject('auth', auth)
   inject('firestore', firestore)
 }

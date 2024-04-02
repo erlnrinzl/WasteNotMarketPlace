@@ -73,7 +73,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 
 export default {
@@ -98,28 +97,18 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('auth', {
-      setFullName: 'setFullName',
-      setRefreshToken: 'setRefreshToken',
-      setAccessToken: 'setAccessToken'
-    }),
     async onSubmit () {
       this.isDisabled = true
 
       try {
         const { email, password } = this.formData
-        const { user } = await signInWithEmailAndPassword(this.$auth, email, password)
+        await signInWithEmailAndPassword(this.$auth, email, password)
 
         // store passed welcome screen
         if (!localStorage.welcomeScreen) {
           this.storeWelcomeScreen()
           this.$router.push('/register')
         }
-
-        // store auth data
-        this.setFullName(user.displayName)
-        this.setAccessToken(await user.getIdToken())
-        this.setRefreshToken(user.refreshToken)
 
         this.$router.push('/')
       } catch (error) {
