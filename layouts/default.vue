@@ -71,7 +71,7 @@
       </v-toolbar-items>
 
       <v-toolbar-items v-else class="hidden-xs-only">
-        <v-btn v-for="(menu, index) in navigationMenu" :key="index" :to="menu.to" text>
+        <v-btn v-for="(menu, index) in navMenuList" :key="index" :to="menu.to" text>
           <span :class="$route.path === menu.to ? 'font-weight-black': ''" class="custom-secondary--text">
             {{ menu.title }}
           </span>
@@ -135,6 +135,8 @@
 </template>
 
 <script>
+// import { mapState } from 'vuex'
+
 export default {
   name: 'DefaultLayout',
   data () {
@@ -211,7 +213,8 @@ export default {
           name: 'Waste Category',
           to: ''
         }
-      ]
+      ],
+      role: 'user'
     }
   },
   computed: {
@@ -227,7 +230,23 @@ export default {
         return false
       }
       return true
+    },
+    navMenuList () {
+      if (this.role === 'seller') {
+        const newNavigationMenu = this.navigationMenu
+        newNavigationMenu.push(
+          {
+            title: 'Seller',
+            to: '/manage-products'
+          }
+        )
+        return newNavigationMenu
+      }
+      return this.navigationMenu
     }
+    // ...mapState('auth', {
+    //   role: 'role'
+    // })
   }
 }
 </script>

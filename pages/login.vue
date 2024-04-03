@@ -1,12 +1,12 @@
 <template>
   <v-container fluid fill-height class="align-stretch">
     <v-row>
-      <v-col md="6">
+      <v-col cols="12" md="6" lg="6">
         <v-container fluid fill-height>
           <v-img :src="require(`@/assets/images/${heroLoginImg}`)" />
         </v-container>
       </v-col>
-      <v-col md="6" class="custom-primary">
+      <v-col cols="12" md="6" lg="6" class="custom-primary">
         <v-container fluid fill-height>
           <v-row>
             <v-col md="8" offset-md="2">
@@ -56,7 +56,7 @@
                     <v-progress-circular v-else color="custom-secondary" indeterminate />
                   </v-btn>
                   <div class="text-center my-3">
-                    <span>Belum punya akun? <a class="font-weight-black" href="/register">Daftar</a></span>
+                    <span>Belum punya akun? <v-btn class="font-weight-black" color="primary" to="/register" text small>Daftar</v-btn></span>
                   </div>
 
                 <!-- <v-btn @click="storeWelcomeScreen"> -->
@@ -87,6 +87,17 @@ export default {
       formData: {
         email: '',
         password: ''
+      },
+      rules: {
+        email: [
+          v => !!v || 'Email is required!',
+          v => /.+@.+/.test(v) || 'Invalid email!',
+          v => !!this.emailExist || 'Email is already registered'
+        ],
+        password: [
+          v => !!v || 'Password is required!',
+          v => v.length >= 6 || 'Password must be at least 6 characters!'
+        ]
       }
     }
   },

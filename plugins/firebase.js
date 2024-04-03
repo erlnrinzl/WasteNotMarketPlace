@@ -22,6 +22,7 @@ export default function ({ store }, inject) {
     if (user) {
       const { claims } = await user.getIdTokenResult()
 
+      console.log('got fired')
       store.commit('auth/setUser', user)
       store.commit('auth/setRole', claims.role)
     }
