@@ -30,8 +30,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/firebase.js',
-    '~/plugins/api.js'
+    // '~/plugins/firebase.js'
+    // '~/plugins/api.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -45,10 +45,38 @@ export default {
     '@nuxtjs/vuetify'
   ],
 
+  // router: {
+  //   middleware: ['auth']
+  // },
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    [
+      '@nuxtjs/firebase',
+      {
+        config: {
+          apiKey: 'AIzaSyCr7b5iXtkghyyZgwWCGh62cxLBCaVM8Jo',
+          authDomain: 'wastenot-c13cd.firebaseapp.com',
+          projectId: 'wastenot-c13cd',
+          storageBucket: 'wastenot-c13cd.appspot.com',
+          messagingSenderId: '881650790886',
+          appId: '1:881650790886:web:1b4b6d02fad949829d6627',
+          measurementId: 'G-EFZW7R00SD'
+        },
+        services: {
+          auth: {
+            persistence: 'local', // default
+            initialize: {
+              onAuthStateChangedAction: 'auth/onAuthStateChangedAction',
+              subscribeManually: false
+            },
+            ssr: false
+          }
+        }
+      }
+    ]
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

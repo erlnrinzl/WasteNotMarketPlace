@@ -113,13 +113,20 @@ export default {
 
       try {
         const { email, password } = this.formData
-        await signInWithEmailAndPassword(this.$auth, email, password)
+        await signInWithEmailAndPassword(this.$fire.auth, email, password)
+
+        // this.$fire.auth.signInWithEmailAndPassword(email, password)
+        //   .catch((error) => {
+        //     console.error(error)
+        //   }).then((user) => {
+        //     this.$router.push('/')
+        //   })
 
         // store passed welcome screen
-        if (!localStorage.welcomeScreen) {
-          this.storeWelcomeScreen()
-          this.$router.push('/register')
-        }
+        // if (!localStorage.welcomeScreen) {
+        //   this.storeWelcomeScreen()
+        //   this.$router.push('/register')
+        // }
 
         this.$router.push('/')
       } catch (error) {
