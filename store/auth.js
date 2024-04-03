@@ -12,7 +12,7 @@ export const getters = {
 
 export const mutations = {
   setUser: (state, user) => {
-    state.user = { ...state.user, ...user }
+    state.user = user ? { ...state.user, ...user } : null
   },
 
   setRole: (state, role) => {
@@ -21,7 +21,7 @@ export const mutations = {
 }
 
 export const actions = {
-  onAuthStateChangedAction: ({ commit, state }, { authUser, claims }) => {
+  onAuthStateChangedAction: ({ commit }, { authUser, claims }) => {
     if (!authUser) {
       commit('setUser', null)
       commit('setRole', null)
