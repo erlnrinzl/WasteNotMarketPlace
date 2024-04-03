@@ -70,7 +70,7 @@
 import { signOut } from 'firebase/auth'
 
 export default {
-  // middleware: ['authenticated'],
+  middleware: ['authenticated'],
   computed: {
     userData () {
       return this.$store.state.auth.user
@@ -86,7 +86,7 @@ export default {
       })
     },
     async logout () {
-      await signOut(this.$auth)
+      await signOut(this.$fire.auth)
       this.$router.push('/login')
     }
   }

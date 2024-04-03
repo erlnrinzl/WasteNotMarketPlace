@@ -1,7 +1,4 @@
-export const state = () => ({
-  user: null,
-  role: null
-})
+export const state = () => ({ user: null, role: null })
 
 export const getters = {
   authenticated: (state) => { return !!state.user },
@@ -26,19 +23,12 @@ export const mutations = {
 export const actions = {
   onAuthStateChangedAction: ({ commit, state }, { authUser, claims }) => {
     if (!authUser) {
-      // remove state
       commit('setUser', null)
+      commit('setRole', null)
     } else {
       const { displayName, email, phoneNumber, photoURL, uid } = authUser
-      console.log(authUser)
-      console.log(claims)
-      commit('setUser', {
-        displayName,
-        email,
-        phoneNumber,
-        photoURL,
-        uid
-      })
+
+      commit('setUser', { displayName, email, phoneNumber, photoURL, uid })
       commit('setRole', claims.role)
     }
   }

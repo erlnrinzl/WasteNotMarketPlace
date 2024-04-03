@@ -97,17 +97,11 @@
 
 <script>
 export default {
-  // middleware: ['authenticated'],
+  middleware: ['authenticated'],
   data () {
     return {
       dialog: false,
       isDisabled: false,
-      // userData: {
-      //   id: '',
-      //   name: 'Calvin Andrew Widjaja',
-      //   email: 'calvin043@gmail.com',
-      //   phone: '081296112422'
-      // },
       rules: {
         name: [
           v => !!v || 'Masukan nama lengkap anda!'
@@ -154,14 +148,6 @@ export default {
       } finally {
         this.isDisabled = false
       }
-      // this.$axios.$post('url', this.userData).then((response) => {
-      //   console.log(response)
-      //   this.isDisabled = false
-      //   this.dialog = true
-      // }).catch((error) => {
-      //   this.isDisabled = false
-      //   console.error(error)
-      // })
     },
     closeDialog () {
       this.dialog = false
