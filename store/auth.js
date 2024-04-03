@@ -6,10 +6,10 @@ export const getters = {
 
 export const mutations = {
   setUser: (state, user) => {
-    state = { ...state, user }
+    state.user = user
   },
 
   setRole: (state, role) => {
-    state = { ...state, role }
+    state.role = role
   }
 }

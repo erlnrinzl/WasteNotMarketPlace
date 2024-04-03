@@ -6,9 +6,9 @@
       </v-col>
       <v-col cols="6" sm="6" md="2" lg="2">
         <div>
-          <a class="custom-primary--text" href="/edit-account">
+          <router-link to="/edit-account" class="custom-primary--text">
             <span class="text-subtitle-2 font-weight-bold">Perbarui Akun</span>
-          </a>
+          </router-link>
         </div>
       </v-col>
       <v-col cols="6" sm="6" md="2" lg="2">
@@ -33,7 +33,7 @@
               <p class="mb-0 custom-secondary--text text-h6 font-weight-bold">
                 Nama Lengkap
               </p>
-              <span class="text-subtitle-1">{{ userData.name }}</span>
+              <span class="text-subtitle-1">{{ userData.displayName }}</span>
             </div>
           </v-list-item-title>
         </v-list-item-content>
@@ -57,7 +57,7 @@
               <p class="mb-0 custom-secondary--text text-h6 font-weight-bold">
                 Nomor Telepon
               </p>
-              <span class="text-subtitle-1">{{ userData.phone }}</span>
+              <span class="text-subtitle-1">{{ userData.phoneNumber }}</span>
             </div>
           </v-list-item-title>
         </v-list-item-content>
@@ -67,15 +67,13 @@
 </template>
 
 <script>
+import { signOut } from 'firebase/auth'
+
 export default {
   // middleware: ['authenticated'],
-  data () {
-    return {
-      userData: {
-        name: 'Calvin Andrew Widjaja',
-        email: 'calvin043@gmail.com',
-        phone: '081296112422'
-      }
+  computed: {
+    userData () {
+      return this.$store.state.auth.user
     }
   },
   methods: {
@@ -87,8 +85,9 @@ export default {
         }
       })
     },
-    logout () {
-      console.log('you are logged out')
+    async logout () {
+      await signOut(this.$auth)
+      this.$router.push('/login')
     }
   }
 }

@@ -3,9 +3,9 @@
     <div class="pb-2 d-flex justify-space-between">
       <span class="custom-secondary--text text-h5 font-weight-bold">Perbarui Informasi Akun</span>
       <div>
-        <a class="custom-primary--text" href="/account">
+        <router-link to="/account" class="custom-primary--text">
           <span class="text-subtitle-2 font-weight-bold">Batal</span>
-        </a>
+        </router-link>
       </div>
     </div>
     <hr>
@@ -14,7 +14,7 @@
         <v-col cols="12" sm="6" md="4" lg="4">
           <label for="fullname" class="custom-secondary--text font-weight-bold">Nama Lengkap</label>
           <v-text-field
-            v-model="userData.email"
+            v-model="user.displayName"
             name="fullname"
             label="Nama Lengkap"
             type="text"
@@ -23,7 +23,7 @@
           />
           <label for="email" class="custom-secondary--text font-weight-bold">Email</label>
           <v-text-field
-            v-model="userData.email"
+            v-model="user.email"
             name="email"
             label="email"
             type="email"
@@ -33,7 +33,7 @@
           />
           <label for="phone" class="custom-secondary--text font-weight-bold">Nomor Telepon</label>
           <v-text-field
-            v-model="userData.phone"
+            v-model="user.phoneNumber"
             name="phone"
             label="Nomor Telepon"
             type="phone"
@@ -46,7 +46,7 @@
                 :to="{
                   name: 'account',
                   params: {
-                    id: userData.id
+                    id: user.uid
                   }
                 }"
                 class="custom-primary--text mr-3"
@@ -102,12 +102,12 @@ export default {
     return {
       dialog: false,
       isDisabled: false,
-      userData: {
-        id: '',
-        name: 'Calvin Andrew Widjaja',
-        email: 'calvin043@gmail.com',
-        phone: '081296112422'
-      },
+      // userData: {
+      //   id: '',
+      //   name: 'Calvin Andrew Widjaja',
+      //   email: 'calvin043@gmail.com',
+      //   phone: '081296112422'
+      // },
       rules: {
         name: [
           v => !!v || 'Masukan nama lengkap anda!'
@@ -123,6 +123,11 @@ export default {
       }
     }
   },
+  computed: {
+    user () {
+      return { ...this.$store.state.auth.user }
+    }
+  },
   methods: {
     checkEmail () {
       // this.$axios.$post('url', this.formData.email)
@@ -133,8 +138,22 @@ export default {
       //     this.emailExist = true
       //   })
     },
-    onSubmit () {
+    async onSubmit () {
       this.isDisabled = true
+
+      try {
+        await this.$api.put('/auth', {
+          name: this.user.displayName,
+          email: this.user.email,
+          phoneNumber: this.user.phoneNumber
+        })
+
+        this.dialog = true
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.isDisabled = false
+      }
       // this.$axios.$post('url', this.userData).then((response) => {
       //   console.log(response)
       //   this.isDisabled = false
