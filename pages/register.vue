@@ -17,11 +17,11 @@
                 outlined
                 solo
               />
-              <label for="radioGender" class="custom-secondary--text font-weight-bold">Jenis Kelamin</label>
+              <label for="radio_gender" class="custom-secondary--text font-weight-bold">Jenis Kelamin</label>
               <v-radio-group
                 v-model="formData.gender"
                 mandatory
-                name="radioGender"
+                name="radio_gender"
               >
                 <v-radio
                   label="Laki-laki"
@@ -83,7 +83,7 @@
                 <v-progress-circular v-else color="custom-secondary" indeterminate />
               </v-btn>
               <div class="text-center my-3">
-                <span>Sudah punya akun? <a class="font-weight-black" href="/login">Masuk</a></span>
+                <span>Sudah punya akun? <v-btn class="font-weight-black" to="/login" color="primary" text small>Masuk</v-btn></span>
               </div>
 
             <!-- <v-btn @click="storeWelcomeScreen"> -->

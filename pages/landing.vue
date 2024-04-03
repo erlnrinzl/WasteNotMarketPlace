@@ -5,13 +5,13 @@
     <!-- Divider -->
 
     <v-container id="achievement" class="d-flex justify-center">
-      <v-responsive height="90vh" class="d-flex align-center">
+      <v-responsive min-height="90vh" class="d-flex align-center">
         <div class="my-16">
-          <div class="mt-16 text-center">
-            <h2 class="text-h2 font-weight-bold">
+          <v-container class="mt-16 text-center">
+            <span class="text-h3 font-weight-bold">
               Pencapaian
-            </h2>
-          </div>
+            </span>
+          </v-container>
           <v-row class="my-16 d-flex justify-center">
             <v-col
               v-for="(item, index) in achievements"
