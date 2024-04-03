@@ -1,20 +1,20 @@
 <template>
-  <v-row class="my-5">
+  <v-row v-if="product" class="my-5">
     <v-col md="6">
       <v-container class="px-10 py-5">
         <v-row>
           <v-col md="8" offset-md="2">
             <v-img
-              :src="require(`@/assets/images/${changePreview}`)"
+              :src="product.productImage[selectedImage]"
             />
           </v-col>
         </v-row>
         <hr class="my-5">
         <div>
           <v-row>
-            <v-col v-for="(image, index) in product.photos" :key="index" cols="3">
+            <v-col v-for="(image, index) in product.productImage" :key="index" cols="3">
               <v-img
-                :src="require(`@/assets/images/${image}`)"
+                :src="image"
                 @click="selectedImage = index"
               />
             </v-col>
@@ -47,16 +47,17 @@
         </div>
         <div class="mt-3">
           <v-btn
-            v-for="market in product.seller.marketPlace"
-            :key="market.id"
+            v-for="marketplace in product.marketplaces"
+            :key="marketplace.name"
             rounded
-            :class="market.name.toLowerCase() + ' pr-0 mr-2'"
+            :class="marketplace.name.toLowerCase() + ' pr-0 mr-2'"
             dark
-            :to="market.to"
+            :href="marketplace.url"
+            target="_blank"
           >
-            {{ market.name }}
+            {{ marketplace.name }}
             <div class="icon-round ml-3">
-              <v-icon right class="inner-icon mx-0" :class="market.name.toLowerCase() + '-icon'">
+              <v-icon right class="inner-icon mx-0" :class="marketplace.name.toLowerCase() + '-icon'">
                 mdi-shopping-outline
               </v-icon>
             </div>
@@ -68,57 +69,19 @@
 </template>
 
 <script>
-
 export default {
-  // middleware: ['authenticated'],
+  middleware: ['authenticated'],
   data () {
     return {
       selectedImage: 0,
-      product: {
-        id: 4,
-        name: 'Tempat ATK',
-        seller: {
-          name: 'Eggan OY',
-          marketPlace: [
-            {
-              id: 1,
-              name: 'Shopee',
-              to: ''
-            },
-            {
-              id: 2,
-              name: 'Tokopedia',
-              to: ''
-            },
-            {
-              id: 3,
-              name: 'Lazada',
-              to: ''
-            }
-          ]
-        },
-        thumbnail: 'Tempat ATK.jpg',
-        description: 'Lampu tidur dari sendok plastik adalah inovasi kreatif yang terbuat dari daur ulang bahan bekas, memberikan pencahayaan lembut dan suasana nyaman di ruangan. Desainnya yang ramah lingkungan dan unik membuatnya menjadi pilihan hiasan dekoratif yang menarik di rumah.',
-        photos: [
-          'Tempat ATK.jpg',
-          'Lampu Sendok 1.jpg'
-        ],
-        price: 150000
-      }
+      product: null
+    }
+  },
+  async created () {
+    const productId = this.$route.params.id
+    const { data } = await this.$api.get(`/products/${productId}`)
 
-    }
-  },
-  computed: {
-    changePreview () {
-      return this.product.photos[this.selectedImage]
-    }
-  },
-  mounted () {
-    try {
-      // this.product = products.filter(product => product.id === this.$route.params.id)
-    } catch (error) {
-      // console.error(error)
-    }
+    this.product = data
   },
   methods: {
     currency (value) {

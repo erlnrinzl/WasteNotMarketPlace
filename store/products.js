@@ -1,16 +1,4 @@
-export const state = () => ({
-  /*
-   *   product object: {
-   *     id: Number,
-   *     title: String,
-   *     seller: String,
-   *     thumbnail: imgURL,
-   *     preface: String
-   *   }
-   */
-
-  products: []
-})
+export const state = () => ({ products: [] })
 
 export const getters = {
   getProductById: state => (id) => {
@@ -25,18 +13,8 @@ export const mutations = {
 }
 
 export const actions = {
-  // contoh fetching data product
-
-  // fetchProducts ({ commit }) {
-  //   return this.$axios.$get('url-etc').then((response) => {
-  //     commit('updateProducts', response.products)
-  //   })
-  // },
-
-  // fetchProductById ({ commit }, productId) {
-  //   this.$axios.$get(`url/${productId}`).then((response) => {
-  //     commit('setProduct', response.data)
-  //   })
-  // }
-
+  async fetchProducts ({ commit }) {
+    const { data } = await this.$api.get('/products')
+    commit('updateProducts', data)
+  }
 }

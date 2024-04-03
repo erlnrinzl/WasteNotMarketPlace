@@ -35,19 +35,17 @@
             {{ product.name }}
           </v-card-title>
           <v-card-text class="custom-primary text-subtitle-1 white--text">
-            {{ product.preface }}
+            {{ product.description }}
           </v-card-text>
           <div class="text-center product-wrapper pt-5 pb-5">
             <v-avatar size="25vh" class="mb-5 absolute-div">
-              <v-img
-                :src="require(`@/assets/images/${product.thumbnail}`)"
-              />
+              <img :src="product.productImage[0]">
             </v-avatar>
           </div>
           <v-card-actions class="px-3 pb-3 justify-space-between align-end">
             <div class="custom-secondary--text">
               Oleh:
-              <span class="font-weight-bold">{{ product.seller }}</span>
+              <span class="font-weight-bold">{{ product.seller.name }}</span>
             </div>
             <v-btn
               color="custom-secondary"
@@ -72,7 +70,7 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
-  // middleware: ['authenticated'],
+  middleware: ['authenticated'],
   data () {
     return {
       search: null,
@@ -90,9 +88,7 @@ export default {
       }
       return this.products
     },
-    ...mapState('products', {
-      products: 'products'
-    })
+    ...mapState('products', { products: 'products' })
   },
   watch: {
     search (value) {
@@ -106,7 +102,7 @@ export default {
     }
   },
   mounted () {
-    // this.fetchProducts()
+    this.fetchProducts()
   },
   methods: {
     ...mapActions({
