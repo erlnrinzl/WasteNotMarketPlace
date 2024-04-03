@@ -1,4 +1,6 @@
-const BASE_API_URL = 'https://us-central1-wastenot-c13cd.cloudfunctions.net/api'
+const BASE_API_URL = process.env.NODE_ENV === 'production'
+  ? 'https://us-central1-wastenot-c13cd.cloudfunctions.net/api'
+  : 'http://127.0.0.1:5001/wastenot-c13cd/us-central1/api'
 
 export default function ({ $axios, $auth }, inject) {
   const api = $axios.create()
