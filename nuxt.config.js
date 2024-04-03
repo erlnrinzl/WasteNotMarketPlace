@@ -1,5 +1,19 @@
 import colors from 'vuetify/es5/util/colors'
 
+const auth = {
+  persistence: 'local', // default
+  initialize: {
+    onAuthStateChangedAction: 'auth/onAuthStateChangedAction',
+    subscribeManually: false
+  },
+  ssr: false
+}
+
+if (process.env.NODE_ENV === 'development') {
+  auth.emulatorPort = 9099
+  auth.emulatorHost = 'http://localhost'
+}
+
 export default {
   // disable SSR rendering
   ssr: false,
@@ -64,18 +78,7 @@ export default {
           appId: '1:881650790886:web:1b4b6d02fad949829d6627',
           measurementId: 'G-EFZW7R00SD'
         },
-        services: {
-          auth: {
-            persistence: 'local', // default
-            initialize: {
-              onAuthStateChangedAction: 'auth/onAuthStateChangedAction',
-              subscribeManually: false
-            },
-            ssr: false,
-            emulatorPort: 9099,
-            emulatorHost: 'http://localhost'
-          }
-        }
+        services: { auth }
       }
     ]
   ],
