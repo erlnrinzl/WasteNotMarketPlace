@@ -12,7 +12,7 @@ export const getters = {
 
 export const mutations = {
   setUser: (state, user) => {
-    state.user = user
+    state.user = { ...state.user, ...user }
   },
 
   setRole: (state, role) => {

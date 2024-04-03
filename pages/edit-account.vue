@@ -85,7 +85,7 @@
           <v-btn
             color="custom-secondary"
             dark
-            @click="dialog = false"
+            @click="closeDialog"
           >
             Agree
           </v-btn>
@@ -136,11 +136,10 @@ export default {
       this.isDisabled = true
 
       try {
-        await this.$api.put('/auth', {
-          name: this.user.displayName,
-          email: this.user.email,
-          phoneNumber: this.user.phoneNumber
-        })
+        const { displayName, email, phoneNumber } = this.user
+
+        await this.$api.put('/auth', { name: displayName, email, phoneNumber })
+        this.$store.commit('auth/setUser', { displayName, email, phoneNumber })
 
         this.dialog = true
       } catch (error) {
