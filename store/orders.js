@@ -1,14 +1,6 @@
-export const state = () => ({
-  /*
-   *   product object: {
-   *     id: Number,
-   *     title: String,
-   *     seller: String,
-   *     thumbnail: imgURL,
-   *     preface: String
-   *   }
-   */
+import { getTime, talkDate } from '~/utils/date'
 
+export const state = () => ({
   orders: [],
   finishedOrders: []
 })
@@ -29,13 +21,40 @@ export const mutations = {
 }
 
 export const actions = {
-  // contoh fetching data order
+  async fetchOrders ({ commit }) {
+    const unfinisihedOrders = []
+    const finishedOrders = []
 
-  // fetchOrders ({ commit }) {
-  //   return this.$axios.$get('url-etc').then((response) => {
-  //     commit('updateOrders', response.orders)
-  //   })
-  // },
+    const { data: pickups } = await this.$api.get('/pickups')
+    const { data: delivers } = await this.$api.get('/delivers')
+
+    pickups.forEach((pickup) => { pickup.type = 'Pick Up' })
+    delivers.forEach((deliver) => { deliver.type = 'Deliver' })
+
+    const orders = [...pickups, ...delivers]
+    orders.forEach((order) => {
+      let date
+
+      order.totalPoints = order.wastes.reduce((t, c) => { return t + c.wastePoint }, 0)
+      order.totalWeight = order.wastes.reduce((t, c) => { return t + c.wasteWeight }, 0)
+
+      if (order.status === 'Selesai') {
+        date = new Date(order.createdTime)
+        finishedOrders.push(order)
+      } else {
+        date = new Date(order.updatedTime)
+        unfinisihedOrders.push(order)
+      }
+
+      order.date = talkDate(date)
+      order.time = getTime(date)
+
+      console.log(order)
+    })
+
+    commit('updateOrders', unfinisihedOrders)
+    commit('updateFinishedOrders', finishedOrders)
+  }
 
   // fetchFinishedOrders ({ commit }) {
   //   return this.$axios.$get('url-etc').then((response) => {

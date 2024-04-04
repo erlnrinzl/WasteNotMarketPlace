@@ -7,7 +7,7 @@
     <v-card-title class="py-1 d-flex justify-space-between">
       <div>
         <span class="custom-primary--text text-h5 font-weight-bold">
-          {{ orderData.type.charAt(0).toUpperCase() + orderData.type.slice(1) }}
+          {{ orderData.type }}
         </span>
       </div>
       <div class="custom-secondary--text text-subtitle-2">
@@ -24,16 +24,15 @@
       <v-row>
         <v-col cols="6">
           <v-img
-            :src="require(`@/assets/images/Kotak Pensil.jpg`)"
+            :src="orderData.wasteImageUrl"
             contain
           />
         </v-col>
         <v-col cols="6">
           <div>
             <p class="mb-0 custom-secondary--text font-weight-bold text-h6">
-              {{ orderData.unitPolls.unitType }}
+              {{ orderData.bank.name }}
             </p>
-            <span>{{ orderData.unitPolls.name }}</span>
           </div>
         </v-col>
 
@@ -56,7 +55,7 @@
               <p class="my-0 text-subtitle-1">
                 Total Berat
               </p>
-              <span class="custom-primary--text font-weight-bold">{{ orderData.totalBerat + " Kg" }}</span>
+              <span class="custom-primary--text font-weight-bold">{{ orderData.totalWeight + " Kg" }}</span>
             </div>
           </v-col>
           <v-col cols="6">
@@ -64,7 +63,7 @@
               <p class="my-0 text-subtitle-1">
                 Poin
               </p>
-              <span class="custom-primary--text font-weight-bold">{{ "+" + orderData.poin }}</span>
+              <span class="custom-primary--text font-weight-bold">{{ "+" + orderData.totalPoints }}</span>
             </div>
           </v-col>
         </template>
