@@ -10,7 +10,7 @@
             <v-card-text class="text-left">
               <label for="fullname" class="custom-secondary--text font-weight-bold">Nama Lengkap</label>
               <v-text-field
-                v-model="formData.email"
+                v-model="formData.name"
                 name="fullname"
                 label="Nama Lengkap"
                 type="text"
@@ -24,16 +24,17 @@
                 name="radio_gender"
               >
                 <v-radio
-                  label="Laki-laki"
-                  value="male"
+                  label="Laki-Laki"
+                  value="Laki Laki"
                 />
                 <v-radio
                   label="Perempuan"
-                  value="female"
+                  value="Perempuan"
                 />
               </v-radio-group>
               <label for="phone" class="custom-secondary--text font-weight-bold">Nomor Telepon</label>
               <v-form>
+                +62
                 <v-text-field
                   v-model="formData.phone"
                   name="phone"
@@ -147,16 +148,19 @@ export default {
       //     this.emailExist = true
       //   })
     },
-    onSubmit () {
+    async onSubmit () {
       this.isDisabled = true
-      // this.$axios.$post('url', this.formData).then((response) => {
-      //   console.log(response)
-      //   this.isDisabled = false
-      //   this.$router.push('/login')
-      // }).catch((error) => {
-      //   this.isDisabled = false
-      //   console.error(error)
-      // })
+      try {
+        const { email, password, phone, name, retype_Password: confirmPassword, gender } = this.formData
+        const phoneNumber = `+62${phone}`
+        await this.$api.post('/auth/register', { name, email, password, phoneNumber, confirmPassword, gender })
+
+        this.$router.push('/login')
+      } catch (error) {
+        // Handle errors
+      } finally {
+        this.isDisabled = false
+      }
     }
   }
 }
