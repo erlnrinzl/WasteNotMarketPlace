@@ -48,8 +48,6 @@ export const actions = {
 
       order.date = talkDate(date)
       order.time = getTime(date)
-
-      console.log(order)
     })
 
     commit('updateOrders', unfinisihedOrders)

@@ -85,7 +85,8 @@ export default {
       this.$router.push({
         name: 'order-detail',
         params: {
-          id: this.orderData.id
+          id: this.orderData.id,
+          type: this.orderData.type
         }
       })
     }
