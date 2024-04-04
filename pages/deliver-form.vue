@@ -226,7 +226,10 @@ export default {
       menu: false,
       menu2: false,
       formData: {
-        sender: null
+        bankId: null,
+        sender: null,
+        phone: null,
+        address: null
       },
       selectedFile: null,
       imageUrl: '',
@@ -256,6 +259,27 @@ export default {
       reader.readAsDataURL(this.selectedFile)
       reader.onload = (e) => {
         this.imageUrl = e.target.result
+      }
+    },
+    async onSubmit () {
+      this.isDisabled = true
+      try {
+        const { bankId, sender, phone } = this.formData
+        const sendSchedule = new Date().toISOString()
+
+        const formData = new FormData()
+        formData.append('bankId', bankId)
+        formData.append('senderName', sender)
+        formData.append('senderPhone', phone) // +62xxx
+        formData.append('sendSchedule', sendSchedule)
+        formData.append('wasteImage', this.selectedFile)
+
+        const { data } = await this.$api.post('/delivers', formData)
+        console.log(data)
+      } catch (error) {
+        // Handle errors
+      } finally {
+        this.isDisabled = false
       }
     }
   }
