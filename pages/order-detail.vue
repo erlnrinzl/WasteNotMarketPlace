@@ -10,7 +10,7 @@
         <DetailLabel label-name="Deliver ID" :label-value="order.id" />
         <DetailLabel label-name="Nama Pengirim" :label-value="user.name" />
         <DetailLabel label-name="Nomor Telepon Pengirim" :label-value="user.phone" />
-        <DetailLabel :v-if="user.address" label-name="Alamat Pengirim" :label-value="user.address" />
+        <DetailLabel :label-name="user.address ? 'Alamat Pengirim' : ''" :label-value="user.address" />
       </v-col>
       <v-col lg="4" md="4" sm="6">
         <DetailLabel label-name="Tanggal Pengiriman" :label-value="order.date" />
