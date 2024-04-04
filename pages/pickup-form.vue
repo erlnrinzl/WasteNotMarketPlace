@@ -209,6 +209,28 @@ export default {
       reader.onload = (e) => {
         this.imageUrl = e.target.result
       }
+    },
+    async onSubmit () {
+      this.isDisabled = true
+      try {
+        const { bankId, sender, phone, address } = this.formData
+        const pickupSchedule = new Date().toISOString()
+
+        const formData = new FormData()
+        formData.append('bankId', bankId)
+        formData.append('requesterName', sender)
+        formData.append('requesterPhone', phone) // +62xxx
+        formData.append('requesterAddress', address)
+        formData.append('pickupSchedule', pickupSchedule)
+        formData.append('wasteImage', this.selectedFile)
+
+        const { data } = await this.$api.post('/pickups', formData)
+        console.log(data)
+      } catch (error) {
+        // Handle errors
+      } finally {
+        this.isDisabled = false
+      }
     }
   }
 }
