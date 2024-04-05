@@ -50,7 +50,7 @@
                 md="4"
                 lg="4"
               >
-                <v-card height="100%" class="pt-3">
+                <v-card height="100%" class="mx-md-8 mx-lg-8 pt-3">
                   <v-img
                     :src="require(`@/assets/images/${item.image}`)"
                     height="20vh"

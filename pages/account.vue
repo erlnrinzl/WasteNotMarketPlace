@@ -1,26 +1,15 @@
 <template>
   <v-container class="py-10 px-5">
     <v-row class="pb-2">
-      <v-col cols="12" md="8" lg="8">
+      <v-col cols="12" sm="10" md="10" lg="10">
         <span class="custom-secondary--text text-h5 font-weight-bold">Informasi Akun</span>
       </v-col>
-      <v-col cols="6" sm="6" md="2" lg="2">
+      <v-col cols="6" sm="2" md="2" lg="2">
         <div>
           <router-link to="/edit-account" class="custom-primary--text">
             <span class="text-subtitle-2 font-weight-bold">Perbarui Akun</span>
           </router-link>
         </div>
-      </v-col>
-      <v-col cols="6" sm="6" md="2" lg="2">
-        <v-btn
-          color="custom-primary"
-          block
-          dark
-          small
-          @click="logout"
-        >
-          Log Out
-        </v-btn>
       </v-col>
     </v-row>
     <hr>
@@ -67,8 +56,6 @@
 </template>
 
 <script>
-import { signOut } from 'firebase/auth'
-
 export default {
   middleware: ['authenticated'],
   computed: {
@@ -84,10 +71,6 @@ export default {
           id: this.orderData.id
         }
       })
-    },
-    async logout () {
-      await signOut(this.$fire.auth)
-      this.$router.push('/login')
     }
   }
 }

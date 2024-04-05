@@ -115,13 +115,12 @@ export default {
       try {
         const { email, password } = this.formData
         await signInWithEmailAndPassword(this.$fire.auth, email, password)
-
-        this.$router.push('/')
       } catch (error) {
         this.isError = true
         this.message = error.response.data.message
       } finally {
         this.isDisabled = false
+        this.$router.push('/')
       }
     },
     async forgetPassword () {

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer
-      v-if="renderAppLayout"
+      v-if="renderNavbar"
       v-model="sideDrawer"
       app
       class="hidden-sm-and-up"
@@ -29,9 +29,10 @@
           </v-btn>
         </v-list-item>
       </v-list>
+
       <v-list v-else>
         <v-list-item
-          v-for="(item, i) in navigationMenu"
+          v-for="(item, i) in navMenuList"
           :key="i"
           :to="item.to"
           router
@@ -41,10 +42,21 @@
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item v-if="authenticated">
+          <v-btn
+            color="custom-primary"
+            block
+            dark
+            small
+            @click="logout"
+          >
+            Log Out
+          </v-btn>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="renderAppLayout" app>
+    <v-app-bar v-if="renderNavbar" app>
       <!-- hamburger icon -->
       <span class="hidden-sm-and-up mr-3">
         <v-app-bar-nav-icon @click.stop="sideDrawer = !sideDrawer" />
@@ -84,13 +96,23 @@
         <span class="mr-3">Pergi Ke Aplikasi</span>
         <v-icon>mdi-send-variant-outline</v-icon>
       </v-btn>
+      <v-btn
+        v-if="authenticated"
+        class="hidden-xs-only"
+        color="custom-primary"
+        dark
+        small
+        @click="logout"
+      >
+        Log Out
+      </v-btn>
     </v-app-bar>
 
     <v-main>
       <Nuxt />
     </v-main>
 
-    <v-footer v-if="renderAppLayout" class="custom-primary">
+    <v-footer v-if="renderFooter" class="custom-primary">
       <v-row>
         <v-col cols="12" md="6" lg="6">
           <div class="ml-4">
@@ -119,13 +141,13 @@
             </div>
           </div>
         </v-col>
-        <v-col cols="6" class="hidden-xs-only">
+        <v-col cols="12" md="6" lg="6">
           <div class="ml-4">
             <p class="white--text text-h6 font-weight-light">
               Menu
             </p>
-            <p v-for="menu in footerMenu" :key="menu.name">
-              <a class="white--text font-weight-bold text-decoration-none" :href="menu.to">{{ menu.name }}</a>
+            <p v-for="menu in footerMenu" :key="menu.title">
+              <a class="white--text font-weight-bold text-decoration-none" :href="menu.to">{{ menu.title }}</a>
             </p>
           </div>
         </v-col>
@@ -135,7 +157,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
+import { signOut } from 'firebase/auth'
 
 export default {
   name: 'DefaultLayout',
@@ -199,29 +222,27 @@ export default {
           icon: 'mdi-facebook',
           to: ''
         }
-      ],
-      footerMenu: [
-        {
-          name: 'About Us',
-          to: ''
-        },
-        {
-          name: 'Milestone',
-          to: ''
-        },
-        {
-          name: 'Waste Category',
-          to: ''
-        }
       ]
     }
   },
   computed: {
-    renderAppLayout () {
+    ...mapGetters('auth', {
+      authenticated: 'authenticated',
+      getRole: 'getRole'
+    }),
+    renderNavbar () {
       if (this.$route.path === '/login' || this.$route.path === '/register') {
         return false
       }
 
+      return true
+    },
+    renderFooter () {
+      if (this.$route.path === '/login' || this.$route.path === '/register') {
+        return false
+      } else if (this.getRole === 'seller' || this.getRole === 'bank') {
+        return false
+      }
       return true
     },
     renderNavLoggedIn () {
@@ -231,21 +252,32 @@ export default {
       return true
     },
     navMenuList () {
-      if (this.role === 'seller') {
-        const newNavigationMenu = this.navigationMenu
-        newNavigationMenu.push(
+      if (this.getRole === 'seller') {
+        return [
           {
             title: 'Seller',
             to: '/manage-products'
           }
-        )
-        return newNavigationMenu
+        ]
       }
       return this.navigationMenu
     },
-    ...mapState('auth', {
-      role: 'role'
+    footerMenu () {
+      if (this.authenticated) {
+        return this.navigationMenu
+      }
+      return this.navigationMenuLoggedOff
+    },
+    ...mapGetters('auth', {
+      authenticated: 'authenticated',
+      getRole: 'getRole'
     })
+  },
+  methods: {
+    async logout () {
+      await signOut(this.$fire.auth)
+      this.$router.push('/login')
+    }
   }
 }
 </script>
