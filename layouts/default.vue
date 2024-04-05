@@ -240,7 +240,7 @@ export default {
     renderFooter () {
       if (this.$route.path === '/login' || this.$route.path === '/register') {
         return false
-      } else if (this.getRole === 'seller' || this.getRole === 'bank') {
+      } else if (this.getRole === 'seller' || this.getRole === 'bank' || this.getRole === 'admin') {
         return false
       }
       return true
@@ -257,6 +257,13 @@ export default {
           {
             title: 'Seller',
             to: '/manage-products'
+          }
+        ]
+      } else if (this.getRole === 'admin') {
+        return [
+          {
+            title: 'Partners',
+            to: '/manage-parners'
           }
         ]
       }
