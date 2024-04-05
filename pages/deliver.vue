@@ -25,7 +25,7 @@ export default {
           'Dinas Lingkungan Menampilkan Hasil Penimbangan Sampah Pada Detail Pesanan',
           'Poin Kamu Akan Ditambahkan Sesuai Dengan Berat Sampah Yang Kamu Kirimkan'
         ],
-        thumbnail: 'Deliver.jpg'
+        thumbnail: 'Deliver.png'
       }
     }
   }
