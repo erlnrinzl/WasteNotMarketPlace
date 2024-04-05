@@ -1,6 +1,6 @@
-export default function ({ store }) {
+export default function ({ app, store }) {
   const userRole = store.getters['auth/getRole']
-  if (!store.getters['auth/authenticated']) {
+  if (!app.$fire.auth.currentUser) {
     window.$nuxt.$router.push({
       name: 'landing',
       params: {

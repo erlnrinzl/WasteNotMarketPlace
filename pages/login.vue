@@ -126,7 +126,9 @@ export default {
 
       try {
         const { email, password } = this.formData
+
         await signInWithEmailAndPassword(this.$fire.auth, email, password)
+
         this.$router.push('/')
       } catch (error) {
         console.log('the error is', error)
@@ -143,6 +145,8 @@ export default {
       try {
         const { email } = this.formData
         await sendPasswordResetEmail(this.$fire.auth, email)
+        this.snackbar = true
+        this.snackbarText = 'The reset link sent to ' + email
       } catch (error) {
         this.isError = true
         this.message = error.response.data.message
