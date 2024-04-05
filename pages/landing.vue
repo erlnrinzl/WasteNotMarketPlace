@@ -80,7 +80,7 @@ export default {
   components: {
     CarouselBanner
   },
-  // middleware: ['unauthenticated'],
+  middleware: ['unauthenticated'],
   data () {
     return {
       achievements: [

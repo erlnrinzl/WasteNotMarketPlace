@@ -11,7 +11,7 @@
           <v-row>
             <v-col md="8" offset-md="2">
               <v-card class="text-center px-3">
-                <v-card-title class="mb-3 custom-primary--text text-h3 font-weight-medium justify-center">
+                <v-card-title class="mb-3 custom-primary--text text-h3 font-weight-bold justify-center">
                   Masuk
                 </v-card-title>
                 <v-card-text class="text-left">
@@ -19,12 +19,13 @@
                     v-if="isError"
                     class="red lighten-2 white--text"
                   >
-                    {{ $t(message) }}
+                    {{ message }}
                   </v-alert>
                   <label for="email" class="custom-secondary--text font-weight-bold">Email</label>
                   <v-form>
                     <v-text-field
                       v-model="formData.email"
+                      :rules="rules.email"
                       name="email"
                       label="email"
                       type="email"
@@ -34,6 +35,7 @@
                     <label for="email" class="custom-secondary--text font-weight-bold">Password</label>
                     <v-text-field
                       v-model="formData.password"
+                      :rules="rules.password"
                       name="password"
                       label="password"
                       type="password"
@@ -41,9 +43,9 @@
                       solo
                     />
                     <div class="text-right">
-                      <span><a href="/login">
-                        Lupa Password
-                      </a></span>
+                      <v-btn text small color="primary" @click="forgetPassword">
+                        <span>Lupa Password</span>
+                      </v-btn>
                     </div>
                   </v-form>
                 </v-card-text>
@@ -73,11 +75,11 @@
 </template>
 
 <script>
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
 
 export default {
   name: 'IndexPage',
-  // middleware: ['unauthenticated'],
+  middleware: ['unauthenticated'],
   data () {
     return {
       heroLoginImg: 'Sign In.jpg',
@@ -91,8 +93,7 @@ export default {
       rules: {
         email: [
           v => !!v || 'Email is required!',
-          v => /.+@.+/.test(v) || 'Invalid email!',
-          v => !!this.emailExist || 'Email is already registered'
+          v => /.+@.+/.test(v) || 'Invalid email!'
         ],
         password: [
           v => !!v || 'Password is required!',
@@ -115,25 +116,21 @@ export default {
         const { email, password } = this.formData
         await signInWithEmailAndPassword(this.$fire.auth, email, password)
 
-        // this.$fire.auth.signInWithEmailAndPassword(email, password)
-        //   .catch((error) => {
-        //     console.error(error)
-        //   }).then((user) => {
-        //     this.$router.push('/')
-        //   })
-
-        // store passed welcome screen
-        // if (!localStorage.welcomeScreen) {
-        //   this.storeWelcomeScreen()
-        //   this.$router.push('/register')
-        // }
-
         this.$router.push('/')
       } catch (error) {
         this.isError = true
         this.message = error.response.data.message
       } finally {
         this.isDisabled = false
+      }
+    },
+    async forgetPassword () {
+      try {
+        const { email } = this.formData
+        await sendPasswordResetEmail(this.$fire.auth, email)
+      } catch (error) {
+        this.isError = true
+        this.message = error.response.data.message
       }
     },
     storeWelcomeScreen () {

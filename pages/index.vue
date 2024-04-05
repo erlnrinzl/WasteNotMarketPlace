@@ -5,14 +5,14 @@
         <v-col cols="10" offset="1">
           <v-card class="px-3 my-5" rounded="rounded-xl">
             <v-card-title>
-              <span class="text-h4 font-weight-bold">
+              <span class="text-md-h4 text-h5 font-weight-bold">
                 Kamu sudah mengumpulkan sampah sebanyak:
               </span>
             </v-card-title>
             <v-card-text>
               <div class="my-5 text-center">
-                <span class="text-h2 custom-primary--text font-weight-bold">{{ user.weightCollected }}</span>
-                <span class="ml-3 text-h2 custom-secondary--text font-weight-bold">KG</span>
+                <span class="text-md-h2 text-h3 custom-primary--text font-weight-bold">{{ user.weightCollected }}</span>
+                <span class="ml-3 text-md-h2 text-h3 custom-secondary--text font-weight-bold">KG</span>
               </div>
               <div class="d-flex justify-end">
                 <span><a href="/order" class="custom-primary--text font-weight-bold text-subtitle-1">Lihat Pesanan</a></span>
@@ -87,10 +87,10 @@
           <v-container class="px-10 text-center" fill-height>
             <div>
               <div>
-                <span class="custom-primary--text text-h2 font-weight-bold">Pick Up</span>
+                <span class="custom-primary--text text-md-h2 text-h4 font-weight-bold">Pick Up</span>
               </div>
               <div class="my-5">
-                <p class="text-h5 font-weight-light text-right">
+                <p class="text-md-h5 text-subtitle-1 font-weight-light text-right">
                   Layanan pickup adalah sebuah layanan di mana kamu dapat memilih jadwal yang tersedia untuk pengambilan barang-barang yang sudah tidak terpakai atau bekas di rumah anda
                 </p>
               </div>
@@ -110,14 +110,14 @@
           <v-container class="px-10 text-center" fill-height>
             <div>
               <div class="mt-5 mb-3">
-                <span class="white--text text-h2 font-weight-bold">Deliver</span>
+                <span class="white--text text-md-h2 text-h4 font-weight-bold">Deliver</span>
               </div>
               <div class="my-5">
-                <p class="text-h5 white--text font-weight-light text-left">
+                <p class="text-md-h5 text-subtitle-1 white--text font-weight-light text-left">
                   Layanan deliver adalah sebuah layanan di mana anda dapat mengirim barang anda ke lokasi dinas lingkungan yang diinginkan Anda
                 </p>
               </div>
-              <v-btn class="mx-5" color="custom-secondary" dark to="/deliver">
+              <v-btn class="mx-5 my-4" color="custom-secondary" dark to="/deliver">
                 <span class="mx-4">Mulai Deliver</span>
                 <v-icon>mdi-hand-coin-outline</v-icon>
               </v-btn>
@@ -147,7 +147,7 @@
         <v-col sm="12" md="5">
           <v-container class="px-10 text-center outer-container" fill-height>
             <div class="hidden-lg-and-up">
-              <span class="white--text text-h4 font-weight-bold">Tertarik menampilkan produk hasil daur ulang anda di website kami?</span>
+              <span class="white--text text-md-h2 text-h4 font-weight-bold">Tertarik menampilkan produk hasil daur ulang anda di website kami?</span>
               <v-btn class="mx-5 mt-5" color="custom-primary" dark to="/about-us">
                 <span class="mx-4">Hubungi Kami</span>
                 <v-icon>mdi-phone</v-icon>
@@ -172,7 +172,7 @@
 <script>
 export default {
   name: 'IndexPage',
-  // middleware: ['authenticated'],
+  middleware: ['authenticated'],
   data () {
     return {
       user: {

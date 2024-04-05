@@ -23,7 +23,7 @@
         <v-list-item
           :to="'/'"
         >
-          <v-btn depressed class="custom-secondary white--text" :to="'/'" active>
+          <v-btn depressed class="custom-secondary white--text" :to="'/login'" active>
             <span class="mr-3">Pergi Ke Aplikasi</span>
             <v-icon>mdi-send-variant-outline </v-icon>
           </v-btn>
@@ -80,7 +80,7 @@
 
       <v-spacer />
 
-      <v-btn v-if="!renderNavLoggedIn" depressed class="custom-secondary white--text hidden-xs-only" :to="'/'">
+      <v-btn v-if="!renderNavLoggedIn" depressed class="custom-secondary white--text hidden-xs-only" :to="'/login'">
         <span class="mr-3">Pergi Ke Aplikasi</span>
         <v-icon>mdi-send-variant-outline</v-icon>
       </v-btn>
@@ -94,7 +94,7 @@
       <v-row>
         <v-col cols="12" md="6" lg="6">
           <div class="ml-4">
-            <p class="text-h4 font-weight-medium white--text">
+            <p class="text-md-h4 text-h6 font-weight-medium white--text">
               WasteNot
             </p>
             <v-btn
@@ -135,7 +135,7 @@
 </template>
 
 <script>
-// import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'DefaultLayout',
@@ -213,8 +213,7 @@ export default {
           name: 'Waste Category',
           to: ''
         }
-      ],
-      role: 'user'
+      ]
     }
   },
   computed: {
@@ -243,10 +242,10 @@ export default {
         return newNavigationMenu
       }
       return this.navigationMenu
-    }
-    // ...mapState('auth', {
-    //   role: 'role'
-    // })
+    },
+    ...mapState('auth', {
+      role: 'role'
+    })
   }
 }
 </script>

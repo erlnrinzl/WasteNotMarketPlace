@@ -10,7 +10,8 @@
             <v-card-text class="text-left">
               <label for="fullname" class="custom-secondary--text font-weight-bold">Nama Lengkap</label>
               <v-text-field
-                v-model="formData.email"
+                v-model="formData.name"
+                :rules="rules.name"
                 name="fullname"
                 label="Nama Lengkap"
                 type="text"
@@ -36,6 +37,7 @@
               <v-form>
                 <v-text-field
                   v-model="formData.phone"
+                  :rules="rules.phone"
                   name="phone"
                   label="Nomor Telepon"
                   type="phone"
@@ -46,6 +48,7 @@
                 <v-form>
                   <v-text-field
                     v-model="formData.email"
+                    :rules="rules.email"
                     name="email"
                     label="email"
                     type="email"
@@ -56,6 +59,7 @@
                   <label for="password" class="custom-secondary--text font-weight-bold">Password</label>
                   <v-text-field
                     v-model="formData.password"
+                    :rules="rules.password"
                     name="password"
                     label="password"
                     type="password"
@@ -65,6 +69,7 @@
                   <label for="retype_Password" class="custom-secondary--text font-weight-bold">Konfirmasi Password</label>
                   <v-text-field
                     v-model="formData.retype_Password"
+                    :rules="rules.retype_Password"
                     name="retype_Password"
                     label="password"
                     type="password"
@@ -100,7 +105,7 @@
 <script>
 export default {
   name: 'IndexPage',
-  // middleware: ['unauthenticated'],
+  middleware: ['unauthenticated'],
   data () {
     return {
       emailExist: false,
