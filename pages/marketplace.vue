@@ -14,7 +14,7 @@
           :search-input.sync="search"
           :loading="isLoading"
           :items="itemsSearch"
-          item-text="title"
+          item-text="name"
           item-value="id"
           return-object
           hide-no-data
@@ -66,7 +66,7 @@ export default {
       setTimeout(() => {
         this.itemsSearch = this.products.filter((product) => {
           this.isLoading = false
-          return product.title
+          return product.name
         })
       }, 800)
     }

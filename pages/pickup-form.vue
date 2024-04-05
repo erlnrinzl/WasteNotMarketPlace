@@ -145,7 +145,8 @@
               <v-col cols="12" md="7" lg="7">
                 <label for="evidence-image" class="white--text font-weight-bold">Foto Bukti Sampah</label>
                 <v-file-input
-                  v-model="selectedFile"
+                  v-model="image"
+                  type="file"
                   name="evidence-image"
                   label="Foto Bukti Sampah"
                   prepend-icon="mdi-camera"
@@ -153,15 +154,19 @@
                   accept="image/*"
                   outlined
                   solo
+                  multiple
                   @change="onFileChange"
                 />
-                <v-img
-                  v-if="imageUrl"
-                  :src="imageUrl"
-                  width="200"
-                  height="200"
-                  contain
-                />
+                <v-row>
+                  <v-col v-for="(imgUrl, index) in imageUrls" :key="index" cols="4">
+                    <v-img
+                      :src="imgUrl"
+                      width="200"
+                      height="200"
+                      contain
+                    />
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </v-container>
@@ -183,7 +188,7 @@
 
 <script>
 export default {
-  // middleware: ['authenticated'],
+  middleware: ['authenticated'],
   data () {
     return {
       formName: 'Pick Up',
@@ -196,21 +201,27 @@ export default {
       formData: {
         sender: null
       },
-      selectedFile: null,
-      imageUrl: ''
+      image: undefined,
+      imageUrls: []
     }
   },
   methods: {
-    onFileChange (event) {
-      this.selectedFile = event.target.files[0]
-      this.previewImage()
-    },
-    previewImage () {
-      const reader = new FileReader()
-      reader.readAsDataURL(this.selectedFile)
-      reader.onload = (e) => {
-        this.imageUrl = e.target.result
+    onFileChange (file) {
+      this.image = null
+      this.imageUrls = []
+      if (!file) {
+        return
       }
+      file.forEach((img) => {
+        this.previewImage(img)
+      })
+    },
+    previewImage (file) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        this.imageUrls.push(e.target.result)
+      }
+      reader.readAsDataURL(file)
     },
     async onSubmit () {
       this.isDisabled = true
@@ -224,7 +235,6 @@ export default {
         formData.append('requesterPhone', phone) // +62xxx
         formData.append('requesterAddress', address)
         formData.append('pickupSchedule', pickupSchedule)
-        formData.append('wasteImage', this.selectedFile)
 
         const { data } = await this.$api.post('/pickups', formData)
         console.log(data)

@@ -302,11 +302,6 @@ export default {
     return {
       headers: [
         {
-          text: 'Aksi',
-          value: 'actions',
-          sortable: false
-        },
-        {
           text: 'ID',
           value: 'id'
         },
@@ -333,6 +328,11 @@ export default {
         {
           text: 'Hari Tutup',
           value: 'closeDay'
+        },
+        {
+          text: 'Aksi',
+          value: 'actions',
+          sortable: false
         }
       ],
       partners: [],
