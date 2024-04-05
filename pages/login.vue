@@ -10,6 +10,17 @@
         <v-container fluid fill-height>
           <v-row>
             <v-col md="8" offset-md="2">
+              <v-snackbar
+                v-model="snackbar"
+                :timeout="4000"
+                color="custom-primary"
+                outlined
+                elevation="24"
+                top
+                center
+              >
+                {{ snackbarText }}
+              </v-snackbar>
               <v-card class="text-center px-3">
                 <v-card-title class="mb-3 custom-primary--text text-h3 font-weight-bold justify-center">
                   Masuk
@@ -60,12 +71,11 @@
                   <div class="text-center my-3">
                     <span>Belum punya akun? <v-btn class="font-weight-black" color="primary" to="/register" text small>Daftar</v-btn></span>
                   </div>
-
-                <!-- <v-btn @click="storeWelcomeScreen"> -->
-                  <!-- Store localStorage -->
-                  <!-- </v-btn> -->
                 </v-card-actions>
               </v-card>
+              <v-btn @click="snackbar = !snackbar">
+                click me
+              </v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -85,6 +95,8 @@ export default {
       heroLoginImg: 'Sign In.jpg',
       isDisabled: false,
       isError: false,
+      snackbar: false,
+      snackbarText: '',
       message: '',
       formData: {
         email: '',
@@ -115,12 +127,16 @@ export default {
       try {
         const { email, password } = this.formData
         await signInWithEmailAndPassword(this.$fire.auth, email, password)
+        this.$router.push('/')
       } catch (error) {
-        this.isError = true
-        this.message = error.response.data.message
+        console.log('the error is', error)
+        console.log('the error response is', error.response)
+        this.snackbar = true
+        this.snackbarText = 'error messages'
+
+        // this.message = error.response.data.message
       } finally {
         this.isDisabled = false
-        this.$router.push('/')
       }
     },
     async forgetPassword () {
