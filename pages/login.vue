@@ -129,7 +129,7 @@ export default {
 
         await signInWithEmailAndPassword(this.$fire.auth, email, password)
 
-        this.$router.replace('/')
+        this.$router.go('/')
       } catch (error) {
         console.log('the error is', error)
         console.log('the error response is', error.response)

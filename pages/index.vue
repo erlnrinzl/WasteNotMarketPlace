@@ -14,19 +14,16 @@
                 <span class="text-md-h2 text-h3 custom-primary--text font-weight-bold">{{ user.wasteCollected }}</span>
                 <span class="ml-3 text-md-h2 text-h3 custom-secondary--text font-weight-bold">KG</span>
               </div>
-              <div class="d-flex justify-end">
-                <span><a href="/order" class="custom-primary--text font-weight-bold text-subtitle-1">Lihat Pesanan</a></span>
-              </div>
               <hr>
 
               <v-row>
-                <v-col sm="12" md="4" lg="4">
+                <v-col cols="12" md="4" lg="4">
                   <div class="mr-10">
                     <span class="custom-primary--text font-weight-bold text-h6">Total Point:</span>
                     <span class="ml-3 custom-secondary--text font-weight-bold text-h6">{{ user.totalPoints }}</span>
                   </div>
                 </v-col>
-                <v-col sm="12" md="4" lg="4" class="text-center">
+                <v-col cols="12" md="4" lg="4" class="text-center">
                   <div>
                     <div>
                       <span>Level Kamu</span>
@@ -37,6 +34,19 @@
                       </v-icon>
                       <span class="custom-primary--text font-weight-bold text-h6">{{ user.level }}</span>
                     </div>
+                  </div>
+                </v-col>
+                <v-col cols="12" md="4" lg="4">
+                  <div class="d-flex justify-md-end justify-lg-end">
+                    <span>
+                      <router-link
+                        to="/my-points"
+                        style="cursor: pointer"
+                        class="custom-primary--text font-weight-bold text-h6"
+                      >
+                        Tukar Poin
+                      </router-link>
+                    </span>
                   </div>
                 </v-col>
               </v-row>
@@ -169,6 +179,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'IndexPage',
   middleware: ['authenticated'],
@@ -182,6 +194,11 @@ export default {
         level: ''
       }
     }
+  },
+  computed: {
+    ...mapGetters('auth', {
+      getRole: 'getRole'
+    })
   },
   async mounted () {
     const { data } = await this.$api.get('/auth')
