@@ -92,7 +92,7 @@ export default {
   middleware: ['unauthenticated'],
   data () {
     return {
-      heroLoginImg: 'Sign In.jpg',
+      heroLoginImg: 'Sign In.png',
       isDisabled: false,
       isError: false,
       snackbar: false,
@@ -129,7 +129,7 @@ export default {
 
         await signInWithEmailAndPassword(this.$fire.auth, email, password)
 
-        this.$router.push('/')
+        this.$router.replace('/')
       } catch (error) {
         console.log('the error is', error)
         console.log('the error response is', error.response)

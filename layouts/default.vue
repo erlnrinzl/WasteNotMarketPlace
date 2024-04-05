@@ -263,7 +263,7 @@ export default {
         return [
           {
             title: 'Partners',
-            to: '/manage-parners'
+            to: '/manage-partners'
           }
         ]
       }

@@ -297,7 +297,7 @@
 
 <script>
 export default {
-  middleware: ['authenticated'],
+  middleware: ['auth-admin'],
   data () {
     return {
       headers: [

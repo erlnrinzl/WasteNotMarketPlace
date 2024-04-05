@@ -77,7 +77,7 @@
           <v-row>
             <v-col sm="12" md="10" offset-md="1">
               <v-img
-                :src="require(`@/assets/images/Sign In.jpg`)"
+                :src="require(`@/assets/images/Sign In.png`)"
               />
             </v-col>
           </v-row>
@@ -127,7 +127,7 @@
           <v-row>
             <v-col sm="12" md="10" offset-md="1">
               <v-img
-                :src="require(`@/assets/images/Sign In.jpg`)"
+                :src="require(`@/assets/images/Sign In.png`)"
               />
             </v-col>
           </v-row>

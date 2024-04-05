@@ -120,7 +120,7 @@
 
 <script>
 export default {
-  // middleware: ['authenticated'],
+  middleware: ['auth-seller'],
   data () {
     return {
       products: [{

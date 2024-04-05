@@ -1,4 +1,4 @@
-export default function ({ app, store }) {
+export default function ({ app, store, redirect }) {
   const userRole = store.getters['auth/getRole']
   if (!app.$fire.auth.currentUser) {
     window.$nuxt.$router.push({
