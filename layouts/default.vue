@@ -146,9 +146,19 @@
             <p class="white--text text-h6 font-weight-light">
               Menu
             </p>
-            <p v-for="menu in footerMenu" :key="menu.title">
-              <a class="white--text font-weight-bold text-decoration-none" :href="menu.to">{{ menu.title }}</a>
-            </p>
+            <v-row>
+              <v-col v-for="menu in footerMenu" :key="menu.title" cols="6" class="py-0 my-0">
+                <p class="mb-1">
+                  <router-link
+                    class="white--text font-weight-bold text-decoration-none"
+                    style="cursor: pointer"
+                    :to="menu.to"
+                  >
+                    {{ menu.title }}
+                  </router-link>
+                </p>
+              </v-col>
+            </v-row>
           </div>
         </v-col>
       </v-row>

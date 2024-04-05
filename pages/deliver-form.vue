@@ -30,7 +30,7 @@
                   :search-input.sync="search"
                   :loading="isLoading"
                   :items="itemsSearch"
-                  item-text="title"
+                  item-text="name"
                   item-value="id"
                   return-object
                   hide-no-data
@@ -44,11 +44,25 @@
         </v-col>
         <v-col cols="12">
           <v-container>
-            <v-row class="px-3">
-              <v-col cols="12" sm="6" md="4" lg="4">
-                <CardAlamat :maps-object="mapsObject" />
-              </v-col>
-            </v-row>
+            <v-slide-group
+              v-model="formData.bankId"
+              show-arrows
+            >
+              <v-slide-item
+                v-for="bank in filteredBanks"
+                v-slot="{ active, toggle }"
+                :key="bank.id"
+                :value="bank.id"
+              >
+                <CardAlamat
+                  :active="active"
+                  :maps-object="bank"
+                  :width="230"
+                  class="ma-3"
+                  @click="toggle"
+                />
+              </v-slide-item>
+            </v-slide-group>
           </v-container>
         </v-col>
 
@@ -225,6 +239,8 @@
 </template>
 
 <script>
+// import { mapActions, mapState } from 'vuex'
+
 export default {
   // middleware: ['authenticated'],
   data () {
@@ -247,19 +263,61 @@ export default {
       isLoading: false,
       itemsSearch: [],
       selectedSearch: null,
-      mapsObject: {
-        name: 'Dinas Lingkungan Hidup Cilandak',
-        distance: 4.5,
-        mapsUrl: '',
-        address: 'Jl. Terusan Gaharu 1 No.2 4, RT.9/RW.11, Cilandak Bar., Kec. Cilandak, Kota Jakarta Selatan,  12430',
-        schedule: {
-          day: 'Senin - Sabtu',
-          time: '07.00 - 17.00'
+      banks: [
+        {
+          id: 1,
+          name: 'Dinas Lingkungan Hidup Cilandak',
+          distance: 4.5,
+          mapsUrl: '',
+          address: 'Jl. Terusan Gaharu 1 No.2 4, RT.9/RW.11, Cilandak Bar., Kec. Cilandak, Kota Jakarta Selatan,  12430',
+          schedule: {
+            day: 'Senin - Sabtu',
+            time: '07.00 - 17.00'
+          }
+        },
+        {
+          id: 2,
+          name: 'Dinas Lingkungan Hidup Cilandak',
+          distance: 4.5,
+          mapsUrl: '',
+          address: 'Jl. Terusan Gaharu 1 No.2 4, RT.9/RW.11, Cilandak Bar., Kec. Cilandak, Kota Jakarta Selatan,  12430',
+          schedule: {
+            day: 'Senin - Sabtu',
+            time: '07.00 - 17.00'
+          }
         }
-      }
+      ]
     }
   },
+  computed: {
+    // ...mapState('banks', { banks: 'banks' }),
+    filteredBanks () {
+      if (this.selectedSearch) {
+        return this.banks.filter(bank =>
+          bank.id === this.selectedSearch.id
+        )
+      }
+      return this.banks
+    }
+  },
+  watch: {
+    search (value) {
+      this.isLoading = true
+      setTimeout(() => {
+        this.itemsSearch = this.banks.filter((bank) => {
+          this.isLoading = false
+          return bank.name
+        })
+      }, 800)
+    }
+  },
+  mounted () {
+    // this.fetchBanks()
+  },
   methods: {
+    // ...mapActions({
+    //   fetchBanks: 'banks/fetchBanks'
+    // }),
     onFileChange (file) {
       this.image = null
       this.imageUrls = []
