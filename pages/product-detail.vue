@@ -24,11 +24,11 @@
     </v-col>
     <v-col md="6">
       <v-container class="px-10 py-5">
-        <h3 class="custom-primary--text text-h3 font-weight-bold">
+        <h3 class="custom-primary--text text-h4 text-md-h3 text-lg-h3 font-weight-bold">
           {{ product.name }}
         </h3>
         <div class="d-flex justify-end">
-          <div class="text-subtitle-2">
+          <div class="mt-3 text-subtitle-2">
             <span>Oleh</span>
             <span class="custom-secondary--text font-weight-bold">{{ product.seller.name }}</span>
           </div>
