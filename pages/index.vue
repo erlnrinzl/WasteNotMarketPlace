@@ -11,7 +11,7 @@
             </v-card-title>
             <v-card-text>
               <div class="my-5 text-center">
-                <span class="text-md-h2 text-h3 custom-primary--text font-weight-bold">{{ user.weightCollected }}</span>
+                <span class="text-md-h2 text-h3 custom-primary--text font-weight-bold">{{ user.wasteCollected }}</span>
                 <span class="ml-3 text-md-h2 text-h3 custom-secondary--text font-weight-bold">KG</span>
               </div>
               <div class="d-flex justify-end">
@@ -23,7 +23,7 @@
                 <v-col sm="12" md="4" lg="4">
                   <div class="mr-10">
                     <span class="custom-primary--text font-weight-bold text-h6">Total Point:</span>
-                    <span class="ml-3 custom-secondary--text font-weight-bold text-h6">{{ user.point }}</span>
+                    <span class="ml-3 custom-secondary--text font-weight-bold text-h6">{{ user.totalPoints }}</span>
                   </div>
                 </v-col>
                 <v-col sm="12" md="4" lg="4" class="text-center">
@@ -43,7 +43,7 @@
 
               <div class=" my-5">
                 <v-progress-linear
-                  value="15"
+                  :value="user.progress"
                   height="20"
                   color="custom-secondary"
                   rounded
@@ -56,10 +56,9 @@
                     <div class="px-2 py-2 custom-border">
                       <div class="text-center">
                         <span class="ml-2 custom-secondary--text font-weight-bold text-h6 d-block">
-                          {{ user.targetPoint - user.point }}
+                          {{ user.nextLevelPoint - user.totalPoints }} Point lagi
                         </span>
-                        <span class="custom-secondary--text font-weight-bold text-h6 d-block">Point Lagi</span>
-                        <span>Dapatkan voucher E-Commerce sebesar 5K</span>
+                        <span>Untuk naik ke level berikutnya!</span>
                       </div>
                     </div>
                   </v-col>
@@ -176,12 +175,22 @@ export default {
   data () {
     return {
       user: {
-        point: 250,
-        weightCollected: 14.5,
-        level: 'Level 1',
-        targetPoint: 500
+        totalPoints: 0,
+        wasteCollected: 0,
+        nextLevelPoint: 0,
+        progress: 0,
+        level: ''
       }
     }
+  },
+  async mounted () {
+    const { data } = await this.$api.get('/auth')
+
+    this.user.wasteCollected = data.wasteCollected
+    this.user.totalPoints = data.totalPoints
+    this.user.level = data.level.name
+    this.user.nextLevelPoint = data.level.nextLevelPoint
+    this.user.progress = Math.floor(data.totalPoints * 100 / data.level.nextLevelPoint)
   }
 }
 </script>

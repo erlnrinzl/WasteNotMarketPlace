@@ -1,21 +1,21 @@
 <template>
-  <v-container class="py-10 px-5">
+  <v-container v-if="order" class="py-10 px-5">
     <div class="pb-2 d-flex justify-space-between">
       <span class="custom-secondary--text text-h5 font-weight-bold">Detail Pesanan</span>
-      <span class="custom-primary--text text-h5 font-weight-bold">{{ orderData.type.charAt(0).toUpperCase() + orderData.type.slice(1) }}</span>
+      <span class="custom-primary--text text-h5 font-weight-bold">{{ order.type }}</span>
     </div>
     <hr>
     <v-row class="py-5">
       <v-col lg="4" md="4" sm="6">
-        <DetailLabel label-name="Deliver ID" :label-value="orderData.id" />
-        <DetailLabel label-name="Nama Pengirim" :label-value="orderData.sender.name" />
-        <DetailLabel label-name="Nomor Telepon Pengirim" :label-value="orderData.sender.phone" />
-        <DetailLabel label-name="Alamat Pengirim" :label-value="orderData.sender.address" />
+        <DetailLabel label-name="Deliver ID" :label-value="order.id" />
+        <DetailLabel label-name="Nama Pengirim" :label-value="user.name" />
+        <DetailLabel label-name="Nomor Telepon Pengirim" :label-value="user.phone" />
+        <DetailLabel :label-name="user.address ? 'Alamat Pengirim' : ''" :label-value="user.address" />
       </v-col>
       <v-col lg="4" md="4" sm="6">
-        <DetailLabel label-name="Tanggal Pengiriman" :label-value="orderData.date" />
-        <DetailLabel label-name="Waktu Pengiriman" :label-value="orderData.time" />
-        <DetailLabel :label-name="orderData.unitPolls.unitType" :label-value="orderData.unitPolls.name" />
+        <DetailLabel label-name="Tanggal Pengiriman" :label-value="order.date" />
+        <DetailLabel label-name="Waktu Pengiriman" :label-value="order.time" />
+        <DetailLabel label-name="" :label-value="order.bank.name" />
       </v-col>
       <v-col lg="4" md="4" sm="12">
         <v-card outlined>
@@ -23,12 +23,12 @@
             Detail Berat Sampah
           </v-card-title>
           <v-list>
-            <v-list-item v-for="(item, index) in orderData.items" :key="index" dense>
+            <v-list-item v-for="(item, index) in order.wastesUpdate" :key="index" dense>
               <v-list-item-content class="py-1">
                 <v-list-item-title>
                   <div class="d-flex justify-space-between">
-                    <span class="custom-secondary--text">{{ item.title }}</span>
-                    <span class="custom-secondary--text font-weight-bold">{{ item.berat + ' Kg' }}</span>
+                    <span class="custom-secondary--text">{{ item.wasteName }}</span>
+                    <span class="custom-secondary--text font-weight-bold">{{ item.wasteWeight + ' Kg' }}</span>
                   </div>
                 </v-list-item-title>
                 <hr class="my-2">
@@ -39,7 +39,7 @@
                 <v-list-item-title>
                   <div class="d-flex justify-space-between">
                     <span class="custom-secondary--text font-weight-bold">Total Berat</span>
-                    <span class="custom-primary--text font-weight-bold">{{ subTotalWeight() + ' Kg' }}</span>
+                    <span class="custom-primary--text font-weight-bold">{{ order.totalWeight + ' Kg' }}</span>
                   </div>
                 </v-list-item-title>
               </v-list-item-content>
@@ -49,7 +49,7 @@
                 <v-list-item-title>
                   <div class="d-flex justify-space-between">
                     <span class="custom-secondary--text font-weight-bold">Total Poin</span>
-                    <span class="custom-primary--text font-weight-bold">{{ '+' + orderData.poin }}</span>
+                    <span class="custom-primary--text font-weight-bold">{{ '+' + order.totalPoints }}</span>
                   </div>
                 </v-list-item-title>
               </v-list-item-content>
@@ -62,51 +62,33 @@
 </template>
 
 <script>
+import { getTime, talkDate } from '~/utils/date'
+
 export default {
-  // middleware: ['authenticated'],
+  middleware: ['authenticated'],
   data () {
     return {
-      orderData: {
-        id: '000000000001',
-        type: 'deliver',
-        date: '24 Agustus 2024',
-        time: '10.43',
-        image: 'imageUrl',
-        unitPolls: {
-          unitType: 'Dinas Lingkungan',
-          name: 'Dinas Lingkungan Hidup Cilandak'
-        },
-        status: 'Selesai',
-        totalBerat: 1.5,
-        poin: 25,
-        sender: {
-          name: 'Calvin Andrew Widjaja',
-          phone: '081296112422',
-          address: 'Jl. Rawa Belong No. 17'
-        },
-        items: [
-          {
-            title: 'Botol Plastik',
-            berat: 0.5
-          },
-          {
-            title: 'Plastik',
-            berat: 0.5
-          },
-          {
-            title: 'Kain',
-            berat: 0.5
-          }
-        ]
-      }
+      order: null,
+      user: null
     }
   },
-  methods: {
-    subTotalWeight () {
-      return this.orderData.items.reduce((total, item) => {
-        return (total + item.berat)
-      }, 0)
-    }
+  async created () {
+    const orderId = this.$route.params.id
+    const orderType = this.$route.params.type
+
+    const api = orderType === 'Deliver' ? 'delivers' : 'pickups'
+    const { data } = await this.$api.get(`/${api}/${orderId}`)
+
+    this.order = data
+
+    const date = new Date(data.updatedTime)
+    this.order.date = talkDate(date)
+    this.order.time = getTime(date)
+
+    this.order.totalPoints = data.wastes.reduce((t, c) => { return t + c.wastePoint }, 0)
+    this.order.totalWeight = data.wastes.reduce((t, c) => { return t + c.wasteWeight }, 0)
+
+    this.user = this.order.sender ?? this.order.requester
   }
 }
 

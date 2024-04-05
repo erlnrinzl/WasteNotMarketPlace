@@ -19,16 +19,22 @@
     >
       <v-tab-item :value="'tab-berlangsung'">
         <v-row class="py-5">
-          <!-- <v-col v-for="order in orders" :key="order.id" cols="4"> -->
-          <v-col cols="12" sm="6" md="4" lg="4">
-            <CardPesanan :order-data="orderData" />
+          <v-col
+            v-for="order in orders"
+            :key="order.id"
+            cols="12"
+            sm="6"
+            md="4"
+            lg="4"
+          >
+            <CardPesanan :order-data="order" />
           </v-col>
         </v-row>
       </v-tab-item>
       <v-tab-item :value="'tab-selesai'">
         <v-row class="py-5">
           <v-col v-for="order in finishedOrders" :key="order.id" cols="4">
-            <CardPesanan :order-data="orderData" />
+            <CardPesanan :order-data="order" />
           </v-col>
         </v-row>
       </v-tab-item>
@@ -37,33 +43,27 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
-  // middleware: ['authenticated'],
+  middleware: ['authenticated'],
   data () {
     return {
-      tabs: null,
-      orderData: {
-        id: '',
-        type: 'deliver',
-        date: '24 Agustus 2024',
-        time: '10.43',
-        image: 'imageUrl',
-        unitPolls: {
-          unitType: 'Dinas Lingkungan',
-          name: 'Dinas Lingkungan Hidup Cilandak'
-        },
-        status: 'Selesai',
-        totalBerat: 1.5,
-        poin: 25
-      }
+      tabs: null
     }
   },
   computed: {
     ...mapState('orders', {
       orders: 'orders',
       finishedOrders: 'finishedOrders'
+    })
+  },
+  mounted () {
+    this.fetchOrders()
+  },
+  methods: {
+    ...mapActions({
+      fetchOrders: 'orders/fetchOrders'
     })
   }
 }
