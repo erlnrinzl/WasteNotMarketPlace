@@ -171,6 +171,10 @@ export default {
       ]
     }
   },
+  async mounted () {
+    const { data } = await this.$api.get('/products/seller')
+    console.log(data)
+  },
   methods: {
     deleteProduct (id) {
       // this.$axios.$post(`url/${id}`)

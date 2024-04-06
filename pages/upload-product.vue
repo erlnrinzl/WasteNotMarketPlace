@@ -119,10 +119,11 @@
       </v-col>
 
       <v-col cols="2" offset-md="5" class="mb-10">
-        <v-btn class="custom-primary" block>
-          <span>
+        <v-btn color="custom-primary" dark block @click="onSubmit">
+          <span v-if="!isDisabled">
             Kirim
           </span>
+          <v-progress-circular v-else color="custom-primary" indeterminate />
         </v-btn>
       </v-col>
     </v-row>
@@ -134,6 +135,7 @@ export default {
   // middleware: ['authenticated'],
   data () {
     return {
+      isDisabled: false,
       formName: 'Unggah Produk',
       formData: {
         name: '',
@@ -148,8 +150,8 @@ export default {
     }
   },
   methods: {
-    onFileChange (event) {
-      this.selectedFile = event.target.files[0]
+    onFileChange (file) {
+      this.selectedFile = file
       this.previewImage()
     },
     previewImage () {
@@ -157,6 +159,32 @@ export default {
       reader.readAsDataURL(this.selectedFile)
       reader.onload = (e) => {
         this.imageUrl = e.target.result
+      }
+    },
+    async onSubmit () {
+      this.isDisabled = true
+
+      try {
+        const marketplaces = []
+
+        if (this.formData.shopee) { marketplaces.push({ name: 'Shopee', url: this.formData.shopee }) }
+        if (this.formData.tokopedia) { marketplaces.push({ name: 'Tokopedia', url: this.formData.tokopedia }) }
+        if (this.formData.lazada) { marketplaces.push({ name: 'Lazada', url: this.formData.lazada }) }
+
+        const formData = new FormData()
+
+        formData.append('productImage1', this.selectedFile)
+        formData.append('name', this.formData.name)
+        formData.append('description', 'DESCRIPTION FIELD')
+        formData.append('price', this.formData.price)
+        formData.append('marketplaces', JSON.stringify(marketplaces))
+
+        const { data } = await this.$api.post('/products', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+        console.log(data)
+      } catch (error) {
+        console.log(error.response.data.message)
+      } finally {
+        this.isDisabled = false
       }
     }
   }
