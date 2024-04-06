@@ -74,7 +74,7 @@
               <div>
                 <label for="phone" class="text-body-1 font-weight-bold">Telepon</label>
                 <v-text-field
-                  v-model="editedItem.phone"
+                  v-model="editedItem.phoneNumber"
                   name="phone"
                   label="Telepon"
                   outlined
@@ -230,14 +230,14 @@ export default {
         name: '',
         address: '',
         email: '',
-        phone: ''
+        phoneNumber: ''
       },
       defaultItem: {
         id: '',
         name: '',
         address: '',
         email: '',
-        phone: ''
+        phoneNumber: ''
       }
     }
   },
@@ -294,52 +294,25 @@ export default {
     async save () {
       if (this.editedIndex > -1) {
         // axios to put updated bank data to server
-        const { name, address, email, phone, id } = this.editedItem
+        const { name, address, email, phoneNumber, id } = this.editedItem
 
-        const closeDates = []
-        const openSchedules = []
-        const geoPoint = {
-          latitude: 0,
-          logitude: 0
-        }
+        const formData = { name, address, email, phoneNumber }
 
-        const formData = new FormData()
-        formData.append('name', name)
-        formData.append('address', address)
-        formData.append('email', email)
-        formData.append('phoneNumber', phone)
-        formData.append('closeDates', closeDates)
-        formData.append('openSchedules', openSchedules)
-        formData.append('geoPoint', geoPoint)
-
-        const { data } = await this.$api.put(`/banks/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+        const { data } = await this.$api.put(`/banks/${id}`, formData)
         console.log(data)
 
         Object.assign(this.banks[this.editedIndex], this.editedItem)
       } else {
         // axios to post new bank data to server
-        const { name, address, email, phone } = this.editedItem
+        const { name, address, email, phoneNumber } = this.editedItem
+        const DEFAULT_PASSWORD = 'password'
 
-        const closeDates = []
-        const openSchedules = []
-        const geoPoint = {
-          latitude: 0,
-          logitude: 0
-        }
+        const formData = { name, email, password: DEFAULT_PASSWORD, phoneNumber, address }
 
-        const formData = new FormData()
-        formData.append('name', name)
-        formData.append('address', address)
-        formData.append('email', email)
-        formData.append('phoneNumber', phone)
-        formData.append('closeDates', closeDates)
-        formData.append('openSchedules', openSchedules)
-        formData.append('geoPoint', geoPoint)
-
-        const { data } = await this.$api.post('/banks', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+        const { data } = await this.$api.post('/banks', formData)
         console.log(data)
 
-        this.banks.push(this.editedItem)
+        this.banks.push({ ...this.editedItem, id: data.bankId })
       }
       this.close()
     }
