@@ -43,6 +43,7 @@
                   solo
                 />
                 <label for="phone" class="white--text font-weight-bold">Nomor Telepon Pengirim</label>
+                +62
                 <v-text-field
                   v-model="formData.phone"
                   :rules="formRules.phone"
@@ -157,7 +158,6 @@
                   accept="image/*"
                   outlined
                   solo
-                  multiple
                   @change="onFileChange"
                 />
                 <v-row>
@@ -178,9 +178,10 @@
         <v-col cols="4" md="2" offset="4" offset-md="5" class="mb-10">
           <v-container>
             <v-btn class="custom-primary white--text" block @click="onSubmit">
-              <span>
+              <span v-if="!isDisabled">
                 Kirim
               </span>
+              <v-progress-circular v-else color="custom-secondary" indeterminate />
             </v-btn>
           </v-container>
         </v-col>
@@ -202,36 +203,23 @@ export default {
       menu: false,
       menu2: false,
       formData: {
-        bankId: 'j3r3OtKxOAo8YcT3WyTeUsjK4fOD',
-        sender: null,
-        phone: null,
-        address: '',
-        image: undefined,
-        imageUrls: []
+        sender: null
       },
-      formRules: {
-        sender: [
-          v => !!v || 'Masukan nama lengkap anda!'
-        ],
-        phone: [
-          v => !!v || 'Masukan nomor telepon anda!'
-        ],
-        address: [
-          v => !!v || 'Masukan alamat anda!'
-        ]
-      }
+      image: undefined,
+      imageUrls: [],
+      isDisabled: false
     }
   },
   methods: {
     onFileChange (file) {
-      this.formData.image = null
-      this.formData.imageUrls = []
+      this.image = file
+      this.imageUrls = []
       if (!file) {
         return
       }
-      file.forEach((img) => {
-        this.previewImage(img)
-      })
+      // file.forEach((img) => {
+      this.previewImage(file)
+      // })
     },
     previewImage (file) {
       const reader = new FileReader()
@@ -242,21 +230,23 @@ export default {
     },
     async onSubmit () {
       this.isDisabled = true
+
       try {
-        const { bankId, sender, phone, address } = this.formData
+        const { sender, phone, address } = this.formData
         const pickupSchedule = new Date().toISOString()
 
         const formData = new FormData()
-        formData.append('bankId', bankId)
+        formData.append('wasteImage', this.image)
+        formData.append('bankId', '')
         formData.append('requesterName', sender)
         formData.append('requesterPhone', phone) // +62xxx
         formData.append('requesterAddress', address)
         formData.append('pickupSchedule', pickupSchedule)
 
-        const { data } = await this.$api.post('/pickups', formData)
+        const { data } = await this.$api.post('/pickups', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
       } catch (error) {
-        // Handle errors
+        console.log(error.response.data.message)
       } finally {
         this.isDisabled = false
       }

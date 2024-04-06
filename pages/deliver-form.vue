@@ -231,9 +231,10 @@
         <v-col cols="4" md="2" offset="4" offset-md="5" class="mb-10">
           <v-container>
             <v-btn class="custom-primary white--text" block @click="onSubmit">
-              <span>
+              <span v-if="!isDisabled">
                 Kirim
               </span>
+              <v-progress-circular v-else color="custom-secondary" indeterminate />
             </v-btn>
           </v-container>
         </v-col>
@@ -243,12 +244,11 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
-
 export default {
   middleware: ['authenticated'],
   data () {
     return {
+      isDisabled: false,
       formName: 'Deliver',
       formLabel: 'Pengiriman',
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
@@ -281,7 +281,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('banks', { banks: 'banks' }),
     filteredBanks () {
       if (this.selectedSearch) {
         return this.banks.filter(bank =>
@@ -302,22 +301,20 @@ export default {
       }, 800)
     }
   },
-  mounted () {
-    // this.fetchBanks()
+  async mounted () {
+    const { data } = await this.$api.get('/banks')
+    this.banks = data
   },
   methods: {
-    ...mapActions({
-      fetchBanks: 'banks/fetchBanks'
-    }),
     onFileChange (file) {
-      this.formData.image = null
-      this.formData.imageUrls = []
+      this.image = file
+      this.imageUrls = []
       if (!file) {
         return
       }
-      file.forEach((img) => {
-        this.previewImage(img)
-      })
+      // file.forEach((img) => {
+      this.previewImage(file)
+      // })
     },
     previewImage (file) {
       const reader = new FileReader()
@@ -329,20 +326,22 @@ export default {
     async onSubmit () {
       this.isDisabled = true
       try {
-        const { bankId, sender, phone, imageUrls } = this.formData
+        const { sender, phone } = this.formData
         const sendSchedule = new Date().toISOString()
 
+        const mockupBankId = 'BU5a94Nkp28cxsPMATQxZu2o1mNL'
+
         const formData = new FormData()
-        formData.append('bankId', bankId)
+        formData.append('wasteImage', this.image)
+        formData.append('bankId', mockupBankId)
         formData.append('senderName', sender)
         formData.append('senderPhone', phone) // +62xxx
         formData.append('sendSchedule', sendSchedule)
-        formData.append('wasteImage', imageUrls)
 
-        const { data } = await this.$api.post('/delivers', formData)
+        const { data } = await this.$api.post('/delivers', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
       } catch (error) {
-        // Handle errors
+        console.log(error)
       } finally {
         this.isDisabled = false
       }
