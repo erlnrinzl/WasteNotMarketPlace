@@ -126,37 +126,7 @@ export default {
   middleware: ['auth-seller'],
   data () {
     return {
-      products: [{
-        id: 4,
-        name: 'Tempat ATK',
-        seller: {
-          name: 'Eggan OY',
-          marketPlace: [
-            {
-              id: 1,
-              name: 'Shopee',
-              to: ''
-            },
-            {
-              id: 2,
-              name: 'Tokopedia',
-              to: ''
-            },
-            {
-              id: 3,
-              name: 'Lazada',
-              to: ''
-            }
-          ]
-        },
-        thumbnail: 'Tempat ATK.jpg',
-        description: 'Lampu tidur dari sendok plastik adalah inovasi kreatif yang terbuat dari daur ulang bahan bekas, memberikan pencahayaan lembut dan suasana nyaman di ruangan. Desainnya yang ramah lingkungan dan unik membuatnya menjadi pilihan hiasan dekoratif yang menarik di rumah.',
-        photos: [
-          'Tempat ATK.jpg',
-          'Lampu Sendok 1.jpg'
-        ],
-        price: 150000
-      }],
+      products: [],
       dialog: false,
       search: null,
       isLoading: false,
@@ -173,17 +143,12 @@ export default {
   },
   async mounted () {
     const { data } = await this.$api.get('/products/seller')
-    console.log(data)
+    this.products = data
   },
   methods: {
-    deleteProduct (id) {
-      // this.$axios.$post(`url/${id}`)
-      //   .then((response) => {
-      //     this.emailExist = false
-      //   }).catch((error) => {
-      //     console.error(error)
-      //     this.emailExist = true
-      //   })
+    async deleteProduct (id) {
+      await this.$api.delete(`/products/${id}`)
+      this.$router.go()
     },
     deleteDialog (id) {
       this.dialog = true

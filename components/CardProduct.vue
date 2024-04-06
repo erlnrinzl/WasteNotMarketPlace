@@ -3,9 +3,7 @@
     <v-container>
       <v-row class="align-center">
         <v-col cols="3" md="2" lg="2">
-          <v-img
-            :src="require(`@/assets/images/${product.photos[0]}`)"
-          />
+          <v-img :src="product.productImage[0]" />
         </v-col>
 
         <v-col cols="9" md="5" lg="5" class="px-3">
@@ -21,8 +19,8 @@
         </v-col>
 
         <v-col
-          v-for="market in product.seller.marketPlace"
-          :key="market.id"
+          v-for="market in product.marketplaces"
+          :key="market.name"
           cols="4"
           sm="1"
           md="1"
@@ -30,7 +28,7 @@
           class="px-3 py-0"
         >
           <router-link
-            :to="market.to"
+            :to="market.url"
             :class="market.name.toLowerCase() + '-icon'"
             class="text-caption"
           >
