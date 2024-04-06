@@ -7,19 +7,12 @@
         </h2>
       </v-col>
       <v-col cols="12" md="3" lg="3" class="py-0">
-        <v-autocomplete
-          v-model="selectedSearch"
-          label="Cari Produk Daur Ulang"
+        <v-text-field
+          v-model="search"
+          label="Cari Dinas Lingkungan"
           placeholder="Tulis untuk mencari"
-          append-icon=""
-          prepend-icon="mdi-magnify"
-          :search-input.sync="search"
-          :loading="isLoading"
-          :items="itemsSearch"
-          item-text="title"
-          item-value="id"
+          append-icon="mdi-magnify"
           hide-no-data
-          return-object
           outlined
           solo
           dense
@@ -39,6 +32,7 @@
     <v-data-table
       :headers="headers"
       :items="banks"
+      :search="search"
       sort-by="calories"
       class="elevation-1"
     >
@@ -46,6 +40,7 @@
         <v-dialog
           v-model="dialog"
           max-width="500px"
+          @click:outside="close"
         >
           <v-card>
             <v-card-title>
@@ -195,7 +190,7 @@
 
 <script>
 export default {
-  // middleware: ['auth-admin'],
+  middleware: ['auth-admin'],
   data () {
     return {
       headers: [
@@ -226,35 +221,24 @@ export default {
         }
       ],
       banks: [],
-      dialog: true,
+      dialog: false,
       dialogDelete: false,
       search: null,
-      isLoading: false,
-      itemsSearch: [],
-      selectedSearch: null,
-      selectedDelete: '',
       editedIndex: -1,
       editedItem: {
         id: '',
         name: '',
         address: '',
-        openTime: '',
-        closeTime: '',
-        openDay: '',
-        closeDay: ''
+        email: '',
+        phone: ''
       },
       defaultItem: {
         id: '',
         name: '',
         address: '',
-        openTime: '',
-        closeTime: '',
-        openDay: '',
-        closeDay: ''
-      },
-      menu1: false,
-      menu2: false,
-      dummyBank: []
+        email: '',
+        phone: ''
+      }
     }
   },
   computed: {
@@ -264,38 +248,16 @@ export default {
   },
   async mounted () {
     const { data } = await this.$api.get('/banks')
-    this.dummyBank = data
-  },
-  created () {
-    this.initialize()
+    this.banks = data
   },
   methods: {
-    initialize () {
-      this.banks = [
-        {
-          id: '103948109234',
-          name: 'Bank Sampah Teratai',
-          address: 'Jl. Terusan Gaharu 1 No.2 4, RT.9/RW.11, Cilandak Bar., Kec. Cilandak, Kota Jakarta Selatan,  12430',
-          closeDates: [
-            '2024-04-15',
-            '2024-04-30'
-          ],
-          openSchedules: [
-            {
-              dayOfWeek: '1',
-              scheduleTimeClose: '17:00',
-              scheduleTimeOpen: '08:00'
-            },
-            {
-              dayOfWeek: '2',
-              scheduleTimeClose: '17:00',
-              scheduleTimeOpen: '08:00'
-            }
-          ]
-        }
-      ]
-    },
     editItem (item) {
+      // axios get bank data by id
+      // const {id} = item
+
+      // const {data} = await this.$api.get(`/banks/${id}`)
+      // this.editedItem = data
+
       this.editedIndex = this.banks.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
@@ -305,9 +267,14 @@ export default {
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
-    deleteItemConfirm () {
-      // this.banks.splice(this.editedIndex, 1)
+    async deleteItemConfirm () {
       // API Call delete
+      const { id } = this.editedItem
+
+      const { data } = await this.$api.delete(`/${id}`)
+      console.log(data)
+
+      this.banks.splice(this.editedIndex, 1)
       this.closeDelete()
     },
     close () {
@@ -326,8 +293,8 @@ export default {
     },
     async save () {
       if (this.editedIndex > -1) {
-        // axios to post updated bank data to server
-        const { name, address, id } = this.editedItem
+        // axios to put updated bank data to server
+        const { name, address, email, phone, id } = this.editedItem
 
         const closeDates = []
         const openSchedules = []
@@ -339,6 +306,8 @@ export default {
         const formData = new FormData()
         formData.append('name', name)
         formData.append('address', address)
+        formData.append('email', email)
+        formData.append('phoneNumber', phone)
         formData.append('closeDates', closeDates)
         formData.append('openSchedules', openSchedules)
         formData.append('geoPoint', geoPoint)
@@ -349,7 +318,7 @@ export default {
         Object.assign(this.banks[this.editedIndex], this.editedItem)
       } else {
         // axios to post new bank data to server
-        const { name, address } = this.editedItem
+        const { name, address, email, phone } = this.editedItem
 
         const closeDates = []
         const openSchedules = []
@@ -361,6 +330,8 @@ export default {
         const formData = new FormData()
         formData.append('name', name)
         formData.append('address', address)
+        formData.append('email', email)
+        formData.append('phoneNumber', phone)
         formData.append('closeDates', closeDates)
         formData.append('openSchedules', openSchedules)
         formData.append('geoPoint', geoPoint)
