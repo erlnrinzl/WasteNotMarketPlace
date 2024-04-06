@@ -14,7 +14,7 @@
     <v-card-text>
       <div>
         <v-icon>mdi-map-marker</v-icon>
-        <span>{{ bank.distance + ' Km' }}</span>
+        <!-- <span>{{ bank.distance + ' Km' }}</span> -->
         <span>
           <router-link
             :to="bank.mapsUrl"
@@ -32,13 +32,14 @@
         <v-icon class="mr-2 custom-primary--text">
           mdi-calendar-multiselect-outline
         </v-icon>
-        <span class="font-weight-black">{{ bank.schedule.day }}</span>
+        <!-- <span class="font-weight-black">{{ bank.schedule.day }}</span> -->
+        <span class="font-weight-black">Senin-Sabtu</span>
       </div>
       <div class="my-2 text-caption">
         <v-icon class="mr-2 custom-primary--text">
           mdi-clock-outline
         </v-icon>
-        <span class="font-weight-black">{{ bank.schedule.time }}</span>
+        <span class="font-weight-black">{{ bank.schedules[0].scheduleTimeOpen + '-' + bank.schedules[0].scheduleTimeClose }}</span>
       </div>
     </v-card-text>
   </v-card>

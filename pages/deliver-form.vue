@@ -48,7 +48,7 @@
               v-model="formData.bankId"
               show-arrows
             >
-              <v-slide-item
+              <!-- <v-slide-item
                 v-for="bank in filteredBanks"
                 v-slot="{ active, toggle }"
                 :key="bank.id"
@@ -61,7 +61,7 @@
                   class="ma-3"
                   @click="toggle"
                 />
-              </v-slide-item>
+              </v-slide-item> -->
             </v-slide-group>
           </v-container>
         </v-col>
@@ -277,7 +277,8 @@ export default {
       search: null,
       isLoading: false,
       itemsSearch: [],
-      selectedSearch: null
+      selectedSearch: null,
+      banks: []
     }
   },
   computed: {

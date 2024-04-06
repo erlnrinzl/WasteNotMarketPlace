@@ -6,7 +6,7 @@
       </h2>
     </div>
     <v-row class="pt-5">
-      <v-col cols="7">
+      <v-col cols="12" md="7" lg="7">
         <v-btn color="custom-primary" dark to="/upload-product">
           <v-icon class="mr-2">
             mdi-tray-arrow-up
@@ -14,10 +14,12 @@
           Unggah Produk
         </v-btn>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="7" md="3" lg="3">
         <v-autocomplete
           v-model="selectedSearch"
           label="Cari Produk Daur Ulang"
+          append-icon=""
+          prepend-icon="mdi-magnify"
           placeholder="Tulis untuk mencari"
           :search-input.sync="search"
           :loading="isLoading"
@@ -26,13 +28,14 @@
           item-value="id"
           return-object
           hide-no-data
+          hide-details="auto"
           outlined
           solo
           dense
           flat
         />
       </v-col>
-      <v-col cols="2">
+      <v-col cols="5" md="2" lg="2">
         <v-select
           v-model="sortBy"
           flat
@@ -67,7 +70,7 @@
       <v-col
         v-for="product in products"
         :key="product.id"
-        cols="6"
+        cols="12"
         sm="12"
         md="12"
         lg="12"

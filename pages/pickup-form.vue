@@ -205,6 +205,17 @@ export default {
       formData: {
         sender: null
       },
+      formRules: {
+        sender: [
+          v => !!v || 'Masukan nama lengkap anda!'
+        ],
+        phone: [
+          v => !!v || 'Masukan nomor telepon anda!'
+        ],
+        address: [
+          v => !!v || 'Masukan alamat anda!'
+        ]
+      },
       image: undefined,
       imageUrls: [],
       isDisabled: false
