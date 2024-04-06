@@ -42,6 +42,7 @@
                   solo
                 />
                 <label for="phone" class="white--text font-weight-bold">Nomor Telepon Pengirim</label>
+                +62
                 <v-text-field
                   v-model="formData.phone"
                   name="phone"
@@ -174,10 +175,11 @@
 
         <v-col cols="4" md="2" offset="4" offset-md="5" class="mb-10">
           <v-container>
-            <v-btn class="custom-primary white--text" block>
-              <span>
-                Kirim
+            <v-btn class="custom-primary white--text" block @click="onSubmit">
+              <span v-if="!isDisabled">
+                Submit
               </span>
+              <v-progress-circular v-else color="custom-secondary" indeterminate />
             </v-btn>
           </v-container>
         </v-col>
@@ -202,12 +204,13 @@ export default {
         sender: null
       },
       image: undefined,
-      imageUrls: []
+      imageUrls: [],
+      isDisabled: false
     }
   },
   methods: {
     onFileChange (file) {
-      this.image = null
+      this.image = file
       this.imageUrls = []
       if (!file) {
         return
@@ -225,21 +228,25 @@ export default {
     },
     async onSubmit () {
       this.isDisabled = true
+
       try {
-        const { bankId, sender, phone, address } = this.formData
+        const { sender, phone, address } = this.formData
         const pickupSchedule = new Date().toISOString()
 
+        const mockupBankId = 'BU5a94Nkp28cxsPMATQxZu2o1mNL'
+
         const formData = new FormData()
-        formData.append('bankId', bankId)
+        formData.append('wasteImage', this.image[0])
+        formData.append('bankId', mockupBankId)
         formData.append('requesterName', sender)
         formData.append('requesterPhone', phone) // +62xxx
         formData.append('requesterAddress', address)
         formData.append('pickupSchedule', pickupSchedule)
 
-        const { data } = await this.$api.post('/pickups', formData)
+        const { data } = await this.$api.post('/pickups', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
       } catch (error) {
-        // Handle errors
+        console.log(error.response.data.message)
       } finally {
         this.isDisabled = false
       }
