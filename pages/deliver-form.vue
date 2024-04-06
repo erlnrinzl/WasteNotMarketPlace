@@ -240,10 +240,8 @@
 </template>
 
 <script>
-// import { mapActions, mapState } from 'vuex'
-
 export default {
-  // middleware: ['authenticated'],
+  middleware: ['authenticated'],
   data () {
     return {
       isDisabled: false,
@@ -292,7 +290,6 @@ export default {
     }
   },
   computed: {
-    // ...mapState('banks', { banks: 'banks' }),
     filteredBanks () {
       if (this.selectedSearch) {
         return this.banks.filter(bank =>
@@ -313,13 +310,11 @@ export default {
       }, 800)
     }
   },
-  mounted () {
-    // this.fetchBanks()
+  async mounted () {
+    const { data } = await this.$api.get('/banks')
+    this.banks = data
   },
   methods: {
-    // ...mapActions({
-    //   fetchBanks: 'banks/fetchBanks'
-    // }),
     onFileChange (file) {
       this.image = file
       this.imageUrls = []
