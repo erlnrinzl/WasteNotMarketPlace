@@ -56,7 +56,7 @@
               >
                 <CardAlamat
                   :active="active"
-                  :maps-object="bank"
+                  :bank="bank"
                   :width="230"
                   class="ma-3"
                   @click="toggle"
