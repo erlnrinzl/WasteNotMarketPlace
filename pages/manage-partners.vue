@@ -1,30 +1,18 @@
 <template>
   <v-container>
     <v-row class="py-5">
-      <v-col cols="12" md="3" lg="3">
+      <v-col cols="12" md="7" lg="7">
         <h2 class="text-h5 font-weight-bold">
           Dinas Lingkungan
         </h2>
       </v-col>
-      <v-col cols="4" md="2" lg="2">
-        <v-select
-          v-model="sortBy"
-          flat
-          dense
-          solo
-          outlined
-          hide-details
-          :items="keys"
-          label="Urutkan"
-          append-icon="mdi-swap-vertical"
-        />
-      </v-col>
-
-      <v-col cols="8" md="3" lg="3" offset-md="2">
+      <v-col cols="8" md="3" lg="3">
         <v-autocomplete
           v-model="selectedSearch"
           label="Cari Produk Daur Ulang"
           placeholder="Tulis untuk mencari"
+          append-icon=""
+          prepend-icon="mdi-magnify"
           :search-input.sync="search"
           :loading="isLoading"
           :items="itemsSearch"
@@ -296,6 +284,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
   middleware: ['auth-admin'],
   data () {
@@ -338,12 +328,6 @@ export default {
       partners: [],
       dialog: false,
       dialogDelete: false,
-      sortBy: 'name',
-      keys: [
-        'Name',
-        'Price',
-        'Date Added'
-      ],
       dayKeys: [
         'Minggu',
         'Senin',
@@ -385,22 +369,43 @@ export default {
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'Tambah Dinas Lingkungan' : 'Perbarui Dinas Lingkungan'
-    }
+    },
+    ...mapState('banks', {
+      banks: 'banks'
+    })
+  },
+  mounted () {
+    // this.fetchBanks()
   },
   created () {
     this.initialize()
   },
   methods: {
+    ...mapActions('banks', {
+      fetchBanks: 'fetchBanks'
+    }),
     initialize () {
       this.partners = [
         {
           id: '103948109234',
           name: 'Bank Sampah Teratai',
           address: 'Jl. Terusan Gaharu 1 No.2 4, RT.9/RW.11, Cilandak Bar., Kec. Cilandak, Kota Jakarta Selatan,  12430',
-          openTime: '09:00',
-          closeTime: '18.00',
-          openDay: 'Senin',
-          closeDay: 'Minggu'
+          closeDates: [
+            '2024-04-15',
+            '2024-04-30'
+          ],
+          openSchedules: [
+            {
+              dayOfWeek: '1',
+              scheduleTimeClose: '17:00',
+              scheduleTimeOpen: '08:00'
+            },
+            {
+              dayOfWeek: '2',
+              scheduleTimeClose: '17:00',
+              scheduleTimeOpen: '08:00'
+            }
+          ]
         }
       ]
     },

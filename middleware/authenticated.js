@@ -15,5 +15,9 @@ export default function ({ app, store, redirect }) {
     window.$nuxt.$router.push({
       name: 'manage-partners'
     })
+  } else if (userRole === 'bank') {
+    window.$nuxt.$router.push({
+      name: 'manage-orders'
+    })
   }
 }

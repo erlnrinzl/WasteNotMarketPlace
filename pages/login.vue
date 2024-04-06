@@ -73,9 +73,9 @@
                   </div>
                 </v-card-actions>
               </v-card>
-              <v-btn @click="snackbar = !snackbar">
+              <!-- <v-btn @click="snackbar = !snackbar">
                 click me
-              </v-btn>
+              </v-btn> -->
             </v-col>
           </v-row>
         </v-container>

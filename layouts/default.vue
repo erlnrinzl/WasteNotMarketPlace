@@ -272,8 +272,15 @@ export default {
       } else if (this.getRole === 'admin') {
         return [
           {
-            title: 'Partners',
+            title: 'Banks',
             to: '/manage-partners'
+          }
+        ]
+      } else if (this.getRole === 'bank') {
+        return [
+          {
+            title: 'Orders',
+            to: '/manage-orders'
           }
         ]
       }
