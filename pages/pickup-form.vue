@@ -34,6 +34,7 @@
                 <label for="sender" class="white--text font-weight-bold">Nama Pengirim</label>
                 <v-text-field
                   v-model="formData.sender"
+                  :rules="formRules.sender"
                   name="sender"
                   label="Nama Pengirim"
                   type="text"
@@ -44,6 +45,7 @@
                 <label for="phone" class="white--text font-weight-bold">Nomor Telepon Pengirim</label>
                 <v-text-field
                   v-model="formData.phone"
+                  :rules="formRules.phone"
                   name="phone"
                   label="Nomor Telepon Pengirim"
                   type="text"
@@ -54,6 +56,7 @@
                 <label for="address" class="white--text font-weight-bold">Alamat Penjemputan</label>
                 <v-textarea
                   v-model="formData.address"
+                  :rules="formRules.address"
                   name="address"
                   label="Alamat Penjemputan"
                   class="mt-3"
@@ -145,7 +148,7 @@
               <v-col cols="12" md="7" lg="7">
                 <label for="evidence-image" class="white--text font-weight-bold">Foto Bukti Sampah</label>
                 <v-file-input
-                  v-model="image"
+                  v-model="formData.image"
                   type="file"
                   name="evidence-image"
                   label="Foto Bukti Sampah"
@@ -158,7 +161,7 @@
                   @change="onFileChange"
                 />
                 <v-row>
-                  <v-col v-for="(imgUrl, index) in imageUrls" :key="index" cols="4">
+                  <v-col v-for="(imgUrl, index) in formData.imageUrls" :key="index" cols="4">
                     <v-img
                       :src="imgUrl"
                       width="200"
@@ -174,7 +177,7 @@
 
         <v-col cols="4" md="2" offset="4" offset-md="5" class="mb-10">
           <v-container>
-            <v-btn class="custom-primary white--text" block>
+            <v-btn class="custom-primary white--text" block @click="onSubmit">
               <span>
                 Kirim
               </span>
@@ -199,16 +202,30 @@ export default {
       menu: false,
       menu2: false,
       formData: {
-        sender: null
+        bankId: 'j3r3OtKxOAo8YcT3WyTeUsjK4fOD',
+        sender: null,
+        phone: null,
+        address: '',
+        image: undefined,
+        imageUrls: []
       },
-      image: undefined,
-      imageUrls: []
+      formRules: {
+        sender: [
+          v => !!v || 'Masukan nama lengkap anda!'
+        ],
+        phone: [
+          v => !!v || 'Masukan nomor telepon anda!'
+        ],
+        address: [
+          v => !!v || 'Masukan alamat anda!'
+        ]
+      }
     }
   },
   methods: {
     onFileChange (file) {
-      this.image = null
-      this.imageUrls = []
+      this.formData.image = null
+      this.formData.imageUrls = []
       if (!file) {
         return
       }
@@ -219,7 +236,7 @@ export default {
     previewImage (file) {
       const reader = new FileReader()
       reader.onload = (e) => {
-        this.imageUrls.push(e.target.result)
+        this.formData.imageUrls.push(e.target.result)
       }
       reader.readAsDataURL(file)
     },

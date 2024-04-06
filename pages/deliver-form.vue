@@ -88,6 +88,7 @@
                 <label for="sender" class="white--text font-weight-bold">Nama Pengirim</label>
                 <v-text-field
                   v-model="formData.sender"
+                  :rules="formRules.sender"
                   name="sender"
                   label="Nama Pengirim"
                   type="text"
@@ -98,6 +99,7 @@
                 <label for="phone" class="white--text font-weight-bold">Nomor Telepon Pengirim</label>
                 <v-text-field
                   v-model="formData.phone"
+                  :rules="formRules.phone"
                   name="phone"
                   label="Nomor Telepon Pengirim"
                   type="text"
@@ -108,6 +110,7 @@
                 <label for="address" class="white--text font-weight-bold">Alamat Penjemputan</label>
                 <v-textarea
                   v-model="formData.address"
+                  :rules="formRules.address"
                   name="address"
                   label="Alamat Penjemputan"
                   class="mt-3"
@@ -199,7 +202,7 @@
               <v-col cols="12" md="7" lg="7">
                 <label for="evidence-image" class="white--text font-weight-bold">Foto Bukti Sampah</label>
                 <v-file-input
-                  v-model="image"
+                  v-model="formData.image"
                   name="evidence-image"
                   label="Foto Bukti Sampah"
                   prepend-icon="mdi-camera"
@@ -207,10 +210,11 @@
                   accept="image/*"
                   outlined
                   solo
+                  multiple
                   @change="onFileChange"
                 />
                 <v-row>
-                  <v-col v-for="(imgUrl, index) in imageUrls" :key="index" cols="4">
+                  <v-col v-for="(imgUrl, index) in formData.imageUrls" :key="index" cols="4">
                     <v-img
                       :src="imgUrl"
                       width="200"
@@ -226,7 +230,7 @@
 
         <v-col cols="4" md="2" offset="4" offset-md="5" class="mb-10">
           <v-container>
-            <v-btn class="custom-primary white--text" block>
+            <v-btn class="custom-primary white--text" block @click="onSubmit">
               <span>
                 Kirim
               </span>
@@ -239,10 +243,10 @@
 </template>
 
 <script>
-// import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
-  // middleware: ['authenticated'],
+  middleware: ['authenticated'],
   data () {
     return {
       formName: 'Deliver',
@@ -255,42 +259,29 @@ export default {
         bankId: null,
         sender: null,
         phone: null,
-        address: null
+        address: null,
+        image: undefined,
+        imageUrls: []
       },
-      image: undefined,
-      imageUrls: [],
+      formRules: {
+        sender: [
+          v => !!v || 'Masukan nama lengkap anda!'
+        ],
+        phone: [
+          v => !!v || 'Masukan nomor telepon anda!'
+        ],
+        address: [
+          v => !!v || 'Masukan alamat anda!'
+        ]
+      },
       search: null,
       isLoading: false,
       itemsSearch: [],
-      selectedSearch: null,
-      banks: [
-        {
-          id: 1,
-          name: 'Dinas Lingkungan Hidup Cilandak',
-          distance: 4.5,
-          mapsUrl: '',
-          address: 'Jl. Terusan Gaharu 1 No.2 4, RT.9/RW.11, Cilandak Bar., Kec. Cilandak, Kota Jakarta Selatan,  12430',
-          schedule: {
-            day: 'Senin - Sabtu',
-            time: '07.00 - 17.00'
-          }
-        },
-        {
-          id: 2,
-          name: 'Dinas Lingkungan Hidup Cilandak',
-          distance: 4.5,
-          mapsUrl: '',
-          address: 'Jl. Terusan Gaharu 1 No.2 4, RT.9/RW.11, Cilandak Bar., Kec. Cilandak, Kota Jakarta Selatan,  12430',
-          schedule: {
-            day: 'Senin - Sabtu',
-            time: '07.00 - 17.00'
-          }
-        }
-      ]
+      selectedSearch: null
     }
   },
   computed: {
-    // ...mapState('banks', { banks: 'banks' }),
+    ...mapState('banks', { banks: 'banks' }),
     filteredBanks () {
       if (this.selectedSearch) {
         return this.banks.filter(bank =>
@@ -315,12 +306,12 @@ export default {
     // this.fetchBanks()
   },
   methods: {
-    // ...mapActions({
-    //   fetchBanks: 'banks/fetchBanks'
-    // }),
+    ...mapActions({
+      fetchBanks: 'banks/fetchBanks'
+    }),
     onFileChange (file) {
-      this.image = null
-      this.imageUrls = []
+      this.formData.image = null
+      this.formData.imageUrls = []
       if (!file) {
         return
       }
@@ -331,14 +322,14 @@ export default {
     previewImage (file) {
       const reader = new FileReader()
       reader.onload = (e) => {
-        this.imageUrls.push(e.target.result)
+        this.formData.imageUrls.push(e.target.result)
       }
       reader.readAsDataURL(file)
     },
     async onSubmit () {
       this.isDisabled = true
       try {
-        const { bankId, sender, phone } = this.formData
+        const { bankId, sender, phone, imageUrls } = this.formData
         const sendSchedule = new Date().toISOString()
 
         const formData = new FormData()
@@ -346,7 +337,7 @@ export default {
         formData.append('senderName', sender)
         formData.append('senderPhone', phone) // +62xxx
         formData.append('sendSchedule', sendSchedule)
-        formData.append('wasteImage', this.selectedFile)
+        formData.append('wasteImage', imageUrls)
 
         const { data } = await this.$api.post('/delivers', formData)
         console.log(data)
