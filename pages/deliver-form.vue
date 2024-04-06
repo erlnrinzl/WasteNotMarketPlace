@@ -27,6 +27,8 @@
                   v-model="selectedSearch"
                   label="Cari Dinas Lingkungan"
                   placeholder="Tulis untuk mencari"
+                  append-icon=""
+                  prepend-icon="mdi-magnify"
                   :search-input.sync="search"
                   :loading="isLoading"
                   :items="itemsSearch"
@@ -45,10 +47,11 @@
         <v-col cols="12">
           <v-container>
             <v-slide-group
+              v-if="filteredBanks.length > 0"
               v-model="formData.bankId"
               show-arrows
             >
-              <!-- <v-slide-item
+              <v-slide-item
                 v-for="bank in filteredBanks"
                 v-slot="{ active, toggle }"
                 :key="bank.id"
@@ -61,7 +64,7 @@
                   class="ma-3"
                   @click="toggle"
                 />
-              </v-slide-item> -->
+              </v-slide-item>
             </v-slide-group>
           </v-container>
         </v-col>
@@ -106,7 +109,14 @@
                   class="mt-3"
                   outlined
                   solo
-                />
+                >
+                  <span
+                    slot="prepend"
+                    class="white--text text-body-1 font-weight-regular"
+                  >
+                    +62
+                  </span>
+                </v-text-field>
                 <label for="address" class="white--text font-weight-bold">Alamat Penjemputan</label>
                 <v-textarea
                   v-model="formData.address"
@@ -202,7 +212,7 @@
               <v-col cols="12" md="7" lg="7">
                 <label for="evidence-image" class="white--text font-weight-bold">Foto Bukti Sampah</label>
                 <v-file-input
-                  v-model="formData.image"
+                  v-model="image"
                   name="evidence-image"
                   label="Foto Bukti Sampah"
                   prepend-icon="mdi-camera"
@@ -210,13 +220,12 @@
                   accept="image/*"
                   outlined
                   solo
-                  multiple
                   @change="onFileChange"
                 />
-                <v-row>
-                  <v-col v-for="(imgUrl, index) in formData.imageUrls" :key="index" cols="4">
+                <v-row v-if="image">
+                  <v-col cols="4">
                     <v-img
-                      :src="imgUrl"
+                      :src="imageUrl"
                       width="200"
                       height="200"
                       contain
@@ -259,9 +268,7 @@ export default {
         bankId: null,
         sender: null,
         phone: null,
-        address: null,
-        image: undefined,
-        imageUrls: []
+        address: null
       },
       formRules: {
         sender: [
@@ -274,6 +281,8 @@ export default {
           v => !!v || 'Masukan alamat anda!'
         ]
       },
+      image: undefined,
+      imageUrl: '',
       search: null,
       isLoading: false,
       itemsSearch: [],
@@ -309,18 +318,16 @@ export default {
   methods: {
     onFileChange (file) {
       this.image = file
-      this.imageUrls = []
+      this.imageUrl = ''
       if (!file) {
         return
       }
-      // file.forEach((img) => {
       this.previewImage(file)
-      // })
     },
     previewImage (file) {
       const reader = new FileReader()
       reader.onload = (e) => {
-        this.formData.imageUrls.push(e.target.result)
+        this.imageUrl = e.target.result
       }
       reader.readAsDataURL(file)
     },
@@ -328,6 +335,7 @@ export default {
       this.isDisabled = true
       try {
         const { sender, phone } = this.formData
+        const phoneID = '+62' + phone
         const sendSchedule = new Date().toISOString()
 
         const mockupBankId = 'BU5a94Nkp28cxsPMATQxZu2o1mNL'
@@ -336,11 +344,12 @@ export default {
         formData.append('wasteImage', this.image)
         formData.append('bankId', mockupBankId)
         formData.append('senderName', sender)
-        formData.append('senderPhone', phone) // +62xxx
+        formData.append('senderPhone', phoneID) // +62xxx
         formData.append('sendSchedule', sendSchedule)
 
         const { data } = await this.$api.post('/delivers', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
+        this.$router.go(-1)
       } catch (error) {
         console.log(error)
       } finally {

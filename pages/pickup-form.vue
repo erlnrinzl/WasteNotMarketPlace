@@ -43,7 +43,6 @@
                   solo
                 />
                 <label for="phone" class="white--text font-weight-bold">Nomor Telepon Pengirim</label>
-                +62
                 <v-text-field
                   v-model="formData.phone"
                   :rules="formRules.phone"
@@ -53,7 +52,14 @@
                   class="mt-3"
                   outlined
                   solo
-                />
+                >
+                  <span
+                    slot="prepend"
+                    class="white--text text-body-1 font-weight-regular"
+                  >
+                    +62
+                  </span>
+                </v-text-field>
                 <label for="address" class="white--text font-weight-bold">Alamat Penjemputan</label>
                 <v-textarea
                   v-model="formData.address"
@@ -149,7 +155,7 @@
               <v-col cols="12" md="7" lg="7">
                 <label for="evidence-image" class="white--text font-weight-bold">Foto Bukti Sampah</label>
                 <v-file-input
-                  v-model="formData.image"
+                  v-model="image"
                   type="file"
                   name="evidence-image"
                   label="Foto Bukti Sampah"
@@ -160,10 +166,10 @@
                   solo
                   @change="onFileChange"
                 />
-                <v-row>
-                  <v-col v-for="(imgUrl, index) in formData.imageUrls" :key="index" cols="4">
+                <v-row v-if="image">
+                  <v-col cols="4">
                     <v-img
-                      :src="imgUrl"
+                      :src="imageUrl"
                       width="200"
                       height="200"
                       contain
@@ -217,25 +223,23 @@ export default {
         ]
       },
       image: undefined,
-      imageUrls: [],
+      imageUrl: '',
       isDisabled: false
     }
   },
   methods: {
     onFileChange (file) {
       this.image = file
-      this.imageUrls = []
+      this.imageUrl = ''
       if (!file) {
         return
       }
-      // file.forEach((img) => {
       this.previewImage(file)
-      // })
     },
     previewImage (file) {
       const reader = new FileReader()
       reader.onload = (e) => {
-        this.formData.imageUrls.push(e.target.result)
+        this.imageUrl = e.target.result
       }
       reader.readAsDataURL(file)
     },
@@ -244,18 +248,20 @@ export default {
 
       try {
         const { sender, phone, address } = this.formData
+        const phoneID = '+62' + phone
         const pickupSchedule = new Date().toISOString()
 
         const formData = new FormData()
         formData.append('wasteImage', this.image)
         formData.append('bankId', '')
         formData.append('requesterName', sender)
-        formData.append('requesterPhone', phone) // +62xxx
+        formData.append('requesterPhone', phoneID) // +62xxx
         formData.append('requesterAddress', address)
         formData.append('pickupSchedule', pickupSchedule)
 
         const { data } = await this.$api.post('/pickups', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
+        this.$router.go(-1)
       } catch (error) {
         console.log(error.response.data.message)
       } finally {

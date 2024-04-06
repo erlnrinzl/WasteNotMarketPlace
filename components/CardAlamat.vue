@@ -6,8 +6,8 @@
     outlined
     @click="$emit('click')"
   >
-    <v-card-title class="font-weight-bold">
-      <span class="">
+    <v-card-title class="word-wrap font-weight-bold">
+      <span>
         {{ bank.name }}
       </span>
     </v-card-title>
@@ -15,7 +15,7 @@
       <div>
         <v-icon>mdi-map-marker</v-icon>
         <!-- <span>{{ bank.distance + ' Km' }}</span> -->
-        <span>
+        <!-- <span>
           <router-link
             :to="bank.mapsUrl"
             style="cursor: pointer"
@@ -23,7 +23,7 @@
           >
             Buka Map
           </router-link>
-        </span>
+        </span> -->
       </div>
       <p class="my-2 text-caption overflow-hidden">
         {{ bank.address }}
@@ -39,7 +39,7 @@
         <v-icon class="mr-2 custom-primary--text">
           mdi-clock-outline
         </v-icon>
-        <span class="font-weight-black">{{ bank.schedules[0].scheduleTimeOpen + '-' + bank.schedules[0].scheduleTimeClose }}</span>
+        <span class="font-weight-black">{{ getOpenTime }}</span>
       </div>
     </v-card-text>
   </v-card>
@@ -67,6 +67,12 @@ export default {
     active: {
       type: Boolean,
       default: false
+    }
+  },
+  computed: {
+    getOpenTime () {
+      const { openSchedules } = this.bank
+      return openSchedules[0].scheduleTimeOpen + '-' + openSchedules[0].scheduleTimeClose
     }
   }
 }
