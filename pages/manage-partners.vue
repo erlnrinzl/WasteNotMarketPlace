@@ -6,7 +6,7 @@
           Dinas Lingkungan
         </h2>
       </v-col>
-      <v-col cols="8" md="3" lg="3">
+      <v-col cols="12" md="3" lg="3" class="py-0">
         <v-autocomplete
           v-model="selectedSearch"
           label="Cari Produk Daur Ulang"
@@ -18,15 +18,15 @@
           :items="itemsSearch"
           item-text="title"
           item-value="id"
-          return-object
           hide-no-data
+          return-object
           outlined
           solo
           dense
           flat
         />
       </v-col>
-      <v-col cols="2">
+      <v-col cols="2" class="pt-0">
         <v-btn color="custom-primary" dark @click="dialog = !dialog">
           <v-icon class="mr-2">
             mdi-plus
@@ -38,7 +38,7 @@
 
     <v-data-table
       :headers="headers"
-      :items="partners"
+      :items="banks"
       sort-by="calories"
       class="elevation-1"
     >
@@ -49,178 +49,88 @@
         >
           <v-card>
             <v-card-title>
-              <v-icon class="mr-2 custom-primary--text" large>
-                mdi-plus
-              </v-icon>
-              <span class="text-h5 custom-primary--text font-weight-bold">{{ formTitle }}</span>
+              <v-row class="align-center">
+                <v-col cols="2">
+                  <v-icon v-if="editedIndex === -1" class="mr-2 custom-primary--text" large>
+                    mdi-plus
+                  </v-icon>
+                  <v-icon v-else class="mr-2 custom-primary--text" large>
+                    mdi-square-edit-outline
+                  </v-icon>
+                </v-col>
+                <v-col cols="10" class="word-wrap">
+                  <span class="text-h5 custom-primary--text font-weight-bold">{{ formTitle }}</span>
+                </v-col>
+              </v-row>
             </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    class="py-0"
-                  >
-                    <label for="nama" class="text-h6 font-weight-bold">Nama</label>
-                    <v-text-field
-                      v-model="editedItem.name"
-                      name="name"
-                      label="Nama"
-                      outlined
-                      solo
-                      flat
-                    />
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    class="py-0"
-                  >
-                    <label for="alamat" class="text-h6 font-weight-bold">Alamat</label>
-                    <v-textarea
-                      v-model="editedItem.address"
-                      name="Alamat"
-                      label="Alamat"
-                      rows="3"
-                      outlined
-                      solo
-                      flat
-                    />
-                  </v-col>
-                  <v-col
-                    cols="6"
-                    class="py-0"
-                  >
-                    <label for="openDay" class="text-h6 font-weight-bold">Hari Buka</label>
-                    <v-select
-                      v-model="editedItem.openDay"
-                      flat
-                      dense
-                      solo
-                      outlined
-                      hide-details
-                      color="custom-primary"
-                      :items="dayKeys"
-                      label="Hari Buka"
-                      append-icon="mdi-calendar-multiselect-outline"
-                    />
-                  </v-col>
-                  <v-col
-                    cols="6"
-                    class="py-0"
-                  >
-                    <label for="closeDay" class="text-h6 font-weight-bold">Hari Tutup</label>
-                    <v-select
-                      v-model="editedItem.closeDay"
-                      color="custom-primary"
-                      flat
-                      dense
-                      solo
-                      outlined
-                      hide-details
-                      :items="dayKeys"
-                      label="Hari Buka"
-                      append-icon="mdi-calendar-multiselect-outline"
-                    />
-                  </v-col>
-                  <v-col cols="12">
-                    <hr class="mt-5">
-                  </v-col>
-                  <v-col
-                    cols="6"
-                  >
-                    <label for="closeDay" class="text-h6 font-weight-bold">Jam Buka</label>
-                    <v-menu
-                      ref="menu1"
-                      v-model="menu1"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      :return-value.sync="editedItem.openTime"
-                      transition="scale-transition"
-                      offset-y
-                      max-width="290px"
-                      min-width="290px"
-                    >
-                      <template #activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="editedItem.openTime"
-                          label="Jam Buka"
-                          prepend-icon="mdi-clock-time-four-outline"
-                          readonly
-                          v-bind="attrs"
-                          class="mt-3"
-                          outlined
-                          flat
-                          solo
-                          v-on="on"
-                        />
-                      </template>
-                      <v-time-picker
-                        v-if="menu1"
-                        v-model="editedItem.openTime"
-                        color="custom-primary"
-                        full-width
-                        @click:minute="$refs.menu1.save(editedItem.openTime)"
-                      />
-                    </v-menu>
-                  </v-col>
-                  <v-col
-                    cols="6"
-                  >
-                    <label for="closeDay" class="text-h6 font-weight-bold">Jam Tutup</label>
-                    <v-menu
-                      ref="menu2"
-                      v-model="menu2"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      :return-value.sync="editedItem.closeTime"
-                      transition="scale-transition"
-                      offset-y
-                      max-width="290px"
-                      min-width="290px"
-                    >
-                      <template #activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="editedItem.closeTime"
-                          label="Jam Tutup"
-                          prepend-icon="mdi-clock-time-four-outline"
-                          readonly
-                          v-bind="attrs"
-                          class="mt-3"
-                          outlined
-                          solo
-                          flat
-                          v-on="on"
-                        />
-                      </template>
-                      <v-time-picker
-                        v-if="menu2"
-                        v-model="editedItem.closeTime"
-                        color="custom-primary"
-                        full-width
-                        @click:minute="$refs.menu2.save(editedItem.closeTime)"
-                      />
-                    </v-menu>
-                  </v-col>
-                </v-row>
-              </v-container>
-              <v-card-actions>
-                <v-spacer />
-                <v-btn
-                  color="red darken-1"
-                  dark
-                  @click="close"
-                >
-                  Cancel
-                </v-btn>
-                <v-btn
-                  color="custom-primary"
-                  dark
-                  @click="save"
-                >
-                  Save
-                </v-btn>
-              </v-card-actions>
+            <v-card-text class="py-0">
+              <div>
+                <label for="nama" class="text-body-1 font-weight-bold">Nama</label>
+                <v-text-field
+                  v-model="editedItem.name"
+                  name="name"
+                  label="Nama"
+                  outlined
+                  dense
+                  solo
+                  flat
+                />
+              </div>
+              <div>
+                <label for="phone" class="text-body-1 font-weight-bold">Telepon</label>
+                <v-text-field
+                  v-model="editedItem.phone"
+                  name="phone"
+                  label="Telepon"
+                  outlined
+                  dense
+                  solo
+                  flat
+                />
+              </div>
+              <div>
+                <label for="email" class="text-body-1 font-weight-bold">Email</label>
+                <v-text-field
+                  v-model="editedItem.email"
+                  name="email"
+                  label="Email"
+                  outlined
+                  dense
+                  solo
+                  flat
+                />
+              </div>
+              <div>
+                <label for="alamat" class="text-body-1 font-weight-bold">Alamat</label>
+                <v-textarea
+                  v-model="editedItem.address"
+                  name="Alamat"
+                  label="Alamat"
+                  rows="3"
+                  outlined
+                  solo
+                  flat
+                />
+              </div>
             </v-card-text>
+
+            <v-card-actions class="pb-4">
+              <v-spacer />
+              <v-btn
+                color="red darken-1"
+                dark
+                @click="close"
+              >
+                Cancel
+              </v-btn>
+              <v-btn
+                color="custom-primary"
+                dark
+                @click="save"
+              >
+                Save
+              </v-btn>
+            </v-card-actions>
           </v-card>
         </v-dialog>
 
@@ -284,10 +194,8 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-
 export default {
-  middleware: ['auth-admin'],
+  // middleware: ['auth-admin'],
   data () {
     return {
       headers: [
@@ -304,20 +212,12 @@ export default {
           value: 'address'
         },
         {
-          text: 'Jam Buka',
-          value: 'openTime'
+          text: 'Telepon',
+          value: 'phone'
         },
         {
-          text: 'Jam Tutup',
-          value: 'closeTime'
-        },
-        {
-          text: 'Hari Buka',
-          value: 'openDay'
-        },
-        {
-          text: 'Hari Tutup',
-          value: 'closeDay'
+          text: 'Email',
+          value: 'email'
         },
         {
           text: 'Aksi',
@@ -325,24 +225,14 @@ export default {
           sortable: false
         }
       ],
-      partners: [],
-      dialog: false,
+      banks: [],
+      dialog: true,
       dialogDelete: false,
-      dayKeys: [
-        'Minggu',
-        'Senin',
-        'Selasa',
-        'Rabu',
-        'Kamis',
-        'Jumat',
-        'Sabtu',
-        'Minggu'
-      ],
       search: null,
       isLoading: false,
       itemsSearch: [],
       selectedSearch: null,
-      selectedDelete: 'lampu sendok',
+      selectedDelete: '',
       editedIndex: -1,
       editedItem: {
         id: '',
@@ -363,29 +253,25 @@ export default {
         closeDay: ''
       },
       menu1: false,
-      menu2: false
+      menu2: false,
+      dummyBank: []
     }
   },
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'Tambah Dinas Lingkungan' : 'Perbarui Dinas Lingkungan'
-    },
-    ...mapState('banks', {
-      banks: 'banks'
-    })
+    }
   },
-  mounted () {
-    // this.fetchBanks()
+  async mounted () {
+    const { data } = await this.$api.get('/banks')
+    this.dummyBank = data
   },
   created () {
     this.initialize()
   },
   methods: {
-    ...mapActions('banks', {
-      fetchBanks: 'fetchBanks'
-    }),
     initialize () {
-      this.partners = [
+      this.banks = [
         {
           id: '103948109234',
           name: 'Bank Sampah Teratai',
@@ -410,17 +296,17 @@ export default {
       ]
     },
     editItem (item) {
-      this.editedIndex = this.partners.indexOf(item)
+      this.editedIndex = this.banks.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
     deleteItem (item) {
-      this.editedIndex = this.partners.indexOf(item)
+      this.editedIndex = this.banks.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
     deleteItemConfirm () {
-      // this.partners.splice(this.editedIndex, 1)
+      // this.banks.splice(this.editedIndex, 1)
       // API Call delete
       this.closeDelete()
     },
@@ -438,11 +324,51 @@ export default {
         this.editedIndex = -1
       })
     },
-    save () {
+    async save () {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+        // axios to post updated bank data to server
+        const { name, address, id } = this.editedItem
+
+        const closeDates = []
+        const openSchedules = []
+        const geoPoint = {
+          latitude: 0,
+          logitude: 0
+        }
+
+        const formData = new FormData()
+        formData.append('name', name)
+        formData.append('address', address)
+        formData.append('closeDates', closeDates)
+        formData.append('openSchedules', openSchedules)
+        formData.append('geoPoint', geoPoint)
+
+        const { data } = await this.$api.put(`/banks/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+        console.log(data)
+
+        Object.assign(this.banks[this.editedIndex], this.editedItem)
       } else {
-        this.desserts.push(this.editedItem)
+        // axios to post new bank data to server
+        const { name, address } = this.editedItem
+
+        const closeDates = []
+        const openSchedules = []
+        const geoPoint = {
+          latitude: 0,
+          logitude: 0
+        }
+
+        const formData = new FormData()
+        formData.append('name', name)
+        formData.append('address', address)
+        formData.append('closeDates', closeDates)
+        formData.append('openSchedules', openSchedules)
+        formData.append('geoPoint', geoPoint)
+
+        const { data } = await this.$api.post('/banks', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+        console.log(data)
+
+        this.banks.push(this.editedItem)
       }
       this.close()
     }
