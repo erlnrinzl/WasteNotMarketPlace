@@ -31,7 +31,7 @@
         <v-col cols="6">
           <div>
             <p class="mb-0 custom-secondary--text font-weight-bold text-h6">
-              {{ orderData.bank.name }}
+              {{ orderData.bank?.name }}
             </p>
           </div>
         </v-col>

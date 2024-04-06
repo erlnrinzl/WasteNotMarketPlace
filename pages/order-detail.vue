@@ -15,7 +15,7 @@
       <v-col lg="4" md="4" sm="6">
         <DetailLabel label-name="Tanggal Pengiriman" :label-value="order.date" />
         <DetailLabel label-name="Waktu Pengiriman" :label-value="order.time" />
-        <DetailLabel label-name="" :label-value="order.bank.name" />
+        <DetailLabel label-name="" :label-value="order.bank?.name" />
       </v-col>
       <v-col lg="4" md="4" sm="12">
         <v-card outlined>

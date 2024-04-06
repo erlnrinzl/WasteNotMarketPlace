@@ -155,7 +155,6 @@
                   accept="image/*"
                   outlined
                   solo
-                  multiple
                   @change="onFileChange"
                 />
                 <v-row>
@@ -177,7 +176,7 @@
           <v-container>
             <v-btn class="custom-primary white--text" block @click="onSubmit">
               <span v-if="!isDisabled">
-                Submit
+                Kirim
               </span>
               <v-progress-circular v-else color="custom-secondary" indeterminate />
             </v-btn>
@@ -215,9 +214,9 @@ export default {
       if (!file) {
         return
       }
-      file.forEach((img) => {
-        this.previewImage(img)
-      })
+      // file.forEach((img) => {
+      this.previewImage(file)
+      // })
     },
     previewImage (file) {
       const reader = new FileReader()
@@ -233,11 +232,9 @@ export default {
         const { sender, phone, address } = this.formData
         const pickupSchedule = new Date().toISOString()
 
-        const mockupBankId = 'BU5a94Nkp28cxsPMATQxZu2o1mNL'
-
         const formData = new FormData()
-        formData.append('wasteImage', this.image[0])
-        formData.append('bankId', mockupBankId)
+        formData.append('wasteImage', this.image)
+        formData.append('bankId', '')
         formData.append('requesterName', sender)
         formData.append('requesterPhone', phone) // +62xxx
         formData.append('requesterAddress', address)

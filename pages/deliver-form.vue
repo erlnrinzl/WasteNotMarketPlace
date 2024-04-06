@@ -226,10 +226,11 @@
 
         <v-col cols="4" md="2" offset="4" offset-md="5" class="mb-10">
           <v-container>
-            <v-btn class="custom-primary white--text" block>
-              <span>
+            <v-btn class="custom-primary white--text" block @click="onSubmit">
+              <span v-if="!isDisabled">
                 Kirim
               </span>
+              <v-progress-circular v-else color="custom-secondary" indeterminate />
             </v-btn>
           </v-container>
         </v-col>
@@ -245,6 +246,7 @@ export default {
   // middleware: ['authenticated'],
   data () {
     return {
+      isDisabled: false,
       formName: 'Deliver',
       formLabel: 'Pengiriman',
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
@@ -319,14 +321,14 @@ export default {
     //   fetchBanks: 'banks/fetchBanks'
     // }),
     onFileChange (file) {
-      this.image = null
+      this.image = file
       this.imageUrls = []
       if (!file) {
         return
       }
-      file.forEach((img) => {
-        this.previewImage(img)
-      })
+      // file.forEach((img) => {
+      this.previewImage(file)
+      // })
     },
     previewImage (file) {
       const reader = new FileReader()
@@ -338,20 +340,22 @@ export default {
     async onSubmit () {
       this.isDisabled = true
       try {
-        const { bankId, sender, phone } = this.formData
+        const { sender, phone } = this.formData
         const sendSchedule = new Date().toISOString()
 
+        const mockupBankId = 'BU5a94Nkp28cxsPMATQxZu2o1mNL'
+
         const formData = new FormData()
-        formData.append('bankId', bankId)
+        formData.append('wasteImage', this.image)
+        formData.append('bankId', mockupBankId)
         formData.append('senderName', sender)
         formData.append('senderPhone', phone) // +62xxx
         formData.append('sendSchedule', sendSchedule)
-        formData.append('wasteImage', this.selectedFile)
 
-        const { data } = await this.$api.post('/delivers', formData)
+        const { data } = await this.$api.post('/delivers', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
       } catch (error) {
-        // Handle errors
+        console.log(error)
       } finally {
         this.isDisabled = false
       }
