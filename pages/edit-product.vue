@@ -14,116 +14,141 @@
       <v-col cols="12">
         <v-container>
           <v-row class="align-center">
-            <v-col cols="1">
+            <v-col cols="2" md="1" lg="1">
               <span class="rounded-lg py-3 px-5 text-h6 custom-primary white--text">
                 1
               </span>
             </v-col>
-            <v-col cols="11">
+            <v-col cols="10" md="11" lg="11">
               <span class="text-h6 white--text">Lengkapi Form Berikut</span>
             </v-col>
           </v-row>
         </v-container>
       </v-col>
 
-      <v-col md="5" class="px-10">
-        <v-container class="ml-5">
-          <label for="product-name" class="white--text font-weight-bold">Nama Produk</label>
-          <v-text-field
-            v-model="formData.name"
-            name="product-name"
-            label="Nama Produk"
-            type="text"
-            class="mt-3"
-            outlined
-            solo
-          />
-          <label for="product-price" class="white--text font-weight-bold">Harga Produk</label>
-          <v-text-field
-            v-model="formData.price"
-            name="product-price"
-            label="Harga Produk"
-            type="text"
-            class="mt-3"
-            outlined
-            solo
-          />
-          <label for="product-link" class="white--text font-weight-bold">Link Shopee</label>
-          <v-icon class="white--text">
-            mdi-link-variant
-          </v-icon>
-          <v-text-field
-            v-model="formData.shopee"
-            name="product-link"
-            label="Link Produk"
-            type="text"
-            class="mt-3"
-            outlined
-            solo
-          />
-          <label for="product-link" class="white--text font-weight-bold">Link Tokopedia</label>
-          <v-icon class="white--text">
-            mdi-link-variant
-          </v-icon>
-          <v-text-field
-            v-model="formData.tokopedia"
-            name="product-link"
-            label="Link Produk"
-            type="text"
-            class="mt-3"
-            outlined
-            solo
-          />
-          <label for="product-link" class="white--text font-weight-bold">Link Lazada</label>
-          <v-icon class="white--text">
-            mdi-link-variant
-          </v-icon>
-          <v-text-field
-            v-model="formData.lazada"
-            name="product-link"
-            label="Link Produk"
-            type="text"
-            class="mt-3"
-            outlined
-            solo
-          />
-        </v-container>
-      </v-col>
-
-      <v-col md="7" class="px-10">
+      <v-col cols="12">
         <v-container>
-          <label for="product-image" class="white--text font-weight-bold">Gambar Produk</label>
-          <v-file-input
-            v-model="selectedFile"
-            name="product-image"
-            label="Gambar Produk"
-            prepend-icon="mdi-camera"
-            class="mt-3"
-            accept="image/*"
-            outlined
-            solo
-            @change="onFileChange"
-          />
-          <v-row>
-            <v-col>
-              <v-img
-                v-if="imageUrl"
-                :src="imageUrl"
-                width="200"
-                height="200"
-                contain
+          <v-row class="px-3">
+            <v-col cols="12" md="5" lg="5">
+              <label for="product-name" class="white--text font-weight-bold">Nama Produk</label>
+              <v-text-field
+                v-model="formData.name"
+                :rules="formRules.productName"
+                name="product-name"
+                label="Nama Produk"
+                type="text"
+                class="mt-3"
+                outlined
+                solo
               />
+              <label for="product-price" class="white--text font-weight-bold">Harga Produk</label>
+              <v-text-field
+                v-model="formData.price"
+                :rules="formRules.price"
+                name="product-price"
+                label="Harga Produk"
+                type="number"
+                class="mt-3"
+                outlined
+                solo
+              >
+                <span
+                  slot="prepend"
+                  class="white--text text-body-1 font-weight-regular"
+                >
+                  Rp
+                </span>
+              </v-text-field>
+              <label for="description" class="white--text font-weight-bold">Deskripsi Produk</label>
+              <v-textarea
+                v-model="formData.description"
+                :rules="formRules.description"
+                name="description"
+                label="Deskripsi Produk"
+                class="mt-3"
+                rows="3"
+                outlined
+                solo
+              />
+              <label for="product-link" class="white--text font-weight-bold">Link Shopee</label>
+              <v-icon class="white--text">
+                mdi-link-variant
+              </v-icon>
+              <v-text-field
+                v-model="formData.shopee"
+                name="product-link"
+                label="Link Produk"
+                type="text"
+                class="mt-3"
+                outlined
+                solo
+              />
+              <label for="product-link" class="white--text font-weight-bold">Link Tokopedia</label>
+              <v-icon class="white--text">
+                mdi-link-variant
+              </v-icon>
+              <v-text-field
+                v-model="formData.tokopedia"
+                name="product-link"
+                label="Link Produk"
+                type="text"
+                class="mt-3"
+                outlined
+                solo
+              />
+              <label for="product-link" class="white--text font-weight-bold">Link Lazada</label>
+              <v-icon class="white--text">
+                mdi-link-variant
+              </v-icon>
+              <v-text-field
+                v-model="formData.lazada"
+                name="product-link"
+                label="Link Produk"
+                type="text"
+                class="mt-3"
+                outlined
+                solo
+              />
+            </v-col>
+
+            <v-col cols="12" md="7" lg="7">
+              <label for="product-image" class="white--text font-weight-bold">Gambar Produk</label>
+              <v-file-input
+                v-model="image"
+                :rules="formRules.images"
+                name="product-image"
+                label="Gambar Produk"
+                prepend-icon="mdi-camera"
+                class="mt-3"
+                accept="image/*"
+                outlined
+                solo
+                @change="onFileChange"
+              />
+              <v-row v-if="image">
+                <v-col cols="4">
+                  <v-img
+                    :src="imageUrl"
+                    width="200"
+                    height="200"
+                    contain
+                  />
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
         </v-container>
       </v-col>
 
-      <v-col cols="2" offset-md="5" class="mb-10">
-        <v-btn class="custom-primary" block>
-          <span>
-            Kirim
-          </span>
-        </v-btn>
+      <v-col cols="4" md="2" offset="4" offset-md="5" class="mb-10">
+        <v-container>
+          <v-btn class="custom-primary white--text" block @click="onSubmit">
+            <span v-if="!isDisabled">
+              Kirim
+            </span>
+            <v-progress-circular v-else color="custom-secondary" indeterminate />
+          </v-btn>
+        </v-container>
       </v-col>
     </v-row>
   </v-form>
@@ -134,15 +159,90 @@ export default {
   // middleware: ['authenticated'],
   data () {
     return {
+      isDisabled: false,
+      formName: 'Unggah Produk',
       formData: {
         name: '',
-        price: 0,
+        price: null,
         description: '',
         shopee: '',
         tokopedia: '',
         lazada: ''
       },
-      selectedFile: null
+      formRules: {
+        productName: [
+          v => !!v || 'Masukan nama produk!'
+        ],
+        price: [
+          v => !!v || 'Masukan harga produk!'
+        ],
+        description: [
+          v => !!v || 'Masukan deskripsi produk!'
+        ]
+      },
+      image: null,
+      imageUpload: [],
+      imageUrl: ''
+    }
+  },
+  async mounted () {
+    const { id } = this.$route.params
+    const { data } = await this.$api.get(`/products/${id}`)
+    const { marketplaces, productImage } = data
+
+    this.formData = data
+    marketplaces.forEach((market) => {
+      this.formData[market.name] = market.url
+    })
+    this.image = productImage[0]
+    this.imageUpload = productImage[0]
+    this.imageUrl = productImage[0]
+  },
+  methods: {
+    onFileChange (file) {
+      if (file.length > 1) {
+        this.imageUpload = []
+        this.imageUrl = ''
+      } else {
+        this.image = file
+        this.imageUpload = file
+        this.imageUrl = ''
+
+        this.previewImage(file)
+      }
+    },
+    previewImage (file) {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (e) => {
+        this.imageUrl = e.target.result
+      }
+    },
+    async onSubmit () {
+      this.isDisabled = true
+
+      try {
+        const marketplaces = []
+
+        if (this.formData.shopee) { marketplaces.push({ name: 'Shopee', url: this.formData.shopee }) }
+        if (this.formData.tokopedia) { marketplaces.push({ name: 'Tokopedia', url: this.formData.tokopedia }) }
+        if (this.formData.lazada) { marketplaces.push({ name: 'Lazada', url: this.formData.lazada }) }
+
+        const formData = new FormData()
+
+        formData.append('productImage1', this.imageUpload)
+        formData.append('name', this.formData.name)
+        formData.append('description', 'DESCRIPTION FIELD')
+        formData.append('price', this.formData.price)
+        await formData.append('marketplaces', JSON.stringify(marketplaces))
+
+        const { data } = await this.$api.put(`/products/${this.formData.id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+        console.log(data)
+      } catch (error) {
+        console.log(error.response.data.message)
+      } finally {
+        this.isDisabled = false
+      }
     }
   }
 }

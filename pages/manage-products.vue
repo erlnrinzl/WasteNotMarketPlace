@@ -24,7 +24,7 @@
           :search-input.sync="search"
           :loading="isLoading"
           :items="itemsSearch"
-          item-text="title"
+          item-text="name"
           item-value="id"
           return-object
           hide-no-data
@@ -68,7 +68,7 @@
     </v-row>
     <v-row class="my-0">
       <v-col
-        v-for="product in products"
+        v-for="product in filteredProduct"
         :key="product.id"
         cols="12"
         sm="12"
@@ -76,7 +76,7 @@
         lg="12"
         class="mb-5"
       >
-        <CardProduct :product="product" @open-dialog="deleteDialog" />
+        <CardProduct :product="product" @open-dialog="deleteDialog(product)" />
       </v-col>
     </v-row>
 
@@ -106,7 +106,7 @@
           <v-btn
             color="red lighten-1"
             dark
-            @click="deleteProduct(selectedDelete.id)"
+            @click="deleteProductConfirm(selectedDelete.id)"
           >
             Buang
           </v-btn>
@@ -141,18 +141,39 @@ export default {
       ]
     }
   },
+  computed: {
+    filteredProduct () {
+      if (this.selectedSearch) {
+        return this.products.filter(product =>
+          product.id === this.selectedSearch.id
+        )
+      }
+      return this.products
+    }
+  },
+  watch: {
+    search (value) {
+      this.isLoading = true
+      setTimeout(() => {
+        this.itemsSearch = this.products.filter((product) => {
+          this.isLoading = false
+          return product.name
+        })
+      }, 800)
+    }
+  },
   async mounted () {
     const { data } = await this.$api.get('/products/seller')
     this.products = data
   },
   methods: {
-    async deleteProduct (id) {
+    async deleteProductConfirm (id) {
       await this.$api.delete(`/products/${id}`)
       this.$router.go()
     },
-    deleteDialog (id) {
+    deleteDialog (product) {
       this.dialog = true
-      this.selectedDelete = this.products.find(product => product.id === id)
+      this.selectedDelete = product
     }
   }
 }

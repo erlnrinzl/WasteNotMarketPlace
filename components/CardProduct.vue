@@ -36,12 +36,23 @@
           </router-link>
         </v-col>
 
+        <v-col
+          v-for="remainder in (3-countProductLink)"
+          :key="remainder"
+          cols="4"
+          sm="1"
+          md="1"
+          lg="1"
+        >
+          <v-spacer />
+        </v-col>
+
         <v-col cols="12" sm="2" md="2" lg="2">
           <v-btn
             class="mr-3 custom-primary--text"
             small
             :to="{
-              name: '/edit-product',
+              name: 'edit-product',
               params: {
                 id: product.id
               }
@@ -49,7 +60,7 @@
           >
             Edit
           </v-btn>
-          <v-btn color="red darken-1" small dark @click="$emit('open-dialog', product.id)">
+          <v-btn color="red darken-1" small dark @click="$emit('open-dialog')">
             Delete
           </v-btn>
         </v-col>
@@ -60,7 +71,26 @@
 
 <script>
 export default {
-  props: ['product'],
+  props: {
+    product: {
+      type: Object,
+      default () {
+        return {
+          id: '',
+          name: '',
+          price: 0,
+          description: '',
+          productImage: [],
+          marketplaces: []
+        }
+      }
+    }
+  },
+  computed: {
+    countProductLink () {
+      return this.product.marketplaces.length
+    }
+  },
   methods: {
     currency (value) {
       return Intl.NumberFormat('en-US').format(value)
