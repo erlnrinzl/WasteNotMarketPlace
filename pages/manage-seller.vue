@@ -43,6 +43,17 @@
           @click:outside="close"
         >
           <v-card>
+            <v-snackbar
+              v-model="showToast"
+              :timeout="4000"
+              color="red lighten-1"
+              outlined
+              elevation="24"
+              top
+              center
+            >
+              {{ errorMessage }}
+            </v-snackbar>
             <v-card-title>
               <v-row class="align-center">
                 <v-col cols="2">
@@ -72,18 +83,6 @@
                 />
               </div>
               <div>
-                <label for="phone" class="text-body-1 font-weight-bold">Telepon</label>
-                <v-text-field
-                  v-model="editedItem.phoneNumber"
-                  name="phone"
-                  label="Telepon"
-                  outlined
-                  dense
-                  solo
-                  flat
-                />
-              </div>
-              <div>
                 <label for="email" class="text-body-1 font-weight-bold">Email</label>
                 <v-text-field
                   v-model="editedItem.email"
@@ -94,6 +93,25 @@
                   solo
                   flat
                 />
+              </div>
+              <div>
+                <label for="phone" class="text-body-1 font-weight-bold">Telepon</label>
+                <v-text-field
+                  v-model="editedItem.phoneNumber"
+                  name="phone"
+                  label="Telepon"
+                  outlined
+                  dense
+                  solo
+                  flat
+                >
+                  <span
+                    slot="prepend"
+                    class="text-body-1 font-weight-regular"
+                  >
+                    +62
+                  </span>
+                </v-text-field>
               </div>
               <div>
                 <label for="alamat" class="text-body-1 font-weight-bold">Alamat</label>
@@ -121,6 +139,7 @@
               <v-btn
                 color="custom-primary"
                 dark
+                :disabled="isDisabled"
                 @click="save"
               >
                 Save
@@ -238,7 +257,11 @@ export default {
         address: '',
         email: '',
         phoneNumber: ''
-      }
+      },
+      isError: true,
+      showToast: false,
+      errorMessage: '',
+      isDisabled: false
     }
   },
   computed: {
@@ -295,29 +318,56 @@ export default {
       })
     },
     async save () {
+      this.isDisabled = true
+
       if (this.editedIndex > -1) {
         // axios to put updated bank data to server
-        const { name, address, email, phoneNumber, id } = this.editedItem
+        try {
+          const { name, address, email, phoneNumber, id } = this.editedItem
+          const phoneID = '+62' + phoneNumber
 
-        const formData = { name, address, email, phoneNumber }
+          let formData = { name, address, email, sellerId: id }
+          formData = { ...formData, phoneNumber: phoneID }
 
-        const { data } = await this.$api.put(`/sellers/${id}`, formData)
-        console.log(data)
+          const { data } = await this.$api.put(`/sellers/${id}`, formData)
+          console.log(data)
 
-        Object.assign(this.sellers[this.editedIndex], this.editedItem)
+          Object.assign(this.sellers[this.editedIndex], this.editedItem)
+          this.isError = false
+        } catch (error) {
+          this.isError = true
+          this.errorMessage = error.response.data.message
+          this.showToast = true
+        } finally {
+          this.isDisabled = false
+        }
       } else {
         // axios to post new bank data to server
-        const { name, address, email, phoneNumber } = this.editedItem
-        const DEFAULT_PASSWORD = 'password'
+        try {
+          const { name, address, email, phoneNumber } = this.editedItem
+          const phoneID = '+62' + phoneNumber
 
-        const formData = { name, email, password: DEFAULT_PASSWORD, phoneNumber, address }
+          const DEFAULT_PASSWORD = 'password'
 
-        const { data } = await this.$api.post('/sellers', formData)
-        console.log(data)
+          let formData = { name, email, password: DEFAULT_PASSWORD, address }
+          formData = { ...formData, phoneNumber: phoneID }
 
-        this.sellers.push({ ...this.editedItem, id: data.sellerId })
+          const { data } = await this.$api.post('/sellers', formData)
+          console.log(data)
+
+          this.sellers.push({ ...this.editedItem, id: data.sellerId })
+          this.isError = false
+        } catch (error) {
+          this.isError = true
+          this.errorMessage = error.response.data.message
+          this.showToast = true
+        } finally {
+          this.isDisabled = false
+        }
       }
-      this.close()
+      if (!this.isError) {
+        this.close()
+      }
     }
   }
 }
