@@ -178,7 +178,7 @@
 
                 <label for="date" class="white--text font-weight-bold">{{ 'Waktu ' + formLabel }}</label>
                 <v-menu
-                  ref="menu"
+                  ref="menu2"
                   v-model="menu2"
                   :close-on-content-click="false"
                   :nudge-right="40"
@@ -206,7 +206,7 @@
                     v-model="time"
                     color="custom-primary"
                     full-width
-                    @click:minute="$refs.menu.save(time)"
+                    @click:minute="$refs.menu2.save(time)"
                   />
                 </v-menu>
               </v-col>
