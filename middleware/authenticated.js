@@ -13,7 +13,7 @@ export default function ({ app, store, redirect }) {
     })
   } else if (userRole === 'admin') {
     window.$nuxt.$router.push({
-      name: 'manage-partners'
+      name: 'manage-banks'
     })
   } else if (userRole === 'bank') {
     window.$nuxt.$router.push({

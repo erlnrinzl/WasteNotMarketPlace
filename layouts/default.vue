@@ -265,7 +265,7 @@ export default {
       if (this.getRole === 'seller') {
         return [
           {
-            title: 'Seller',
+            title: 'Product',
             to: '/manage-products'
           }
         ]
@@ -273,7 +273,11 @@ export default {
         return [
           {
             title: 'Banks',
-            to: '/manage-partners'
+            to: '/manage-banks'
+          },
+          {
+            title: 'Seller',
+            to: '/manage-seller'
           }
         ]
       } else if (this.getRole === 'bank') {
