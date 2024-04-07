@@ -92,7 +92,7 @@
                 mdi-delete-alert-outline
               </v-icon>
             </v-col>
-            <v-col cols="10" class="text-left">
+            <v-col cols="10" class="word-wrap text-left">
               Apakah anda yakin membuang produk ini?
             </v-col>
           </v-row>

@@ -150,6 +150,14 @@
           </v-btn>
         </v-container>
       </v-col>
+      <PopUp
+        :color="isError ? 'red darken-1' : 'custom-secondary'"
+        :icon="isError ? 'mdi-close' : 'mdi-check'"
+        :show="dialog"
+        :title="popUpTitle"
+        :message="popUpMessage"
+        @close="closePopUpRedirect"
+      />
     </v-row>
   </v-form>
 </template>
@@ -182,7 +190,11 @@ export default {
       },
       image: null,
       imageUpload: [],
-      imageUrl: ''
+      imageUrl: '',
+      dialog: false,
+      isError: false,
+      popUpTitle: '',
+      popUpMessage: ''
     }
   },
   async mounted () {
@@ -192,7 +204,7 @@ export default {
 
     this.formData = data
     marketplaces.forEach((market) => {
-      this.formData[market.name] = market.url
+      this.formData[market.name.toLowerCase()] = market.url
     })
     this.image = productImage[0]
     this.imageUpload = productImage[0]
@@ -218,6 +230,19 @@ export default {
         this.imageUrl = e.target.result
       }
     },
+    openPopUp (title, message) {
+      this.dialog = true
+      this.popUpTitle = title
+      this.popUpMessage = message
+    },
+    closePopUpRedirect () {
+      this.dialog = false
+      if (this.isError) {
+        this.isError = false
+      } else {
+        this.$router.go(-1)
+      }
+    },
     async onSubmit () {
       this.isDisabled = true
 
@@ -238,8 +263,16 @@ export default {
 
         const { data } = await this.$api.put(`/products/${this.formData.id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
+        const title = 'Berhasil Submit'
+        const message = 'Produk anda telah berhasil diperbarui!'
+
+        this.openPopUp(title, message)
+        this.isError = false
       } catch (error) {
-        console.log(error.response.data.message)
+        const title = 'Error!'
+        this.isError = true
+        console.log(error.message)
+        this.openPopUp(title, error.response.data.message)
       } finally {
         this.isDisabled = false
       }
