@@ -226,6 +226,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getTime, talkDate } from '~/utils/date'
 
 export default {
   middleware: ['auth-bank'],
@@ -325,35 +326,28 @@ export default {
     // ...mapActions('banks', {
     //   fetchBanks: 'fetchBanks'
     // }),
-    initialize () {
-      this.orders = [
-        {
-          id: '103948109234',
-          sender: 'Eggan Ojwala Yatalana',
-          phone: '091832901283918',
-          dateOrder: '24-08-2024',
-          timeOrder: '10:00 - 11:00',
-          wasteWeight: null,
-          isConfirmed: false,
-          images: [
-            'Kotak Pensil.jpg',
-            'Lampu Sendok 1.jpg'
-          ]
-        },
-        {
-          id: '103948109235',
-          sender: 'Rinzler',
-          phone: '091832901283918',
-          dateOrder: '24-08-2024',
-          timeOrder: '10:00 - 11:00',
-          wasteWeight: '13',
-          isConfirmed: true,
-          images: [
-            'Kotak Pensil.jpg',
-            'Lampu Sendok 1.jpg'
-          ]
-        }
-      ]
+    async initialize () {
+      const { data } = await this.$api.get('/delivers/bank')
+      const orders = data.map((order) => {
+        const { name, phone } = order.sender
+
+        order.sender = name
+        order.phone = phone
+
+        const date = new Date(order.sendScheduleTime)
+
+        order.dateOrder = talkDate(date)
+        order.timeOrder = getTime(date)
+
+        order.wasteWeight = order.wastes.reduce((t, c) => (t + c.wasteWeight), 0)
+        order.images = [order.wasteImageUrl]
+
+        order.isConfirmed = order.wasteWeight > 0
+
+        return order
+      })
+
+      this.orders = orders
     },
     showImage (item) {
       this.editedIndex = this.orders.indexOf(item)

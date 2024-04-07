@@ -334,18 +334,22 @@ export default {
     async onSubmit () {
       this.isDisabled = true
       try {
-        const { sender, phone } = this.formData
-        const phoneID = '+62' + phone
-        const sendSchedule = new Date().toISOString()
+        const { sender, phone, bankId } = this.formData
+        const phoneNumber = '+62' + phone
 
-        const mockupBankId = 'BU5a94Nkp28cxsPMATQxZu2o1mNL'
+        const { date, time } = this
+        const [hours, minutes] = time.split(':')
+
+        const sendSchedule = new Date(date)
+        sendSchedule.setHours(hours)
+        sendSchedule.setMinutes(minutes)
 
         const formData = new FormData()
         formData.append('wasteImage', this.image)
-        formData.append('bankId', mockupBankId)
+        formData.append('bankId', bankId)
         formData.append('senderName', sender)
-        formData.append('senderPhone', phoneID) // +62xxx
-        formData.append('sendSchedule', sendSchedule)
+        formData.append('senderPhone', phoneNumber) // +62xxx
+        formData.append('sendSchedule', sendSchedule.toISOString())
 
         const { data } = await this.$api.post('/delivers', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
