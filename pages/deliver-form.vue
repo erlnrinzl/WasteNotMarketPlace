@@ -247,6 +247,42 @@
             </v-btn>
           </v-container>
         </v-col>
+        <v-dialog
+          v-model="dialog"
+          max-width="290"
+        >
+          <v-card>
+            <v-card-title class="custom-secondary">
+              <v-container>
+                <div class="text-center">
+                  <v-icon class="text-h1 white--text">
+                    mdi-check
+                  </v-icon>
+                </div>
+                <div class="text-center">
+                  <p class="text-h6 white--text">
+                    {{ popUpTitle }}
+                  </p>
+                </div>
+              </v-container>
+            </v-card-title>
+            <v-card-text class="py-2">
+              <div class="text-center">
+                {{ popUpMessage }}
+              </div>
+            </v-card-text>
+            <v-card-actions class="pb-3 justify-center">
+              <v-btn
+                color="custom-primary"
+                small
+                dark
+                @click="closePopUpRedirect"
+              >
+                Tutup
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-row>
     </v-form>
   </v-responsive>
@@ -287,7 +323,10 @@ export default {
       isLoading: false,
       itemsSearch: [],
       selectedSearch: null,
-      banks: []
+      banks: [],
+      dialog: false,
+      popUpMessage: '',
+      popUpTitle: ''
     }
   },
   computed: {
@@ -331,6 +370,15 @@ export default {
       }
       reader.readAsDataURL(file)
     },
+    openPopUp (title, message) {
+      this.dialog = true
+      this.popUpTitle = title
+      this.popUpMessage = message
+    },
+    closePopUpRedirect () {
+      this.dialog = false
+      this.$router.go(-1)
+    },
     async onSubmit () {
       this.isDisabled = true
       try {
@@ -353,7 +401,13 @@ export default {
 
         const { data } = await this.$api.post('/delivers', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
-        this.$router.go(-1)
+
+        const seletedBank = this.banks.filter(bank => bank.id === bankId)
+
+        const title = 'Berhasil Submit'
+        const message = `Mohon antarkan sampah anda ke bank sampah ${seletedBank.name} terim kasih`
+
+        this.openPopUp(title, message)
       } catch (error) {
         console.log(error)
       } finally {

@@ -17,7 +17,65 @@
             <v-row class="align-center">
               <v-col cols="2" md="1" lg="1">
                 <span class="rounded-lg py-3 px-5 text-h6 custom-primary white--text">
-                  {{ formNumber }}
+                  1
+                </span>
+              </v-col>
+              <v-col cols="10" md="4" lg="4">
+                <span class="text-h6 white--text">Pilih Dinas Lingkungan</span>
+              </v-col>
+              <v-col cols="12" md="4" lg="4">
+                <v-autocomplete
+                  v-model="selectedSearch"
+                  label="Cari Dinas Lingkungan"
+                  placeholder="Tulis untuk mencari"
+                  append-icon=""
+                  prepend-icon="mdi-magnify"
+                  :search-input.sync="search"
+                  :loading="isLoading"
+                  :items="itemsSearch"
+                  item-text="name"
+                  item-value="id"
+                  return-object
+                  hide-no-data
+                  outlined
+                  solo
+                  dense
+                />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-col>
+        <v-col cols="12">
+          <v-container>
+            <v-slide-group
+              v-if="filteredBanks.length > 0"
+              v-model="formData.bankId"
+              show-arrows
+            >
+              <v-slide-item
+                v-for="bank in filteredBanks"
+                v-slot="{ active, toggle }"
+                :key="bank.id"
+                :value="bank.id"
+              >
+                <CardAlamat
+                  :active="active"
+                  :bank="bank"
+                  :width="230"
+                  class="ma-3"
+                  @click="toggle"
+                />
+              </v-slide-item>
+            </v-slide-group>
+          </v-container>
+        </v-col>
+
+        <v-col cols="12">
+          <v-container>
+            <v-row class="align-center">
+              <v-col cols="2" md="1" lg="1">
+                <span class="rounded-lg py-3 px-5 text-h6 custom-primary white--text">
+                  2
                 </span>
               </v-col>
               <v-col cols="10" md="11" lg="11">
@@ -191,6 +249,42 @@
             </v-btn>
           </v-container>
         </v-col>
+        <v-dialog
+          v-model="dialog"
+          max-width="290"
+        >
+          <v-card>
+            <v-card-title :class="isError ? 'red darken-1' : 'custom-secondary'">
+              <v-container>
+                <div class="text-center">
+                  <v-icon class="text-h1 white--text">
+                    mdi-check
+                  </v-icon>
+                </div>
+                <div class="text-center">
+                  <p class="text-h6 white--text">
+                    {{ popUpTitle }}
+                  </p>
+                </div>
+              </v-container>
+            </v-card-title>
+            <v-card-text class="py-2">
+              <div class="text-center">
+                {{ popUpMessage }}
+              </div>
+            </v-card-text>
+            <v-card-actions class="pb-3 justify-center">
+              <v-btn
+                color="custom-primary"
+                small
+                dark
+                @click="closePopUpRedirect"
+              >
+                Tutup
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-row>
     </v-form>
   </v-responsive>
@@ -203,12 +297,12 @@ export default {
     return {
       formName: 'Pick Up',
       formLabel: 'Pengambilan',
-      formNumber: 1,
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       time: null,
       menu: false,
       menu2: false,
       formData: {
+        bankId: null,
         sender: null
       },
       formRules: {
@@ -224,10 +318,47 @@ export default {
       },
       image: undefined,
       imageUrl: '',
-      isDisabled: false
+      isDisabled: false,
+      search: null,
+      isLoading: false,
+      itemsSearch: [],
+      selectedSearch: null,
+      banks: [],
+      dialog: false,
+      popUpMessage: '',
+      popUpTitle: '',
+      isError: false
     }
   },
+  computed: {
+    filteredBanks () {
+      if (this.selectedSearch) {
+        return this.banks.filter(bank =>
+          bank.id === this.selectedSearch.id
+        )
+      }
+      return this.banks
+    }
+  },
+  watch: {
+    search (value) {
+      this.isLoading = true
+      setTimeout(() => {
+        this.itemsSearch = this.banks.filter((bank) => {
+          this.isLoading = false
+          return bank.name
+        })
+      }, 800)
+    }
+  },
+  mounted () {
+    this.initialize()
+  },
   methods: {
+    async initialize () {
+      const { data } = await this.$api.get('/banks')
+      this.banks = data
+    },
     onFileChange (file) {
       this.image = file
       this.imageUrl = ''
@@ -243,11 +374,20 @@ export default {
       }
       reader.readAsDataURL(file)
     },
+    openPopUp (title, message) {
+      this.dialog = true
+      this.popUpTitle = title
+      this.popUpMessage = message
+    },
+    closePopUpRedirect () {
+      this.dialog = false
+      this.$router.go(-1)
+    },
     async onSubmit () {
       this.isDisabled = true
 
       try {
-        const { sender, phone, address } = this.formData
+        const { sender, phone, address, bankId } = this.formData
         const phoneID = '+62' + phone
 
         const { date, time } = this
@@ -259,7 +399,7 @@ export default {
 
         const formData = new FormData()
         formData.append('wasteImage', this.image)
-        formData.append('bankId', '')
+        formData.append('bankId', bankId)
         formData.append('requesterName', sender)
         formData.append('requesterPhone', phoneID) // +62xxx
         formData.append('requesterAddress', address)
@@ -267,7 +407,11 @@ export default {
 
         const { data } = await this.$api.post('/pickups', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
-        this.$router.go(-1)
+
+        const title = 'Berhasil Submit'
+        const message = 'Permintaan pick up anda sedang diproses, terima kasih'
+
+        this.openPopUp(title, message)
       } catch (error) {
         console.log(error.response.data.message)
       } finally {
