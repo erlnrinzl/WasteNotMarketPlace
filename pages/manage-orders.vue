@@ -383,12 +383,15 @@ export default {
         this.editedIndex = -1
       })
     },
-    save () {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
-      } else {
-        this.desserts.push(this.editedItem)
-      }
+    async save () {
+      const { id, wasteWeight } = this.editedItem
+      await this.$api.put(`/delivers/${id}`, { status: 'Selesai', wasteWeight })
+
+      // if (this.editedIndex > -1) {
+      //   Object.assign(this.desserts[this.editedIndex], this.editedItem)
+      // } else {
+      //   this.desserts.push(this.editedItem)
+      // }
       this.close()
     }
   }
