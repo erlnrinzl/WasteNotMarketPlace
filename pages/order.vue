@@ -33,7 +33,14 @@
       </v-tab-item>
       <v-tab-item :value="'tab-selesai'">
         <v-row class="py-5">
-          <v-col v-for="order in finishedOrders" :key="order.id" cols="4">
+          <v-col
+            v-for="order in finishedOrders"
+            :key="order.id"
+            cols="12"
+            sm="6"
+            md="4"
+            lg="4"
+          >
             <CardPesanan :order-data="order" />
           </v-col>
         </v-row>

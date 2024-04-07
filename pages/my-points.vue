@@ -6,7 +6,7 @@
         color="custom-primary"
       >
         <v-tab href="#tab-my-point" class="custom-secondary--text font-weight-bold">
-          Point Saya
+          Poin Saya
         </v-tab>
         <v-tab href="#tab-exchange-point" class="custom-secondary--text font-weight-bold">
           Tukar Poin

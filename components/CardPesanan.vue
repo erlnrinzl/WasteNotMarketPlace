@@ -82,13 +82,15 @@ export default {
   },
   methods: {
     onClick (id) {
-      this.$router.push({
-        name: 'order-detail',
-        params: {
-          id: this.orderData.id,
-          type: this.orderData.type
-        }
-      })
+      if (this.orderData.status.toLowerCase() === 'selesai') {
+        this.$router.push({
+          name: 'order-detail',
+          params: {
+            id: this.orderData.id,
+            type: this.orderData.type
+          }
+        })
+      }
     }
   }
 }

@@ -154,7 +154,7 @@
               <v-spacer />
               <v-btn
                 color="red lighten-1"
-                dark
+                disabled
                 @click="deleteItemConfirm"
               >
                 Buang
@@ -208,7 +208,7 @@ export default {
         },
         {
           text: 'Telepon',
-          value: 'phone'
+          value: 'phoneNumber'
         },
         {
           text: 'Email',

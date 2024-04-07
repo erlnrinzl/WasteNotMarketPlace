@@ -7,18 +7,11 @@
         </h2>
       </v-col>
       <v-col cols="12" md="3" lg="3">
-        <v-autocomplete
-          v-model="selectedSearch"
+        <v-text-field
+          v-model="search"
           label="Cari Pesanan"
           placeholder="Tulis untuk mencari"
-          append-icon=""
-          prepend-icon="mdi-magnify"
-          :search-input.sync="search"
-          :loading="isLoading"
-          :items="itemsSearch"
-          item-text="sender"
-          item-value="id"
-          return-object
+          append-icon="mdi-magnify"
           hide-no-data
           outlined
           solo
@@ -31,6 +24,7 @@
     <v-data-table
       :headers="headers"
       :items="orders"
+      :search="search"
       sort-by="calories"
       class="elevation-1"
     >
@@ -148,7 +142,7 @@
             </v-card-title>
             <v-card-text>
               <span class="font-weight-bold">Nama:</span>
-              <span>{{ editedItem.name }}</span>
+              <span>{{ editedItem.sender + ', ' + editedItem.dateOrder }}</span>
             </v-card-text>
             <v-card-actions>
               <v-spacer />

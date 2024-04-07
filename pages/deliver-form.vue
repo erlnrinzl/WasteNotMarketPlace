@@ -249,6 +249,7 @@
         </v-col>
         <PopUp
           :color="isError ? 'red darken-1' : 'custom-secondary'"
+          :icon="isError ? 'mdi-close' : 'mdi-check'"
           :show="dialog"
           :title="popUpTitle"
           :message="popUpMessage"
@@ -295,7 +296,7 @@ export default {
       itemsSearch: [],
       selectedSearch: null,
       banks: [],
-      dialog: true,
+      dialog: false,
       popUpMessage: '',
       popUpTitle: ''
     }

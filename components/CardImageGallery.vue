@@ -3,7 +3,7 @@
     <v-img
       v-if="images.length > 0"
       height="200px"
-      :src="require(`@/assets/images/${images[selectedImageIndex]}`)"
+      :src="images[0]"
     />
     <v-card-title v-else>
       <span>No Image Available</span>
@@ -15,7 +15,7 @@
         <v-row v-if="images.length > 0">
           <v-col v-for="(image, index) in images" :key="index" cols="3">
             <v-img
-              :src="require(`@/assets/images/${image}`)"
+              :src="image"
               @click="selectedImageIndex = index"
             />
           </v-col>

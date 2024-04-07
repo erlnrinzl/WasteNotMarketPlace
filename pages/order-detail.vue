@@ -6,18 +6,18 @@
     </div>
     <hr>
     <v-row class="py-5">
-      <v-col lg="4" md="4" sm="6">
-        <DetailLabel label-name="Deliver ID" :label-value="order.id" />
+      <v-col lg="4" md="4" cols="6">
+        <DetailLabel class="overflow-hidden text-truncate" label-name="Deliver ID" :label-value="order.id" />
         <DetailLabel label-name="Nama Pengirim" :label-value="user.name" />
         <DetailLabel label-name="Nomor Telepon Pengirim" :label-value="user.phone" />
         <DetailLabel :label-name="user.address ? 'Alamat Pengirim' : ''" :label-value="user.address" />
       </v-col>
-      <v-col lg="4" md="4" sm="6">
+      <v-col lg="4" md="4" cols="6">
         <DetailLabel label-name="Tanggal Pengiriman" :label-value="order.date" />
         <DetailLabel label-name="Waktu Pengiriman" :label-value="order.time" />
         <DetailLabel label-name="" :label-value="order.bank?.name" />
       </v-col>
-      <v-col lg="4" md="4" sm="12">
+      <v-col lg="4" md="4" cols="12">
         <v-card outlined>
           <v-card-title class="custom-secondary--text">
             Detail Berat Sampah
@@ -87,6 +87,8 @@ export default {
 
     this.order.totalPoints = data.wastes.reduce((t, c) => { return t + c.wastePoint }, 0)
     this.order.totalWeight = data.wastes.reduce((t, c) => { return t + c.wasteWeight }, 0)
+
+    this.order = { ...this.order, type: orderType }
 
     this.user = this.order.sender ?? this.order.requester
   }
