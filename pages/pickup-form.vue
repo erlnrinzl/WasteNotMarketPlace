@@ -271,7 +271,7 @@ export default {
       formName: 'Pick Up',
       formLabel: 'Pengambilan',
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      time: null,
+      time: this.getCurrentTime(),
       menu: false,
       menu2: false,
       formData: {
@@ -331,6 +331,12 @@ export default {
     async initialize () {
       const { data } = await this.$api.get('/banks')
       this.banks = data
+    },
+    getCurrentTime () {
+      const now = new Date()
+      const hours = String(now.getHours()).padStart(2, '0')
+      const minutes = String(now.getMinutes()).padStart(2, '0')
+      return `${hours}:${minutes}`
     },
     onFileChange (file) {
       this.image = file
@@ -392,7 +398,7 @@ export default {
       } catch (error) {
         const title = 'Error'
         this.isError = true
-        this.openPopUp(title, error.message)
+        this.openPopUp(title, error.response.data.message)
       } finally {
         this.isDisabled = false
       }

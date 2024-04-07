@@ -269,7 +269,7 @@ export default {
       formName: 'Deliver',
       formLabel: 'Pengiriman',
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      time: null,
+      time: this.getCurrentTime(),
       menu: false,
       menu2: false,
       formData: {
@@ -298,7 +298,8 @@ export default {
       banks: [],
       dialog: false,
       popUpMessage: '',
-      popUpTitle: ''
+      popUpTitle: '',
+      isError: false
     }
   },
   computed: {
@@ -327,6 +328,12 @@ export default {
     this.banks = data
   },
   methods: {
+    getCurrentTime () {
+      const now = new Date()
+      const hours = String(now.getHours()).padStart(2, '0') // Ambil jam dengan menambahkan leading zero jika perlu
+      const minutes = String(now.getMinutes()).padStart(2, '0') // Ambil menit dengan menambahkan leading zero jika perlu
+      return `${hours}:${minutes}`
+    },
     onFileChange (file) {
       this.image = file
       this.imageUrl = ''
@@ -378,16 +385,17 @@ export default {
         const { data } = await this.$api.post('/delivers', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
 
-        const seletedBank = this.banks.filter(bank => bank.id === bankId)
+        const selectedBank = this.banks.find(bank => bank.id === bankId)
 
         const title = 'Berhasil Submit'
-        const message = `Mohon antarkan sampah anda ke bank sampah ${seletedBank.name} terim kasih`
+        const message = `Mohon antarkan sampah anda ke bank sampah ${selectedBank.name} terim kasih`
 
         this.openPopUp(title, message)
       } catch (error) {
         const title = 'Error'
         this.isError = true
-        this.openPopUp(title, error.message)
+        console.log(error.message)
+        this.openPopUp(title, error.response.data.message)
       } finally {
         this.isDisabled = false
       }
