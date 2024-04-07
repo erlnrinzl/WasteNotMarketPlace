@@ -249,7 +249,13 @@ export default {
       try {
         const { sender, phone, address } = this.formData
         const phoneID = '+62' + phone
-        const pickupSchedule = new Date().toISOString()
+
+        const { date, time } = this
+        const [hours, minutes] = time.split(':')
+
+        const pickupSchedule = new Date(date)
+        pickupSchedule.setHours(hours)
+        pickupSchedule.setMinutes(minutes)
 
         const formData = new FormData()
         formData.append('wasteImage', this.image)
@@ -257,7 +263,7 @@ export default {
         formData.append('requesterName', sender)
         formData.append('requesterPhone', phoneID) // +62xxx
         formData.append('requesterAddress', address)
-        formData.append('pickupSchedule', pickupSchedule)
+        formData.append('pickupSchedule', pickupSchedule.toISOString())
 
         const { data } = await this.$api.post('/pickups', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)
