@@ -247,42 +247,13 @@
             </v-btn>
           </v-container>
         </v-col>
-        <v-dialog
-          v-model="dialog"
-          max-width="290"
-        >
-          <v-card>
-            <v-card-title class="custom-secondary">
-              <v-container>
-                <div class="text-center">
-                  <v-icon class="text-h1 white--text">
-                    mdi-check
-                  </v-icon>
-                </div>
-                <div class="text-center">
-                  <p class="text-h6 white--text">
-                    {{ popUpTitle }}
-                  </p>
-                </div>
-              </v-container>
-            </v-card-title>
-            <v-card-text class="py-2">
-              <div class="text-center">
-                {{ popUpMessage }}
-              </div>
-            </v-card-text>
-            <v-card-actions class="pb-3 justify-center">
-              <v-btn
-                color="custom-primary"
-                small
-                dark
-                @click="closePopUpRedirect"
-              >
-                Tutup
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+        <PopUp
+          :color="isError ? 'red darken-1' : 'custom-secondary'"
+          :show="dialog"
+          :title="popUpTitle"
+          :message="popUpMessage"
+          @close="closePopUpRedirect"
+        />
       </v-row>
     </v-form>
   </v-responsive>
@@ -324,7 +295,7 @@ export default {
       itemsSearch: [],
       selectedSearch: null,
       banks: [],
-      dialog: false,
+      dialog: true,
       popUpMessage: '',
       popUpTitle: ''
     }
@@ -377,7 +348,11 @@ export default {
     },
     closePopUpRedirect () {
       this.dialog = false
-      this.$router.go(-1)
+      if (this.isError) {
+        this.isError = false
+      } else {
+        this.$router.go(-1)
+      }
     },
     async onSubmit () {
       this.isDisabled = true
@@ -409,7 +384,9 @@ export default {
 
         this.openPopUp(title, message)
       } catch (error) {
-        console.log(error)
+        const title = 'Error'
+        this.isError = true
+        this.openPopUp(title, error.message)
       } finally {
         this.isDisabled = false
       }
