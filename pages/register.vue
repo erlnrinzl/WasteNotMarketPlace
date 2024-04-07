@@ -3,6 +3,17 @@
     <v-row>
       <v-col md="4" offset-md="4">
         <v-card class="text-center px-3">
+          <v-snackbar
+            v-model="showToast"
+            :timeout="4000"
+            color="red lighten-1"
+            outlined
+            elevation="24"
+            top
+            center
+          >
+            {{ errorMessage }}
+          </v-snackbar>
           <v-form>
             <v-card-title class="mb-3 custom-primary--text text-h3 font-weight-medium justify-center">
               Daftar
@@ -35,7 +46,6 @@
               </v-radio-group>
               <label for="phone" class="custom-secondary--text font-weight-bold">Nomor Telepon</label>
               <v-form>
-                +62
                 <v-text-field
                   v-model="formData.phone"
                   :rules="rules.phone"
@@ -44,40 +54,45 @@
                   type="phone"
                   outlined
                   solo
-                />
+                >
+                  <span
+                    slot="prepend"
+                    class="text-body-1 font-weight-regular"
+                  >
+                    +62
+                  </span>
+                </v-text-field>
                 <label for="email" class="custom-secondary--text font-weight-bold">Email</label>
-                <v-form>
-                  <v-text-field
-                    v-model="formData.email"
-                    :rules="rules.email"
-                    name="email"
-                    label="email"
-                    type="email"
-                    outlined
-                    solo
-                    @keyup="checkEmail"
-                  />
-                  <label for="password" class="custom-secondary--text font-weight-bold">Password</label>
-                  <v-text-field
-                    v-model="formData.password"
-                    :rules="rules.password"
-                    name="password"
-                    label="password"
-                    type="password"
-                    outlined
-                    solo
-                  />
-                  <label for="retype_Password" class="custom-secondary--text font-weight-bold">Konfirmasi Password</label>
-                  <v-text-field
-                    v-model="formData.retype_Password"
-                    :rules="rules.retype_Password"
-                    name="retype_Password"
-                    label="password"
-                    type="password"
-                    outlined
-                    solo
-                  />
-                </v-form>
+                <v-text-field
+                  v-model="formData.email"
+                  :rules="rules.email"
+                  name="email"
+                  label="email"
+                  type="email"
+                  outlined
+                  solo
+                  @keyup="checkEmail"
+                />
+                <label for="password" class="custom-secondary--text font-weight-bold">Password</label>
+                <v-text-field
+                  v-model="formData.password"
+                  :rules="rules.password"
+                  name="password"
+                  label="password"
+                  type="password"
+                  outlined
+                  solo
+                />
+                <label for="retype_Password" class="custom-secondary--text font-weight-bold">Konfirmasi Password</label>
+                <v-text-field
+                  v-model="formData.retype_Password"
+                  :rules="rules.retype_Password"
+                  name="retype_Password"
+                  label="password"
+                  type="password"
+                  outlined
+                  solo
+                />
               </v-form>
             </v-card-text>
             <v-card-actions class="d-block px-4">
@@ -110,7 +125,6 @@ export default {
   data () {
     return {
       emailExist: false,
-      isDisabled: false,
       message: '',
       formData: {
         name: '',
@@ -139,7 +153,11 @@ export default {
           v => !!v || 'Re-type your password!',
           v => v === this.formData.password || 'Re-password harus identik dengan Password!'
         ]
-      }
+      },
+      isError: false,
+      showToast: false,
+      errorMessage: '',
+      isDisabled: false
     }
   },
   methods: {
@@ -161,7 +179,9 @@ export default {
 
         this.$router.push('/login')
       } catch (error) {
-        // Handle errors
+        this.isError = true
+        this.errorMessage = error.response.data.message
+        this.showToast = true
       } finally {
         this.isDisabled = false
       }

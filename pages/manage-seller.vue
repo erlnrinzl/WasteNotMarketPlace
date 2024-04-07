@@ -258,7 +258,7 @@ export default {
         email: '',
         phoneNumber: ''
       },
-      isError: true,
+      isError: false,
       showToast: false,
       errorMessage: '',
       isDisabled: false
@@ -335,7 +335,7 @@ export default {
           Object.assign(this.sellers[this.editedIndex], this.editedItem)
           this.isError = false
         } catch (error) {
-          this.isError = true
+          this.isError = false
           this.errorMessage = error.response.data.message
           this.showToast = true
         } finally {

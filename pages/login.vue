@@ -11,27 +11,21 @@
           <v-row>
             <v-col md="8" offset-md="2">
               <v-snackbar
-                v-model="snackbar"
+                v-model="showToast"
                 :timeout="4000"
-                color="custom-primary"
+                :color="isError ? 'red lighten-1' : 'custom-primary'"
                 outlined
                 elevation="24"
                 top
                 center
               >
-                {{ snackbarText }}
+                {{ errorMessage }}
               </v-snackbar>
               <v-card class="text-center px-3">
                 <v-card-title class="mb-3 custom-primary--text text-h3 font-weight-bold justify-center">
                   Masuk
                 </v-card-title>
                 <v-card-text class="text-left">
-                  <v-alert
-                    v-if="isError"
-                    class="red lighten-2 white--text"
-                  >
-                    {{ message }}
-                  </v-alert>
                   <label for="email" class="custom-secondary--text font-weight-bold">Email</label>
                   <v-form>
                     <v-text-field
@@ -93,10 +87,6 @@ export default {
   data () {
     return {
       heroLoginImg: 'Sign In.png',
-      isDisabled: false,
-      isError: false,
-      snackbar: false,
-      snackbarText: '',
       message: '',
       formData: {
         email: '',
@@ -111,7 +101,11 @@ export default {
           v => !!v || 'Password is required!',
           v => v.length >= 6 || 'Password must be at least 6 characters!'
         ]
-      }
+      },
+      isError: false,
+      showToast: false,
+      errorMessage: '',
+      isDisabled: false
     }
   },
   mounted () {
@@ -128,15 +122,12 @@ export default {
         const { email, password } = this.formData
 
         await signInWithEmailAndPassword(this.$fire.auth, email, password)
-
+        this.isError = false
         this.$router.go('/')
       } catch (error) {
-        console.log('the error is', error)
-        console.log('the error response is', error.response)
-        this.snackbar = true
-        this.snackbarText = 'error messages'
-
-        // this.message = error.response.data.message
+        this.isError = true
+        this.errorMessage = error.code
+        this.showToast = true
       } finally {
         this.isDisabled = false
       }
@@ -145,11 +136,13 @@ export default {
       try {
         const { email } = this.formData
         await sendPasswordResetEmail(this.$fire.auth, email)
-        this.snackbar = true
-        this.snackbarText = 'The reset link sent to ' + email
+        this.isError = false
+        this.errorMessage = 'The reset link sent to ' + email
+        this.showToast = true
       } catch (error) {
         this.isError = true
-        this.message = error.response.data.message
+        this.errorMessage = error.response.data.message
+        this.showToast = true
       }
     },
     storeWelcomeScreen () {

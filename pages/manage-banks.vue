@@ -258,7 +258,7 @@ export default {
         email: '',
         phoneNumber: ''
       },
-      isError: true,
+      isError: false,
       showToast: false,
       errorMessage: '',
       isDisabled: false
