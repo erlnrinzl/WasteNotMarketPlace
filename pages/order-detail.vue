@@ -7,7 +7,7 @@
     <hr>
     <v-row class="py-5">
       <v-col lg="4" md="4" cols="6">
-        <DetailLabel class="overflow-hidden text-truncate" label-name="Deliver ID" :label-value="order.id" />
+        <DetailLabel class="overflow-hidden text-truncate" :label-name="order.type.toLowerCase() === 'deliver' ? 'Deliver ID' : 'Pick Up ID'" :label-value="order.id" />
         <DetailLabel label-name="Nama Pengirim" :label-value="user.name" />
         <DetailLabel label-name="Nomor Telepon Pengirim" :label-value="user.phone" />
         <DetailLabel :label-name="user.address ? 'Alamat Pengirim' : ''" :label-value="user.address" />
