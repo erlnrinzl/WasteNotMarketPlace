@@ -13,7 +13,7 @@
           </div>
           <div v-if="!coupon.isClaimed" class="d-flex justify-end">
             <p class="mb-0 custom-primary--text text-caption font-weight-bold">
-              {{ coupon.point + ' Point' }}
+              {{ coupon.point + ' Poin' }}
             </p>
           </div>
         </div>

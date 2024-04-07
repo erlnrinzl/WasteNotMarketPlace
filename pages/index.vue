@@ -19,7 +19,7 @@
               <v-row>
                 <v-col cols="12" md="4" lg="4">
                   <div class="mr-10">
-                    <span class="custom-primary--text font-weight-bold text-h6">Total Point:</span>
+                    <span class="custom-primary--text font-weight-bold text-h6">Total Poin:</span>
                     <span class="ml-3 custom-secondary--text font-weight-bold text-h6">{{ user.totalPoints }}</span>
                   </div>
                 </v-col>
@@ -66,7 +66,7 @@
                     <div class="px-2 py-2 custom-border">
                       <div class="text-center">
                         <span class="ml-2 custom-secondary--text font-weight-bold text-h6 d-block">
-                          {{ user.nextLevelPoint - user.totalPoints }} Point lagi
+                          {{ user.nextLevelPoint - user.totalPoints }} Poin lagi
                         </span>
                         <span>Untuk naik ke level berikutnya!</span>
                       </div>
