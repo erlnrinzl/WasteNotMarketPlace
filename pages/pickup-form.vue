@@ -395,6 +395,7 @@ export default {
         const message = 'Permintaan pick up anda sedang diproses, terima kasih'
 
         this.openPopUp(title, message)
+        this.isError = false
       } catch (error) {
         const title = 'Error'
         this.isError = true

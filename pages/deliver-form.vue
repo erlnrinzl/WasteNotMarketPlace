@@ -388,9 +388,10 @@ export default {
         const selectedBank = this.banks.find(bank => bank.id === bankId)
 
         const title = 'Berhasil Submit'
-        const message = `Mohon antarkan sampah anda ke bank sampah ${selectedBank.name} terim kasih`
+        const message = `Mohon antarkan sampah anda ke bank sampah ${selectedBank.name} terima kasih`
 
         this.openPopUp(title, message)
+        this.isError = false
       } catch (error) {
         const title = 'Error'
         this.isError = true
