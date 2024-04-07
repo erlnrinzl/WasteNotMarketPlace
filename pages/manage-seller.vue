@@ -335,7 +335,7 @@ export default {
           Object.assign(this.sellers[this.editedIndex], this.editedItem)
           this.isError = false
         } catch (error) {
-          this.isError = false
+          this.isError = true
           this.errorMessage = error.response.data.message
           this.showToast = true
         } finally {

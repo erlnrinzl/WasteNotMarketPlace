@@ -34,6 +34,17 @@
           max-width="300px"
         >
           <v-card>
+            <v-snackbar
+              v-model="showToast"
+              :timeout="4000"
+              color="red lighten-1"
+              outlined
+              elevation="24"
+              top
+              center
+            >
+              {{ errorMessage }}
+            </v-snackbar>
             <v-card-title>
               <v-row class="align-center">
                 <v-col cols="2">
@@ -111,6 +122,7 @@
                   <v-btn
                     color="custom-primary"
                     dark
+                    :disabled="isDisabled"
                     @click="save"
                   >
                     Simpan
@@ -302,7 +314,11 @@ export default {
         images: []
       },
       menu1: false,
-      menu2: false
+      menu2: false,
+      isError: false,
+      showToast: false,
+      errorMessage: '',
+      isDisabled: false
     }
   },
   computed: {
@@ -378,15 +394,24 @@ export default {
       })
     },
     async save () {
+      this.isDisabled = true
       const { id, wasteWeight } = this.editedItem
-      await this.$api.put(`/delivers/${id}`, { status: 'Selesai', wasteWeight })
+      try {
+        await this.$api.put(`/delivers/${id}`, { status: 'Selesai', wasteWeight })
+        this.isError = false
+      } catch (error) {
+        this.isError = true
+        this.errorMessage = error.response.data.message
+        this.showToast = true
+      } finally {
+        this.isDisabled = false
+      }
 
-      // if (this.editedIndex > -1) {
-      //   Object.assign(this.desserts[this.editedIndex], this.editedItem)
-      // } else {
-      //   this.desserts.push(this.editedItem)
-      // }
-      this.close()
+      Object.assign(this.orders[this.editedIndex], this.editedItem)
+
+      if (!this.isError) {
+        this.close()
+      }
     }
   }
 }
