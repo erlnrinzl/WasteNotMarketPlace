@@ -129,8 +129,7 @@ export default {
         ],
         email: [
           v => !!v || 'Email is wajib diisi!',
-          v => /.+@.+/.test(v) || 'Email salah!',
-          v => !!this.emailExist || 'Email telah terdaftar'
+          v => /.+@.+/.test(v) || 'Email salah!'
         ],
         password: [
           v => !!v || 'Password is required!',
