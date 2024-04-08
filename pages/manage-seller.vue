@@ -269,6 +269,15 @@ export default {
       return this.editedIndex === -1 ? 'Tambah Penjual Baru' : 'Perbarui Data Penjual'
     }
   },
+  watch: {
+    dialog () {
+      if (this.editedIndex > -1) {
+        if (this.editedItem.phoneNumber) {
+          this.editedItem.phoneNumber = this.editedItem.phoneNumber.replace('+62', '')
+        }
+      }
+    }
+  },
   mounted () {
     this.initialize()
   },

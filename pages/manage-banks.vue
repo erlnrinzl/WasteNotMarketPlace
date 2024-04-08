@@ -269,6 +269,13 @@ export default {
       return this.editedIndex === -1 ? 'Tambah Dinas Lingkungan' : 'Perbarui Dinas Lingkungan'
     }
   },
+  watch: {
+    dialog () {
+      if (this.editedIndex > -1) {
+        this.editedItem.phoneNumber = this.editedItem.phoneNumber.replace('+62', '')
+      }
+    }
+  },
   async mounted () {
     const { data } = await this.$api.get('/banks')
     this.banks = data
