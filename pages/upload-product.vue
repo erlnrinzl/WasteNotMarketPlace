@@ -14,13 +14,15 @@
       <v-col cols="12">
         <v-container>
           <v-row class="align-center">
-            <v-col cols="2" md="1" lg="1">
-              <span class="rounded-lg py-3 px-5 text-h6 custom-primary white--text">
-                1
+            <v-col cols="12">
+              <div class="mr-2 d-inline-block">
+                <span class="rounded-lg py-3 px-5 text-h6 custom-primary white--text">
+                  1
+                </span>
+              </div>
+              <span class="text-h6 white--text">
+                Lengkapi Form Berikut
               </span>
-            </v-col>
-            <v-col cols="10" md="11" lg="11">
-              <span class="text-h6 white--text">Lengkapi Form Berikut</span>
             </v-col>
           </v-row>
         </v-container>

@@ -114,6 +114,14 @@
           </v-form>
         </v-card>
       </v-col>
+      <PopUp
+        :color="isError ? 'red darken-1' : 'custom-secondary'"
+        :icon="isError ? 'mdi-close' : 'mdi-check'"
+        :show="dialog"
+        :title="popUpTitle"
+        :message="popUpMessage"
+        @close="closePopUpRedirect"
+      />
     </v-row>
   </v-container>
 </template>
@@ -157,7 +165,10 @@ export default {
       isError: false,
       showToast: false,
       errorMessage: '',
-      isDisabled: false
+      isDisabled: false,
+      dialog: false,
+      popUpTitle: '',
+      popUpMessage: ''
     }
   },
   methods: {
@@ -170,6 +181,14 @@ export default {
       //     this.emailExist = true
       //   })
     },
+    closePopUpRedirect () {
+      this.dialog = false
+      if (this.isError) {
+        this.isError = false
+      } else {
+        this.$router.push('/login')
+      }
+    },
     async onSubmit () {
       this.isDisabled = true
       try {
@@ -177,7 +196,10 @@ export default {
         const phoneNumber = `+62${phone}`
         await this.$api.post('/auth/register', { name, email, password, phoneNumber, confirmPassword, gender })
 
-        this.$router.push('/login')
+        this.isError = false
+        this.popUpTitle = 'Sukses!'
+        this.popUpMessage = `akun ${email} telah berhasil dibuat, silahkan login`
+        this.dialog = true
       } catch (error) {
         this.isError = true
         this.errorMessage = error.response.data.message
