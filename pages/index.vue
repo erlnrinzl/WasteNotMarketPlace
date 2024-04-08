@@ -166,7 +166,7 @@
               <div class="mt-5 mb-3">
                 <span class="white--text text-h4 font-weight-bold">Tertarik menampilkan produk hasil daur ulang anda di website kami?</span>
               </div>
-              <v-btn class="mx-5 mt-5" color="custom-primary" dark to="/about-us">
+              <v-btn class="mx-5 mt-5" color="custom-primary" dark href="https://chat.whatsapp.com/B7zs0gvavPT22kpcLhW1IU">
                 <span class="mx-4">Hubungi Kami</span>
                 <v-icon>mdi-phone</v-icon>
               </v-btn>

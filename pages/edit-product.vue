@@ -170,7 +170,7 @@ export default {
   data () {
     return {
       isDisabled: false,
-      formName: 'Unggah Produk',
+      formName: 'Edit Produk',
       formData: {
         name: '',
         price: null,
@@ -259,7 +259,7 @@ export default {
 
         formData.append('productImage1', this.imageUpload)
         formData.append('name', this.formData.name)
-        formData.append('description', 'DESCRIPTION FIELD')
+        formData.append('description', this.formData.description)
         formData.append('price', this.formData.price)
         await formData.append('marketplaces', JSON.stringify(marketplaces))
 

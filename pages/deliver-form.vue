@@ -121,17 +121,6 @@
                     +62
                   </span>
                 </v-text-field>
-                <label for="address" class="white--text font-weight-bold">Alamat Penjemputan</label>
-                <v-textarea
-                  v-model="formData.address"
-                  :rules="formRules.address"
-                  name="address"
-                  label="Alamat Penjemputan"
-                  class="mt-3"
-                  rows="3"
-                  outlined
-                  solo
-                />
                 <label for="date" class="white--text font-weight-bold">{{ 'Tanggal ' + formLabel }}</label>
                 <v-menu
                   ref="menu"
@@ -279,8 +268,7 @@ export default {
       formData: {
         bankId: null,
         sender: null,
-        phone: null,
-        address: null
+        phone: null
       },
       formRules: {
         sender: [
@@ -288,9 +276,6 @@ export default {
         ],
         phone: [
           v => !!v || 'Masukan nomor telepon anda!'
-        ],
-        address: [
-          v => !!v || 'Masukan alamat anda!'
         ]
       },
       image: undefined,
