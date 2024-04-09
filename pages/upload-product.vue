@@ -191,7 +191,7 @@ export default {
         ]
       },
       image: null,
-      imageUpload: [],
+      imageUpload: null,
       imageUrl: '',
       dialog: false,
       isError: false,
@@ -246,9 +246,9 @@ export default {
 
         formData.append('productImage1', this.imageUpload)
         formData.append('name', this.formData.name)
-        formData.append('description', 'DESCRIPTION FIELD')
+        formData.append('description', this.formData.description)
         formData.append('price', this.formData.price)
-        await formData.append('marketplaces', JSON.stringify(marketplaces))
+        formData.append('marketplaces', JSON.stringify(marketplaces))
 
         const { data } = await this.$api.post('/products', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         console.log(data)

@@ -214,15 +214,17 @@ export default {
   },
   methods: {
     onFileChange (file) {
-      if (file.length > 1) {
-        this.imageUpload = []
-        this.imageUrl = ''
-      } else {
-        this.image = file
-        this.imageUpload = file
-        this.imageUrl = ''
+      if (file) {
+        if (file.length > 1) {
+          this.imageUpload = []
+          this.imageUrl = ''
+        } else {
+          this.image = file
+          this.imageUpload = file
+          this.imageUrl = ''
 
-        this.previewImage(file)
+          this.previewImage(file)
+        }
       }
     },
     previewImage (file) {

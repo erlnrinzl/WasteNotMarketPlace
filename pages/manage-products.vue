@@ -49,36 +49,88 @@
         />
       </v-col>
     </v-row>
-    <v-row class="my-0">
-      <v-col cols="7">
-        Detail Product
-      </v-col>
-      <v-col cols="1" class="font-weight-bold hidden-xs-only">
-        Shopee
-      </v-col>
-      <v-col cols="1" class="font-weight-bold hidden-xs-only">
-        Tokopedia
-      </v-col>
-      <v-col cols="1" class="font-weight-bold hidden-xs-only">
-        Lazada
-      </v-col>
-      <v-col cols="2" class="text-center font-weight-bold hidden-xs-only">
-        Aksi
-      </v-col>
-    </v-row>
-    <v-row class="my-0">
-      <v-col
-        v-for="product in filteredProduct"
-        :key="product.id"
-        cols="12"
-        sm="12"
-        md="12"
-        lg="12"
-        class="mb-5"
-      >
-        <CardProduct :product="product" @open-dialog="deleteDialog(product)" />
-      </v-col>
-    </v-row>
+
+    <v-data-table
+      :headers="headers"
+      :items="products"
+      :search="search"
+      :sort-by="sortBy"
+      :rtl="false"
+      class="elevation-1 mt-3"
+    >
+      <template slot="item.detailProduct" slot-scope="{ item }">
+        <v-row class="pa-2 align-center">
+          <v-col cols="12" md="4" lg="4">
+            <v-img :src="item.productImage[0]" :aspect-ratio="10/8" />
+          </v-col>
+
+          <v-col cols="12" md="8" lg="8" class="px-3">
+            <p class="mb-0 custom-secondary--text text-body-1 text-md-h4 text-lg-h4 font-weight-bold">
+              {{ item.name }}
+            </p>
+            <span class="custom-primary--text text-body-2 text-md-h4 text-lg-h4 font-weight-bold">
+              {{ 'Rp.' + currency(item.price) }}
+            </span>
+            <p class="mt-1 text-caption hidden-xs-only">
+              {{ item.description }}
+            </p>
+          </v-col>
+        </v-row>
+      </template>
+
+      <template slot="item.shopee" slot-scope="{ item }">
+        <router-link
+          v-if="getMarketData(item.marketplaces, 'shopee')"
+          :to="getMarketData(item.marketplaces, 'shopee').url"
+          :class="getMarketData(item.marketplaces, 'shopee').name.toLowerCase() + '-icon'"
+          class="text-caption"
+        >
+          {{ 'Link ' + getMarketData(item.marketplaces, 'shopee').name }}
+        </router-link>
+      </template>
+
+      <template slot="item.tokopedia" slot-scope="{ item }">
+        <router-link
+          v-if="getMarketData(item.marketplaces, 'tokopedia')"
+          :to="getMarketData(item.marketplaces, 'tokopedia').url"
+          :class="getMarketData(item.marketplaces, 'tokopedia').name.toLowerCase() + '-icon'"
+          class="text-caption"
+        >
+          {{ 'Link ' + getMarketData(item.marketplaces, 'tokopedia').name }}
+        </router-link>
+      </template>
+
+      <template slot="item.lazada" slot-scope="{ item }">
+        <router-link
+          v-if="getMarketData(item.marketplaces, 'lazada')"
+          :to="getMarketData(item.marketplaces, 'lazada').url"
+          :class="getMarketData(item.marketplaces, 'lazada').name.toLowerCase() + '-icon'"
+          class="text-caption"
+        >
+          {{ 'Link ' + getMarketData(item.marketplaces, 'lazada').name }}
+        </router-link>
+      </template>
+
+      <template slot="item.actions" slot-scope="{ item }">
+        <div>
+          <v-btn
+            class="mr-3 custom-primary--text"
+            x-small
+            :to="{
+              name: 'edit-product',
+              params: {
+                id: item.id
+              }
+            }"
+          >
+            Edit
+          </v-btn>
+          <v-btn color="red darken-1" x-small dark @click="deleteDialog(item)">
+            Delete
+          </v-btn>
+        </div>
+      </template>
+    </v-data-table>
 
     <v-dialog
       v-model="dialog"
@@ -138,6 +190,29 @@ export default {
         'Name',
         'Price',
         'Date Added'
+      ],
+      headers: [
+        {
+          text: 'Detail Produk',
+          value: 'detailProduct'
+        },
+        {
+          text: 'Shopee',
+          value: 'shopee'
+        },
+        {
+          text: 'Tokopedia',
+          value: 'tokopedia'
+        },
+        {
+          text: 'Lazada',
+          value: 'lazada'
+        },
+        {
+          text: 'Aksi',
+          value: 'actions',
+          sortable: false
+        }
       ]
     }
   },
@@ -174,6 +249,12 @@ export default {
     deleteDialog (product) {
       this.dialog = true
       this.selectedDelete = product
+    },
+    currency (value) {
+      return Intl.NumberFormat('en-US').format(value)
+    },
+    getMarketData (marketplaces, marketToFind) {
+      return marketplaces.find(market => market.name.toLowerCase() === marketToFind.toLowerCase())
     }
   }
 }
