@@ -335,7 +335,7 @@ export default {
           const { name, address, email, phoneNumber, id } = this.editedItem
           const phoneID = '+62' + phoneNumber
 
-          let formData = { name, address, email, sellerId: id }
+          let formData = { name, address, email }
           formData = { ...formData, phoneNumber: phoneID }
 
           const { data } = await this.$api.put(`/sellers/${id}`, formData)
