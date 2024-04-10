@@ -240,6 +240,10 @@ export default {
     return {
       headers: [
         {
+          text: 'Tipe',
+          value: 'type'
+        },
+        {
           text: 'Delivery ID',
           value: 'id'
         },
@@ -337,8 +341,39 @@ export default {
     //   fetchBanks: 'fetchBanks'
     // }),
     async initialize () {
+      const deliverOrders = await this.getDeliverOrders()
+      const pikcupOrders = await this.getPickupOrders()
+
+      this.orders = [...deliverOrders, ...pikcupOrders]
+    },
+    async getPickupOrders () {
+      const { data } = await this.$api.get('/pickups/bank')
+      const orders = data.map((order) => {
+        order.type = 'Pickup'
+        const { name, phone } = order.requester
+
+        order.sender = name
+        order.phone = phone
+
+        const date = new Date(order.pickupScheduleTime)
+
+        order.dateOrder = talkDate(date)
+        order.timeOrder = getTime(date)
+
+        order.wasteWeight = order.wastes.reduce((t, c) => (t + c.wasteWeight), 0)
+        order.images = [order.wasteImageUrl]
+
+        order.isConfirmed = order.wasteWeight > 0
+
+        return order
+      })
+
+      return orders
+    },
+    async getDeliverOrders () {
       const { data } = await this.$api.get('/delivers/bank')
       const orders = data.map((order) => {
+        order.type = 'Deliver'
         const { name, phone } = order.sender
 
         order.sender = name
@@ -357,7 +392,7 @@ export default {
         return order
       })
 
-      this.orders = orders
+      return orders
     },
     showImage (item) {
       this.editedIndex = this.orders.indexOf(item)
@@ -395,9 +430,11 @@ export default {
     },
     async save () {
       this.isDisabled = true
-      const { id, wasteWeight } = this.editedItem
+      const { type, id, wasteWeight } = this.editedItem
+      const route = type === 'Deliver' ? 'delivers' : 'pickups'
+
       try {
-        await this.$api.put(`/delivers/${id}`, { status: 'Selesai', wasteWeight })
+        await this.$api.put(`/${route}/${id}`, { status: 'Selesai', wasteWeight })
         this.isError = false
       } catch (error) {
         this.isError = true
